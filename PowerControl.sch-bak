@@ -35,8 +35,6 @@ F 3 "~" H 4300 3000 50  0001 C CNN
 	1    4300 3000
 	0    1    1    0   
 $EndComp
-Text GLabel 3250 2800 0    50   Input ~ 0
-Vs
 Wire Wire Line
 	3250 2800 3700 2800
 $Comp
@@ -101,12 +99,12 @@ $EndComp
 $Comp
 L Device:C_Small C3
 U 1 1 5EFC64B7
-P 6000 3000
-F 0 "C3" H 6092 3046 50  0000 L CNN
-F 1 "100u" H 6092 2955 50  0000 L CNN
-F 2 "" H 6000 3000 50  0001 C CNN
-F 3 "~" H 6000 3000 50  0001 C CNN
-	1    6000 3000
+P 6000 3250
+F 0 "C3" H 6092 3296 50  0000 L CNN
+F 1 "100u" H 6092 3205 50  0000 L CNN
+F 2 "" H 6000 3250 50  0001 C CNN
+F 3 "~" H 6000 3250 50  0001 C CNN
+	1    6000 3250
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -158,10 +156,10 @@ Wire Wire Line
 Wire Wire Line
 	5900 2800 6000 2800
 Wire Wire Line
-	6000 2900 6000 2800
+	6000 3150 6000 2800
 Connection ~ 6000 2800
 Wire Wire Line
-	6000 3100 6000 3550
+	6000 3350 6000 3550
 Wire Wire Line
 	5600 3100 5600 3150
 Wire Wire Line
@@ -187,10 +185,6 @@ Wire Wire Line
 Connection ~ 3900 3150
 Wire Wire Line
 	3900 3500 3900 3550
-Text GLabel 3300 3100 0    50   Input ~ 0
-GND
-Text GLabel 6550 2800 2    50   Input ~ 0
-Vo
 Wire Wire Line
 	6400 3500 6400 3550
 Wire Wire Line
@@ -235,4 +229,28 @@ Wire Wire Line
 Connection ~ 6400 2800
 Wire Wire Line
 	6400 2800 6550 2800
+$Comp
+L power:VS #PWR09
+U 1 1 5F035B21
+P 3250 2800
+F 0 "#PWR09" H 3050 2650 50  0001 C CNN
+F 1 "VS" V 3268 2928 50  0000 L CNN
+F 2 "" H 3250 2800 50  0001 C CNN
+F 3 "" H 3250 2800 50  0001 C CNN
+	1    3250 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:VCC #PWR010
+U 1 1 5F0366B6
+P 6550 2800
+F 0 "#PWR010" H 6550 2650 50  0001 C CNN
+F 1 "VCC" V 6567 2928 50  0000 L CNN
+F 2 "" H 6550 2800 50  0001 C CNN
+F 3 "" H 6550 2800 50  0001 C CNN
+	1    6550 2800
+	0    1    1    0   
+$EndComp
+Text GLabel 3300 3100 0    50   Input ~ 0
+GND
 $EndSCHEMATC
