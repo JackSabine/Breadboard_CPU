@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 8
+Sheet 8 8
 Title ""
 Date ""
 Rev ""
@@ -45,18 +45,9 @@ Wire Wire Line
 	4900 2200 4900 2250
 Wire Wire Line
 	4900 2250 3800 2250
-Wire Wire Line
-	3800 2250 3800 3200
-Wire Wire Line
-	3800 3200 4400 3200
 Connection ~ 4900 2250
 Wire Wire Line
 	4900 2250 4900 2300
-Wire Wire Line
-	3800 3200 3800 3300
-Wire Wire Line
-	3800 3300 4400 3300
-Connection ~ 3800 3200
 Text HLabel 4350 2600 0    50   Input ~ 0
 B0
 Text HLabel 4350 2700 0    50   Input ~ 0
@@ -133,10 +124,6 @@ Wire Wire Line
 Wire Wire Line
 	5450 4300 3750 4300
 Wire Wire Line
-	3750 4300 3750 5800
-Wire Wire Line
-	3750 5800 4400 5800
-Wire Wire Line
 	4900 4600 4900 4650
 Wire Wire Line
 	4350 5500 4400 5500
@@ -160,28 +147,13 @@ Wire Wire Line
 	4350 6000 4400 6000
 Wire Wire Line
 	4900 4650 3800 4650
-Wire Wire Line
-	3800 4650 3800 5600
-Wire Wire Line
-	3800 5600 4400 5600
 Connection ~ 4900 4650
 Wire Wire Line
 	4900 4650 4900 4700
-Wire Wire Line
-	3800 5600 3800 5700
-Wire Wire Line
-	3800 5700 4400 5700
-Connection ~ 3800 5600
-Text HLabel 4350 3400 0    50   Input ~ 0
+Text HLabel 4300 3250 0    50   Input ~ 0
 PC_INC
 Text HLabel 4350 3100 0    50   Input ~ 0
 ~PC_LD
-Text HLabel 4350 3600 0    50   Input ~ 0
-~CLR
-Text HLabel 4350 5500 0    50   Input ~ 0
-~PC_LD
-Text HLabel 4350 6000 0    50   Input ~ 0
-~CLR
 $Comp
 L Device:C_Small C16
 U 1 1 5F39FCC5
@@ -193,23 +165,6 @@ F 3 "~" H 3800 3800 50  0001 C CNN
 	1    3800 3800
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:C_Small C15
-U 1 1 5F3A023B
-P 3750 6200
-F 0 "C15" H 3842 6246 50  0000 L CNN
-F 1 "0.1u" H 3842 6155 50  0000 L CNN
-F 2 "" H 3750 6200 50  0001 C CNN
-F 3 "~" H 3750 6200 50  0001 C CNN
-	1    3750 6200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3750 5800 3750 6100
-Connection ~ 3750 5800
-Wire Wire Line
-	3800 3700 3800 3300
-Connection ~ 3800 3300
 Wire Wire Line
 	3800 3900 3800 3950
 Wire Wire Line
@@ -217,12 +172,6 @@ Wire Wire Line
 Connection ~ 4900 3950
 Wire Wire Line
 	4900 3950 4900 4000
-Wire Wire Line
-	3750 6300 3750 6350
-Wire Wire Line
-	3750 6350 4900 6350
-Wire Wire Line
-	4900 6350 4900 6300
 $Comp
 L power:GND #PWR026
 U 1 1 5F3A930D
@@ -234,9 +183,6 @@ F 3 "" H 4900 6400 50  0001 C CNN
 	1    4900 6400
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4900 6400 4900 6350
-Connection ~ 4900 6350
 Wire Wire Line
 	5400 5000 5600 5000
 Wire Wire Line
@@ -630,4 +576,64 @@ F 3 "~" H 7600 2400 50  0001 C CNN
 	1    7600 2400
 	1    0    0    -1  
 $EndComp
+Text HLabel 4350 6000 0    50   Input ~ 0
+~CLR
+Text HLabel 4350 3600 0    50   Input ~ 0
+~CLR
+Wire Wire Line
+	3800 2250 3800 3700
+Wire Wire Line
+	4300 3250 4350 3250
+Wire Wire Line
+	4350 3250 4350 3200
+Wire Wire Line
+	4350 3200 4400 3200
+Wire Wire Line
+	4350 3250 4350 3300
+Wire Wire Line
+	4350 3300 4400 3300
+Connection ~ 4350 3250
+Wire Wire Line
+	3750 4300 3750 5800
+Wire Wire Line
+	3750 5800 4400 5800
+Text HLabel 4350 5500 0    50   Input ~ 0
+~PC_LD
+$Comp
+L Device:C_Small C15
+U 1 1 5F3A023B
+P 3800 6200
+F 0 "C15" H 3892 6246 50  0000 L CNN
+F 1 "0.1u" H 3892 6155 50  0000 L CNN
+F 2 "" H 3800 6200 50  0001 C CNN
+F 3 "~" H 3800 6200 50  0001 C CNN
+	1    3800 6200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 6300 4900 6350
+Wire Wire Line
+	3800 6300 3800 6350
+Wire Wire Line
+	3800 6350 4900 6350
+Connection ~ 4900 6350
+Wire Wire Line
+	4900 6350 4900 6400
+Wire Wire Line
+	3800 4650 3800 6100
+Text HLabel 4300 5650 0    50   Input ~ 0
+PC_INC
+Wire Wire Line
+	4300 5650 4350 5650
+Wire Wire Line
+	4350 5650 4350 5700
+Wire Wire Line
+	4350 5700 4400 5700
+Wire Wire Line
+	4350 5650 4350 5600
+Wire Wire Line
+	4350 5600 4400 5600
+Connection ~ 4350 5650
+Text Notes 1450 5400 0    50   ~ 0
+The carry out from the above counter is fed into CP,\nwhich is Clock Pulse.  PC_INC will be set on the falling\nedge by the uCode EEPROMS.  CP will be an output from \nthe previous counter.  No CLK necessary since we never\nwant to count this with the CLK, only as a carryout.
 $EndSCHEMATC
