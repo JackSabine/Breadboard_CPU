@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 8 8
+Sheet 7 9
 Title ""
 Date ""
 Rev ""
@@ -18,7 +18,7 @@ L 74xx:74LS163 U11
 U 1 1 5F362EFB
 P 4900 5500
 F 0 "U11" H 5000 6250 50  0000 C CNN
-F 1 "74LS163" H 5100 6150 50  0000 C CNN
+F 1 "74HC161" H 5100 6150 50  0000 C CNN
 F 2 "" H 4900 5500 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 4900 5500 50  0001 C CNN
 	1    4900 5500
@@ -90,21 +90,21 @@ Wire Wire Line
 	8200 3900 8200 3950
 Wire Wire Line
 	4900 3900 4900 3950
-Text HLabel 8700 2600 2    50   Input ~ 0
+Text HLabel 8700 2600 2    50   Output ~ 0
 B0
-Text HLabel 8700 2700 2    50   Input ~ 0
+Text HLabel 8700 2700 2    50   Output ~ 0
 B1
-Text HLabel 8700 2800 2    50   Input ~ 0
+Text HLabel 8700 2800 2    50   Output ~ 0
 B2
-Text HLabel 8700 2900 2    50   Input ~ 0
+Text HLabel 8700 2900 2    50   Output ~ 0
 B3
-Text HLabel 8700 3000 2    50   Input ~ 0
+Text HLabel 8700 3000 2    50   Output ~ 0
 B4
-Text HLabel 8700 3100 2    50   Input ~ 0
+Text HLabel 8700 3100 2    50   Output ~ 0
 B5
-Text HLabel 8700 3200 2    50   Input ~ 0
+Text HLabel 8700 3200 2    50   Output ~ 0
 B6
-Text HLabel 8700 3300 2    50   Input ~ 0
+Text HLabel 8700 3300 2    50   Output ~ 0
 B7
 $Comp
 L power:VCC #PWR025
@@ -153,7 +153,7 @@ Wire Wire Line
 Text HLabel 4300 3250 0    50   Input ~ 0
 PC_INC
 Text HLabel 4350 3100 0    50   Input ~ 0
-~PC_LD
+~PC_IN
 $Comp
 L Device:C_Small C16
 U 1 1 5F39FCC5
@@ -237,8 +237,8 @@ Wire Wire Line
 Wire Wire Line
 	7650 3600 7700 3600
 Connection ~ 7650 3550
-Text HLabel 5450 5500 2    50   Input ~ 0
-HALT
+Text HLabel 5450 5500 2    50   Output ~ 0
+TR_HALT
 Wire Wire Line
 	5400 5500 5450 5500
 Wire Wire Line
@@ -250,7 +250,7 @@ L 74xx:74LS163 U10
 U 1 1 5F361F47
 P 4900 3100
 F 0 "U10" H 5000 3850 50  0000 C CNN
-F 1 "74LS163" H 5100 3750 50  0000 C CNN
+F 1 "74HC161" H 5100 3750 50  0000 C CNN
 F 2 "" H 4900 3100 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS163" H 4900 3100 50  0001 C CNN
 	1    4900 3100
@@ -482,7 +482,7 @@ L 74xx:74LS541 U12
 U 1 1 5F36314F
 P 8200 3100
 F 0 "U12" H 8300 3850 50  0000 C CNN
-F 1 "74LS541" H 8400 3750 50  0000 C CNN
+F 1 "74HC541" H 8400 3750 50  0000 C CNN
 F 2 "" H 8200 3100 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS541" H 8200 3100 50  0001 C CNN
 	1    8200 3100
@@ -593,12 +593,8 @@ Wire Wire Line
 Wire Wire Line
 	4350 3300 4400 3300
 Connection ~ 4350 3250
-Wire Wire Line
-	3750 4300 3750 5800
-Wire Wire Line
-	3750 5800 4400 5800
 Text HLabel 4350 5500 0    50   Input ~ 0
-~PC_LD
+~PC_IN
 $Comp
 L Device:C_Small C15
 U 1 1 5F3A023B
@@ -621,17 +617,25 @@ Wire Wire Line
 	4900 6350 4900 6400
 Wire Wire Line
 	3800 4650 3800 6100
-Text HLabel 4300 5650 0    50   Input ~ 0
-PC_INC
+Text Notes 1450 5400 0    50   ~ 0
+The carry out from the above counter is fed into CP,\nwhich is Clock Pulse.  PC_INC will be set on the falling\nedge by the uCode EEPROMS.  CP will be an output from \nthe previous counter.  No CLK necessary since we never\nwant to count this with the CLK, only as a carryout.
+Text HLabel 4350 3400 0    50   Input ~ 0
+CLK
 Wire Wire Line
-	4300 5650 4350 5650
+	3750 4300 3750 5650
 Wire Wire Line
-	4350 5650 4350 5700
-Wire Wire Line
-	4350 5700 4400 5700
+	3750 5650 4350 5650
 Wire Wire Line
 	4350 5650 4350 5600
 Wire Wire Line
 	4350 5600 4400 5600
+Wire Wire Line
+	4350 5650 4350 5700
+Wire Wire Line
+	4350 5700 4400 5700
 Connection ~ 4350 5650
+Wire Wire Line
+	4350 5800 4400 5800
+Text HLabel 4350 5800 0    50   Input ~ 0
+CLK
 $EndSCHEMATC

@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name Memory)(type Legacy)(uri ${KIPRJMOD}/Memory/Memory.lib)(options "")(descr ""))
+  (lib (name Registers)(type Legacy)(uri ${KIPRJMOD}/Registers/Registers.lib)(options "")(descr ""))
+  (lib (name LogicGates)(type Legacy)(uri ${KIPRJMOD}/Logic/LogicGates.lib)(options "")(descr ""))
+)
