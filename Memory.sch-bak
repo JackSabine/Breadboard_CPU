@@ -1634,8 +1634,4 @@ Wire Bus Line
 	9900 3700 9900 8650
 Wire Bus Line
 	9850 4100 9850 8600
-Text Notes 3800 8100 0    50   ~ 0
-add more AND gates
-Text Notes 3800 8350 0    50   ~ 0
-this should not work\n
 $EndSCHEMATC
