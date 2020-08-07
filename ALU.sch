@@ -1902,14 +1902,14 @@ $EndComp
 $Comp
 L 74xx:74LS04 U?
 U 7 1 5FE38408
-P 15475 9375
+P 15450 8775
 AR Path="/5F05F116/5FE38408" Ref="U?"  Part="7" 
 AR Path="/5EFC06D4/5FE38408" Ref="U46"  Part="7" 
-F 0 "U46" H 15705 9421 50  0000 L CNN
-F 1 "74LS04" H 15705 9330 50  0000 L CNN
-F 2 "" H 15475 9375 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 15475 9375 50  0001 C CNN
-	7    15475 9375
+F 0 "U46" H 15680 8821 50  0000 L CNN
+F 1 "74LS04" H 15680 8730 50  0000 L CNN
+F 2 "" H 15450 8775 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 15450 8775 50  0001 C CNN
+	7    15450 8775
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -1918,4 +1918,74 @@ Wire Wire Line
 	8250 5500 8250 8850
 Wire Wire Line
 	5300 9900 7550 9900
+Text Notes 900  9375 0    118  ~ 0
+Sign extender
+Text Notes 1325 6175 0    118  ~ 0
+XOR conditional inverters
+Text Notes 5350 5725 0    118  ~ 0
+8b Full Adders
+Text Notes 9650 5200 0    118  ~ 0
+Adder or AND\noperation buffers
+Text Notes 11425 1650 0    118  ~ 0
+ALU output\nregister
+Text Notes 15375 7775 2    118  ~ 0
+ALU AND gate array
+$Comp
+L power:VCC #PWR?
+U 1 1 5F622F4C
+P 15450 8225
+AR Path="/5EFC09F3/5F622F4C" Ref="#PWR?"  Part="1" 
+AR Path="/5F05F116/5F622F4C" Ref="#PWR?"  Part="1" 
+AR Path="/5EFC06D4/5F622F4C" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 15450 8075 50  0001 C CNN
+F 1 "VCC" H 15467 8398 50  0000 C CNN
+F 2 "" H 15450 8225 50  0001 C CNN
+F 3 "" H 15450 8225 50  0001 C CNN
+	1    15450 8225
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5F622F52
+P 15450 9325
+AR Path="/5EFC09F3/5F622F52" Ref="#PWR?"  Part="1" 
+AR Path="/5F05F116/5F622F52" Ref="#PWR?"  Part="1" 
+AR Path="/5EFC06D4/5F622F52" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 15450 9075 50  0001 C CNN
+F 1 "GND" H 15455 9152 50  0000 C CNN
+F 2 "" H 15450 9325 50  0001 C CNN
+F 3 "" H 15450 9325 50  0001 C CNN
+	1    15450 9325
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C?
+U 1 1 5F622F58
+P 14800 8775
+AR Path="/5EFC09F3/5F622F58" Ref="C?"  Part="1" 
+AR Path="/5F05F116/5F622F58" Ref="C?"  Part="1" 
+AR Path="/5EFC06D4/5F622F58" Ref="C?"  Part="1" 
+F 0 "C?" H 14892 8821 50  0000 L CNN
+F 1 "0.1u" H 14892 8730 50  0000 L CNN
+F 2 "" H 14800 8775 50  0001 C CNN
+F 3 "~" H 14800 8775 50  0001 C CNN
+	1    14800 8775
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14800 8675 14800 8275
+Wire Wire Line
+	14800 8275 15450 8275
+Wire Wire Line
+	15450 8225 15450 8275
+Wire Wire Line
+	14800 8875 14800 9275
+Wire Wire Line
+	14800 9275 15450 9275
+Wire Wire Line
+	15450 9275 15450 9325
+Text Notes 6800 8625 0    118  ~ 0
+ALU Reg A
+Text Notes 8075 11125 0    118  ~ 0
+ALU Instruction Decoder
 $EndSCHEMATC

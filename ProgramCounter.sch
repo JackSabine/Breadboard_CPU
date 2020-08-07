@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 9 9
+Sheet 8 9
 Title ""
 Date ""
 Rev ""
@@ -428,18 +428,18 @@ $EndComp
 $Comp
 L power:GND #PWR029
 U 1 1 5F4B1E72
-P 7900 1800
-F 0 "#PWR029" H 7900 1550 50  0001 C CNN
-F 1 "GND" H 7905 1627 50  0000 C CNN
-F 2 "" H 7900 1800 50  0001 C CNN
-F 3 "" H 7900 1800 50  0001 C CNN
-	1    7900 1800
+P 7950 1800
+F 0 "#PWR029" H 7950 1550 50  0001 C CNN
+F 1 "GND" H 7955 1627 50  0000 C CNN
+F 2 "" H 7950 1800 50  0001 C CNN
+F 3 "" H 7950 1800 50  0001 C CNN
+	1    7950 1800
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7900 1800 7900 1750
+	7950 1800 7950 1750
 Wire Wire Line
-	7900 1750 7600 1750
+	7950 1750 7600 1750
 Wire Wire Line
 	5500 1750 5500 1900
 Wire Wire Line
@@ -638,4 +638,8 @@ Wire Wire Line
 	4350 5800 4400 5800
 Text HLabel 4350 5800 0    50   Input ~ 0
 CLK
+Text Notes 3475 3850 2    118  ~ 0
+Program Counter\n(up only)
+Text Notes 9250 3250 0    118  ~ 0
+Program Counter\nBus Buffer
 $EndSCHEMATC

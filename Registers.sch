@@ -1876,4 +1876,8 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS27" H 10600 8300 50  0001 C CNN
 	4    10600 8300
 	1    0    0    -1  
 $EndComp
+Text Notes 975  6725 0    118  ~ 0
+Register Selector
+Text Notes 13550 4850 0    118  ~ 0
+Register Arrays
 $EndSCHEMATC

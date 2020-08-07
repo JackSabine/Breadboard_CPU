@@ -1028,4 +1028,12 @@ Wire Wire Line
 	9450 3800 9525 3800
 Connection ~ 3500 5600
 Connection ~ 3500 6600
+Text Notes 5325 1625 2    118  ~ 0
+Astable clock
+Text Notes 875  3600 0    118  ~ 0
+Monostable button\npress
+Text Notes 8250 2275 2    118  ~ 0
+Astable or\nmonostable\nselector
+Text Notes 7750 6325 2    118  ~ 0
+HALT logic
 $EndSCHEMATC

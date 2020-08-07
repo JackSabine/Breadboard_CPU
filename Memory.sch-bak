@@ -37,8 +37,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS157" H 7700 3500 50  0001 C CNN
 $EndComp
 Text Notes 11175 7425 0    50   ~ 0
 EEPROM
-Text Notes 11950 2850 0    50   ~ 0
-SRAM
 $Comp
 L 74xx:74AHCT273 U16
 U 1 1 5F0670BE
@@ -273,7 +271,7 @@ Wire Wire Line
 	11350 8250 11350 8350
 Connection ~ 11350 8350
 Text HLabel 9800 7300 0    50   Input ~ 0
-INTERRUPT
+INT
 Wire Wire Line
 	9950 7600 10100 7600
 Wire Wire Line
@@ -456,7 +454,7 @@ Wire Wire Line
 Wire Wire Line
 	10000 5650 10100 5650
 Text HLabel 9800 5350 0    50   Input ~ 0
-INTERRUPT
+INT
 Entry Wire Line
 	9850 6550 9950 6450
 Entry Wire Line
@@ -1622,6 +1620,12 @@ Text HLabel 10950 7750 2    50   Output ~ 0
 I14
 Text HLabel 10950 7850 2    50   Output ~ 0
 I15
+Text Notes 1850 4950 0    118  ~ 0
+Interrupt Stack Pointers
+Text Notes 5275 2550 0    118  ~ 0
+MAR
+Text Notes 6775 2250 0    118  ~ 0
+Mux to choose int \nstack pointer or MAR
 Wire Bus Line
 	8400 3000 8400 8600
 Wire Bus Line
@@ -1638,4 +1642,8 @@ Wire Bus Line
 	9900 3550 9900 8650
 Wire Bus Line
 	9850 3950 9850 8600
+Text Notes 9850 2125 0    118  ~ 0
+SRAM for active use
+Text Notes 11625 6950 0    118  ~ 0
+EEPROMs for user\nand interrupt code
 $EndSCHEMATC
