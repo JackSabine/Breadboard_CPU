@@ -1626,6 +1626,10 @@ Text Notes 5275 2550 0    118  ~ 0
 MAR
 Text Notes 6775 2250 0    118  ~ 0
 Mux to choose int \nstack pointer or MAR
+Text Notes 9850 2125 0    118  ~ 0
+SRAM for active use
+Text Notes 11625 6950 0    118  ~ 0
+EEPROMs for user\nand interrupt code
 Wire Bus Line
 	8400 3000 8400 8600
 Wire Bus Line
@@ -1642,8 +1646,4 @@ Wire Bus Line
 	9900 3550 9900 8650
 Wire Bus Line
 	9850 3950 9850 8600
-Text Notes 9850 2125 0    118  ~ 0
-SRAM for active use
-Text Notes 11625 6950 0    118  ~ 0
-EEPROMs for user\nand interrupt code
 $EndSCHEMATC
