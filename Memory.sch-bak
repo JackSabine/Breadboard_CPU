@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 7 9
+Sheet 7 10
 Title ""
 Date ""
 Rev ""
@@ -235,8 +235,6 @@ F 3 "" H 10650 7900 50  0001 C CNN
 	1    10500 7500
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9800 7300 10100 7300
 $Comp
 L power:VCC #PWR044
 U 1 1 5F29B4BD
@@ -270,8 +268,6 @@ Wire Wire Line
 Wire Wire Line
 	11350 8250 11350 8350
 Connection ~ 11350 8350
-Text HLabel 9800 7300 0    50   Input ~ 0
-INT
 Wire Wire Line
 	9950 7600 10100 7600
 Wire Wire Line
@@ -279,10 +275,6 @@ Wire Wire Line
 Connection ~ 9950 7500
 Wire Wire Line
 	9950 7500 9950 7600
-Wire Wire Line
-	9950 7400 10100 7400
-Wire Wire Line
-	9950 7400 9950 7500
 $Comp
 L power:GND #PWR037
 U 1 1 5F345E05
@@ -332,11 +324,6 @@ Wire Wire Line
 Connection ~ 11350 8650
 Wire Wire Line
 	11350 8650 11350 8700
-Wire Wire Line
-	10100 7200 9950 7200
-Wire Wire Line
-	9950 7200 9950 7400
-Connection ~ 9950 7400
 $Comp
 L power:VCC #PWR041
 U 1 1 5F371B6C
@@ -443,12 +430,7 @@ F 3 "" H 9750 5700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	10000 5450 10000 5550
-Wire Wire Line
-	10000 5450 10100 5450
-Wire Wire Line
 	10000 5550 10000 5650
-Connection ~ 10000 5550
 Wire Wire Line
 	10100 5550 10000 5550
 Wire Wire Line
@@ -1630,10 +1612,12 @@ Text Notes 9850 2125 0    118  ~ 0
 SRAM for active use
 Text Notes 11625 6950 0    118  ~ 0
 EEPROMs for user\nand interrupt code
-Wire Bus Line
-	8400 3000 8400 8600
-Wire Bus Line
-	8350 5450 8350 8650
+Wire Wire Line
+	10100 7200 9950 7200
+Text HLabel 9800 7300 0    50   Input ~ 0
+INT
+Wire Wire Line
+	9800 7300 10100 7300
 Wire Bus Line
 	6950 3000 6950 6550
 Wire Bus Line
@@ -1643,7 +1627,23 @@ Wire Bus Line
 Wire Bus Line
 	6200 5150 6200 6500
 Wire Bus Line
+	9850 3950 9850 8600
+Wire Bus Line
 	9900 3550 9900 8650
 Wire Bus Line
-	9850 3950 9850 8600
+	8400 3000 8400 8600
+Wire Bus Line
+	8350 5450 8350 8650
+Wire Wire Line
+	9950 7200 9950 7400
+Wire Wire Line
+	9950 7400 9950 7500
+Connection ~ 9950 7400
+Wire Wire Line
+	9950 7400 10100 7400
+Wire Wire Line
+	10000 5450 10100 5450
+Connection ~ 10000 5550
+Wire Wire Line
+	10000 5450 10000 5550
 $EndSCHEMATC
