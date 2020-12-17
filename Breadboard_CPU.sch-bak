@@ -60,7 +60,7 @@ Wire Wire Line
 Wire Wire Line
 	4875 6700 4375 6700
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 6175446F
 P 4425 9825
 AR Path="/5EFC0772/6175446F" Ref="D?"  Part="1" 
@@ -73,7 +73,7 @@ F 3 "~" H 4425 9825 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 61754475
 P 4125 9825
 AR Path="/5EFC0772/61754475" Ref="D?"  Part="1" 
@@ -86,7 +86,7 @@ F 3 "~" H 4125 9825 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 6175447B
 P 3825 9825
 AR Path="/5EFC0772/6175447B" Ref="D?"  Part="1" 
@@ -99,7 +99,7 @@ F 3 "~" H 3825 9825 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 61754481
 P 3525 9825
 AR Path="/5EFC0772/61754481" Ref="D?"  Part="1" 
@@ -112,7 +112,7 @@ F 3 "~" H 3525 9825 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 61754487
 P 3225 9825
 AR Path="/5EFC0772/61754487" Ref="D?"  Part="1" 
@@ -125,7 +125,7 @@ F 3 "~" H 3225 9825 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 6175448D
 P 2925 9825
 AR Path="/5EFC0772/6175448D" Ref="D?"  Part="1" 
@@ -138,7 +138,7 @@ F 3 "~" H 2925 9825 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 61754493
 P 2625 9825
 AR Path="/5EFC0772/61754493" Ref="D?"  Part="1" 
@@ -165,7 +165,7 @@ Wire Wire Line
 Wire Wire Line
 	2625 9675 2625 9625
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544A7
 P 4425 9475
 AR Path="/5EFC0772/617544A7" Ref="R?"  Part="1" 
@@ -178,7 +178,7 @@ F 3 "~" H 4425 9475 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544AD
 P 4125 9475
 AR Path="/5EFC0772/617544AD" Ref="R?"  Part="1" 
@@ -191,7 +191,7 @@ F 3 "~" H 4125 9475 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544B3
 P 3825 9475
 AR Path="/5EFC0772/617544B3" Ref="R?"  Part="1" 
@@ -204,7 +204,7 @@ F 3 "~" H 3825 9475 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544B9
 P 3525 9475
 AR Path="/5EFC0772/617544B9" Ref="R?"  Part="1" 
@@ -217,7 +217,7 @@ F 3 "~" H 3525 9475 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544BF
 P 3225 9475
 AR Path="/5EFC0772/617544BF" Ref="R?"  Part="1" 
@@ -230,7 +230,7 @@ F 3 "~" H 3225 9475 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544C5
 P 2925 9475
 AR Path="/5EFC0772/617544C5" Ref="R?"  Part="1" 
@@ -243,7 +243,7 @@ F 3 "~" H 2925 9475 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544CB
 P 2625 9475
 AR Path="/5EFC0772/617544CB" Ref="R?"  Part="1" 
@@ -319,7 +319,7 @@ Connection ~ 4725 10050
 Wire Wire Line
 	4725 10150 4725 10050
 $Comp
-L power:GND #PWR0101
+L Breadboard_CPU-rescue:GND-power #PWR0101
 U 1 1 617BA607
 P 4725 10150
 F 0 "#PWR0101" H 4725 9900 50  0001 C CNN
@@ -334,7 +334,7 @@ Wire Wire Line
 Wire Wire Line
 	4725 10050 4725 9975
 $Comp
-L Device:R R?
+L Breadboard_CPU-rescue:R-Device R?
 U 1 1 617544A1
 P 4725 9475
 AR Path="/5EFC0772/617544A1" Ref="R?"  Part="1" 
@@ -349,7 +349,7 @@ $EndComp
 Wire Wire Line
 	4725 9675 4725 9625
 $Comp
-L Device:LED D?
+L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 61754469
 P 4725 9825
 AR Path="/5EFC0772/61754469" Ref="D?"  Part="1" 
@@ -374,7 +374,7 @@ CLK
 Wire Wire Line
 	6050 8225 6000 8225
 $Comp
-L Switch:SW_Push SW101
+L Breadboard_CPU-rescue:SW_Push-Switch SW101
 U 1 1 619A341E
 P 5525 9350
 F 0 "SW101" H 5525 9635 50  0000 C CNN
@@ -385,7 +385,7 @@ F 3 "~" H 5525 9550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:VCC #PWR0102
+L Breadboard_CPU-rescue:VCC-power #PWR0102
 U 1 1 619AC651
 P 5250 9300
 F 0 "#PWR0102" H 5250 9150 50  0001 C CNN
@@ -403,7 +403,7 @@ Wire Wire Line
 	5250 9350 5325 9350
 Connection ~ 5775 9350
 $Comp
-L Device:Q_NPN_CBE Q101
+L Breadboard_CPU-rescue:Q_NPN_CBE-Device Q101
 U 1 1 624C0D4B
 P 6700 10275
 F 0 "Q101" H 6891 10321 50  0000 L CNN
@@ -416,7 +416,7 @@ $EndComp
 Wire Wire Line
 	6450 10275 6500 10275
 $Comp
-L power:GND #PWR0105
+L Breadboard_CPU-rescue:GND-power #PWR0105
 U 1 1 624DADF8
 P 6800 10525
 F 0 "#PWR0105" H 6800 10275 50  0001 C CNN
@@ -429,7 +429,7 @@ $EndComp
 Wire Wire Line
 	6800 10525 6800 10475
 $Comp
-L Device:R R111
+L Breadboard_CPU-rescue:R-Device R111
 U 1 1 624F3D36
 P 6800 9825
 F 0 "R111" H 6870 9871 50  0000 L CNN
@@ -440,7 +440,7 @@ F 3 "~" H 6800 9825 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:VCC #PWR0104
+L Breadboard_CPU-rescue:VCC-power #PWR0104
 U 1 1 6250C2F9
 P 6800 9600
 F 0 "#PWR0104" H 6800 9450 50  0001 C CNN
@@ -453,7 +453,7 @@ $EndComp
 Wire Wire Line
 	6800 9600 6800 9675
 $Comp
-L power:GND #PWR0106
+L Breadboard_CPU-rescue:GND-power #PWR0106
 U 1 1 5FCEEC34
 P 8775 3300
 F 0 "#PWR0106" H 8775 3050 50  0001 C CNN
@@ -484,7 +484,7 @@ Wire Notes Line style solid
 Wire Notes Line style solid
 	2225 10800 2225 1575
 $Comp
-L Device:R R109
+L Breadboard_CPU-rescue:R-Device R109
 U 1 1 619ABF60
 P 5775 9625
 F 0 "R109" H 5845 9671 50  0000 L CNN
@@ -497,7 +497,7 @@ $EndComp
 Wire Wire Line
 	5775 9825 5775 9775
 $Comp
-L power:GND #PWR0103
+L Breadboard_CPU-rescue:GND-power #PWR0103
 U 1 1 619C1BEF
 P 5775 9825
 F 0 "#PWR0103" H 5775 9575 50  0001 C CNN
@@ -1128,7 +1128,7 @@ Connection ~ 6800 10025
 Wire Wire Line
 	6800 10025 6800 10075
 $Comp
-L Device:R R110
+L Breadboard_CPU-rescue:R-Device R110
 U 1 1 60088CBA
 P 6450 9825
 F 0 "R110" H 6520 9871 50  0000 L CNN

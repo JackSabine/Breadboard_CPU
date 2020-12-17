@@ -14,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Device:Q_PMOS_GDS Q201
+L Breadboard_CPU-rescue:Q_PMOS_GDS-Device Q201
 U 1 1 5EFC0CE7
 P 3900 2900
 F 0 "Q201" V 4242 2900 50  0000 C CNN
@@ -25,7 +25,7 @@ F 3 "~" H 3900 2900 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Device:D_Zener D201
+L Breadboard_CPU-rescue:D_Zener-Device D201
 U 1 1 5EFC19F2
 P 4300 3000
 F 0 "D201" V 4254 3079 50  0000 L CNN
@@ -38,7 +38,7 @@ $EndComp
 Wire Wire Line
 	3250 2800 3700 2800
 $Comp
-L power:GND #PWR0202
+L Breadboard_CPU-rescue:GND-power #PWR0202
 U 1 1 5EFC2D0B
 P 3450 3550
 F 0 "#PWR0202" H 3450 3300 50  0001 C CNN
@@ -53,7 +53,7 @@ Wire Wire Line
 Wire Wire Line
 	3450 3100 3450 3550
 $Comp
-L Device:R R201
+L Breadboard_CPU-rescue:R-Device R201
 U 1 1 5EFC37FA
 P 3900 3350
 F 0 "R201" H 3970 3396 50  0000 L CNN
@@ -64,7 +64,7 @@ F 3 "~" H 3900 3350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Regulator_Linear:LM1085-5.0 U201
+L Breadboard_CPU-rescue:LM1085-5.0-Regulator_Linear U201
 U 1 1 5EFC3C14
 P 5600 2800
 F 0 "U201" H 5600 3042 50  0000 C CNN
@@ -75,7 +75,7 @@ F 3 "http://www.ti.com/lit/ds/symlink/lm1085.pdf" H 5600 2800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C201
+L Breadboard_CPU-rescue:C_Small-Device C201
 U 1 1 5EFC5530
 P 4900 3250
 F 0 "C201" H 4992 3296 50  0000 L CNN
@@ -86,7 +86,7 @@ F 3 "~" H 4900 3250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C202
+L Breadboard_CPU-rescue:C_Small-Device C202
 U 1 1 5EFC61B4
 P 5600 3250
 F 0 "C202" H 5692 3296 50  0000 L CNN
@@ -97,7 +97,7 @@ F 3 "~" H 5600 3250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C_Small C203
+L Breadboard_CPU-rescue:C_Small-Device C203
 U 1 1 5EFC64B7
 P 6000 3250
 F 0 "C203" H 6092 3296 50  0000 L CNN
@@ -108,7 +108,7 @@ F 3 "~" H 6000 3250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0205
+L Breadboard_CPU-rescue:GND-power #PWR0205
 U 1 1 5EFC6BF9
 P 5600 3550
 F 0 "#PWR0205" H 5600 3300 50  0001 C CNN
@@ -119,7 +119,7 @@ F 3 "" H 5600 3550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0206
+L Breadboard_CPU-rescue:GND-power #PWR0206
 U 1 1 5EFC748C
 P 6000 3550
 F 0 "#PWR0206" H 6000 3300 50  0001 C CNN
@@ -130,7 +130,7 @@ F 3 "" H 6000 3550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0203
+L Breadboard_CPU-rescue:GND-power #PWR0203
 U 1 1 5EFC834C
 P 3900 3550
 F 0 "#PWR0203" H 3900 3300 50  0001 C CNN
@@ -141,7 +141,7 @@ F 3 "" H 3900 3550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0204
+L Breadboard_CPU-rescue:GND-power #PWR0204
 U 1 1 5EFC8352
 P 4900 3550
 F 0 "#PWR0204" H 4900 3300 50  0001 C CNN
@@ -190,7 +190,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 3150 6400 3200
 $Comp
-L power:GND #PWR0207
+L Breadboard_CPU-rescue:GND-power #PWR0207
 U 1 1 5EFD7367
 P 6400 3550
 F 0 "#PWR0207" H 6400 3300 50  0001 C CNN
@@ -201,7 +201,7 @@ F 3 "" H 6400 3550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R202
+L Breadboard_CPU-rescue:R-Device R202
 U 1 1 5EFD633B
 P 6400 3350
 F 0 "R202" H 6470 3396 50  0000 L CNN
@@ -212,7 +212,7 @@ F 3 "~" H 6400 3350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:LED D202
+L Breadboard_CPU-rescue:LED-Device D202
 U 1 1 5EFD4D26
 P 6400 3000
 F 0 "D202" V 6439 2882 50  0000 R CNN
@@ -230,7 +230,7 @@ Connection ~ 6400 2800
 Wire Wire Line
 	6400 2800 6550 2800
 $Comp
-L power:VS #PWR0201
+L Breadboard_CPU-rescue:VS-power #PWR0201
 U 1 1 5F035B21
 P 3250 2800
 F 0 "#PWR0201" H 3050 2650 50  0001 C CNN
@@ -241,7 +241,7 @@ F 3 "" H 3250 2800 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L power:VCC #PWR0208
+L Breadboard_CPU-rescue:VCC-power #PWR0208
 U 1 1 5F0366B6
 P 6550 2800
 F 0 "#PWR0208" H 6550 2650 50  0001 C CNN
