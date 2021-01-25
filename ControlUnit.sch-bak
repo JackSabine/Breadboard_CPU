@@ -295,7 +295,7 @@ Text HLabel 14325 8325 2    50   Output ~ 0
 PC_INC
 Text Label 16250 10725 0    50   ~ 0
 ~NEXTINST
-Text HLabel 14375 5450 2    50   Output ~ 0
+Text HLabel 14325 14375 2    50   Output ~ 0
 ALU_SAVE
 Text HLabel 14325 11325 2    50   Output ~ 0
 MEM_IN
@@ -754,7 +754,7 @@ Wire Wire Line
 	8300 11850 8300 11750
 Text Label 14325 13775 0    50   ~ 0
 IR_IN
-Text HLabel 14375 5550 2    50   Output ~ 0
+Text HLabel 16225 5425 2    50   Output ~ 0
 AREG_IN
 Text HLabel 11275 2175 2    50   Output ~ 0
 B2
@@ -780,7 +780,7 @@ Text Label 12625 8275 2    50   ~ 0
 OPC_2
 Text Label 12625 8175 2    50   ~ 0
 OPC_3
-Text HLabel 14325 14375 2    50   Output ~ 0
+Text HLabel 14325 14175 2    50   Output ~ 0
 UPDATE_CC
 Wire Wire Line
 	10775 1625 11575 1625
@@ -1826,15 +1826,15 @@ Connection ~ 3050 12025
 Wire Wire Line
 	3050 12025 3050 12875
 NoConn ~ 4600 11725
-Text HLabel 14375 5250 2    50   Output ~ 0
+Text HLabel 14375 5550 2    50   Output ~ 0
 ALU_USE_ADDERS
-Text HLabel 14375 5350 2    50   Output ~ 0
+Text HLabel 14375 5450 2    50   Output ~ 0
 ALU_USE_ANDS
-Text HLabel 14375 5150 2    50   Output ~ 0
+Text HLabel 14325 14075 2    50   Output ~ 0
 ALU_CIN
-Text HLabel 14375 5050 2    50   Output ~ 0
+Text HLabel 14375 5250 2    50   Output ~ 0
 ALU_SEXT_5
-Text HLabel 14375 4950 2    50   Output ~ 0
+Text HLabel 14375 5150 2    50   Output ~ 0
 ALU_INVERT_B
 $Comp
 L Breadboard_CPU-rescue:74LS74-74xx U601
@@ -1898,7 +1898,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3675 8400 50  0001 C CNN
 	4    3675 8400
 	1    0    0    -1  
 $EndComp
-Text HLabel 14325 8425 2    50   Output ~ 0
+Text HLabel 16225 5525 2    50   Output ~ 0
 ALU_USE_CFL_SAVED
 Wire Wire Line
 	3050 11525 3050 11325
@@ -1923,9 +1923,9 @@ Text HLabel 15450 9775 3    50   Output ~ 0
 PC_IN
 Text HLabel 15400 10275 3    50   Output ~ 0
 PC_OUT
-Text HLabel 14325 14175 2    50   Output ~ 0
+Text HLabel 14375 5350 2    50   Output ~ 0
 ALU_OUT
-Text HLabel 14325 14075 2    50   Output ~ 0
+Text HLabel 14375 5650 2    50   Output ~ 0
 ALU_AREG_OUT
 Wire Wire Line
 	13425 7825 15600 7825
@@ -1977,11 +1977,11 @@ Wire Wire Line
 	15600 7725 15650 7725
 Text HLabel 15600 7675 1    50   Output ~ 0
 SP_IN
-NoConn ~ 14325 14275
+NoConn ~ 14325 8425
 Text Label 3600 12525 2    50   ~ 0
 OPC_1
 Text Label 3600 12425 2    50   ~ 0
 OPC_0
-Text HLabel 14375 5650 2    50   Output ~ 0
+Text HLabel 14325 14275 2    50   Output ~ 0
 ALU_CFL_UPD
 $EndSCHEMATC

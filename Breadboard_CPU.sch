@@ -522,7 +522,7 @@ F6 "HALT_C" I L 9075 3175 50
 F7 "HALT_D" I L 9075 3275 50 
 $EndSheet
 Text Notes 10925 5500 0    150  ~ 0
-Annotation Key:\n100's: Main Sheet\n200's: Power Module\n300's: Clock Module\n400's: Memory Module\n500's: ALU Module\n600's: Control Unit\n700's: Registers Module\n800's PC Module
+Annotation Key:\n100's: Main Sheet\n200's: Power Module\n300's: Clock Module\n400's: Memory Module\n500's: ALU Module\n600's: Control Unit\n700's: Registers Module\n800's: PC Module
 $Sheet
 S 3300 5825 900  900 
 U 5EFC0623

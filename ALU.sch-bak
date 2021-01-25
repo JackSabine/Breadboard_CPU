@@ -16,26 +16,26 @@ $EndDescr
 $Comp
 L Breadboard_CPU-rescue:74LS32-74xx U?
 U 4 1 5F92E394
-P 9275 9500
+P 2850 1925
 AR Path="/5EFC04D0/5F92E394" Ref="U?"  Part="4" 
 AR Path="/5EFC06D4/5F92E394" Ref="U503"  Part="4" 
-F 0 "U503" H 9275 9825 50  0000 C CNN
-F 1 "74HCT32N" H 9275 9734 50  0000 C CNN
-F 2 "" H 9275 9500 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 9275 9500 50  0001 C CNN
-	4    9275 9500
-	-1   0    0    -1  
+F 0 "U503" H 2850 2250 50  0000 C CNN
+F 1 "74HCT32N" H 2850 2159 50  0000 C CNN
+F 2 "" H 2850 1925 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 2850 1925 50  0001 C CNN
+	4    2850 1925
+	1    0    0    -1  
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U509
 U 4 1 610C6B10
-P 10325 9600
-F 0 "U509" H 10325 9925 50  0000 C CNN
-F 1 "74HCT08N" H 10325 9834 50  0000 C CNN
-F 2 "" H 10325 9600 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 10325 9600 50  0001 C CNN
-	4    10325 9600
-	-1   0    0    -1  
+P 10050 4225
+F 0 "U509" H 10050 4550 50  0000 C CNN
+F 1 "74HCT08N" H 10050 4459 50  0000 C CNN
+F 2 "" H 10050 4225 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 10050 4225 50  0001 C CNN
+	4    10050 4225
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	9500 8725 9900 8725
@@ -71,13 +71,13 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U509
 U 3 1 610C6B0A
-P 7600 12700
-F 0 "U509" H 7600 13025 50  0000 C CNN
-F 1 "74HCT08N" H 7600 12934 50  0000 C CNN
-F 2 "" H 7600 12700 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 7600 12700 50  0001 C CNN
-	3    7600 12700
-	0    -1   -1   0   
+P 14000 2250
+F 0 "U509" H 14000 2575 50  0000 C CNN
+F 1 "74HCT08N" H 14000 2484 50  0000 C CNN
+F 2 "" H 14000 2250 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 14000 2250 50  0001 C CNN
+	3    14000 2250
+	1    0    0    -1  
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U513
@@ -159,13 +159,13 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U509
 U 2 1 61036CFD
-P 10050 4225
-F 0 "U509" H 10050 4550 50  0000 C CNN
-F 1 "74HCT08N" H 10050 4459 50  0000 C CNN
-F 2 "" H 10050 4225 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 10050 4225 50  0001 C CNN
-	2    10050 4225
-	1    0    0    -1  
+P 7600 12700
+F 0 "U509" H 7600 13025 50  0000 C CNN
+F 1 "74HCT08N" H 7600 12934 50  0000 C CNN
+F 2 "" H 7600 12700 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 7600 12700 50  0001 C CNN
+	2    7600 12700
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U513
@@ -478,15 +478,15 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS32-74xx U?
 U 2 1 605D5434
-P 2850 1925
+P 9275 9500
 AR Path="/5EFC04D0/605D5434" Ref="U?"  Part="2" 
 AR Path="/5EFC06D4/605D5434" Ref="U502"  Part="2" 
-F 0 "U502" H 2850 2250 50  0000 C CNN
-F 1 "74HCT32N" H 2850 2159 50  0000 C CNN
-F 2 "" H 2850 1925 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 2850 1925 50  0001 C CNN
-	2    2850 1925
-	1    0    0    -1  
+F 0 "U502" H 9275 9825 50  0000 C CNN
+F 1 "74HCT32N" H 9275 9734 50  0000 C CNN
+F 2 "" H 9275 9500 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 9275 9500 50  0001 C CNN
+	2    9275 9500
+	-1   0    0    -1  
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS32-74xx U?
@@ -1894,13 +1894,13 @@ Wire Wire Line
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U509
 U 1 1 613F070E
-P 14000 2250
-F 0 "U509" H 14000 2575 50  0000 C CNN
-F 1 "74HCT08N" H 14000 2484 50  0000 C CNN
-F 2 "" H 14000 2250 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 14000 2250 50  0001 C CNN
-	1    14000 2250
-	1    0    0    -1  
+P 10325 9600
+F 0 "U509" H 10325 9925 50  0000 C CNN
+F 1 "74HCT08N" H 10325 9834 50  0000 C CNN
+F 2 "" H 10325 9600 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 10325 9600 50  0001 C CNN
+	1    10325 9600
+	-1   0    0    1   
 $EndComp
 Text HLabel 13650 2350 0    50   Input ~ 0
 CLK

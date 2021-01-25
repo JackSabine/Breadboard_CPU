@@ -198,31 +198,31 @@ Wire Wire Line
 $Comp
 L Breadboard_CPU-rescue:Q_NPN_CBE-Device Q401
 U 1 1 5F79CEAE
-P 11700 3375
-F 0 "Q401" H 11891 3421 50  0000 L CNN
-F 1 "2N2222" H 11891 3330 50  0000 L CNN
-F 2 "" H 11900 3475 50  0001 C CNN
-F 3 "~" H 11700 3375 50  0001 C CNN
-	1    11700 3375
+P 12100 3375
+F 0 "Q401" H 12291 3421 50  0000 L CNN
+F 1 "2N2222" H 12291 3330 50  0000 L CNN
+F 2 "" H 12300 3475 50  0001 C CNN
+F 3 "~" H 12100 3375 50  0001 C CNN
+	1    12100 3375
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	11600 3175 11600 3025
+	12000 3175 12000 3025
 Connection ~ 11600 3025
 Wire Wire Line
-	11600 3575 11600 3825
+	12000 3575 12000 3825
 Wire Wire Line
 	10850 3025 11600 3025
 Wire Wire Line
-	11900 3375 11950 3375
-Text HLabel 2475 1350 0    50   Input ~ 0
+	12300 3375 12350 3375
+Text HLabel 13075 4850 0    50   Input ~ 0
 CLK
 Wire Wire Line
-	2525 1350 2475 1350
-Text HLabel 2475 1150 0    50   Input ~ 0
+	13125 4850 13075 4850
+Text HLabel 13075 4650 0    50   Input ~ 0
 MEM_IN
 Wire Wire Line
-	2475 1150 2525 1150
+	13075 4650 13125 4650
 $Comp
 L Breadboard_CPU-rescue:C_Small-Device C408
 U 1 1 5F0D1068
@@ -271,19 +271,16 @@ Entry Wire Line
 Entry Wire Line
 	9225 3175 9125 3275
 Wire Wire Line
-	11600 3825 13550 3825
-Connection ~ 11600 3825
-Wire Wire Line
 	10400 3775 10400 3825
 $Comp
 L Breadboard_CPU-rescue:R-Device R404
 U 1 1 5FACF7B8
-P 12100 3375
-F 0 "R404" V 11893 3375 50  0000 C CNN
-F 1 "10k" V 11984 3375 50  0000 C CNN
-F 2 "" V 12030 3375 50  0001 C CNN
-F 3 "~" H 12100 3375 50  0001 C CNN
-	1    12100 3375
+P 12500 3375
+F 0 "R404" V 12293 3375 50  0000 C CNN
+F 1 "10k" V 12384 3375 50  0000 C CNN
+F 2 "" V 12430 3375 50  0001 C CNN
+F 3 "~" H 12500 3375 50  0001 C CNN
+	1    12500 3375
 	0    1    1    0   
 $EndComp
 Wire Wire Line
@@ -688,7 +685,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 6675 7450 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	3925 1350 3975 1350
+	2750 4150 2800 4150
 Wire Wire Line
 	5925 4475 5975 4475
 Text HLabel 5925 4475 0    50   Input ~ 0
@@ -820,14 +817,14 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 1 1 61B1F14E
-P 2825 1250
+P 2550 8700
 AR Path="/5EFC06D4/61B1F14E" Ref="U?"  Part="1" 
 AR Path="/5EFC0623/61B1F14E" Ref="U403"  Part="1" 
-F 0 "U403" H 2825 1575 50  0000 C CNN
-F 1 "74HCT08N" H 2825 1484 50  0000 C CNN
-F 2 "" H 2825 1250 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 2825 1250 50  0001 C CNN
-	1    2825 1250
+F 0 "U403" H 2550 9025 50  0000 C CNN
+F 1 "74HCT08N" H 2550 8934 50  0000 C CNN
+F 2 "" H 2550 8700 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 2550 8700 50  0001 C CNN
+	1    2550 8700
 	1    0    0    -1  
 $EndComp
 Text Notes 6300 750  0    118  ~ 0
@@ -892,7 +889,7 @@ Entry Wire Line
 	7525 1450 7625 1550
 Entry Wire Line
 	7525 1350 7625 1450
-Text HLabel 3925 1350 0    50   Input ~ 0
+Text HLabel 2750 4150 0    50   Input ~ 0
 MAR_IN
 Wire Wire Line
 	5925 1350 5975 1350
@@ -1066,8 +1063,6 @@ MAR[15]
 Wire Wire Line
 	9225 4150 9875 4150
 Wire Wire Line
-	10400 3825 11600 3825
-Wire Wire Line
 	10900 3375 10900 4150
 Wire Wire Line
 	10900 4150 10475 4150
@@ -1196,15 +1191,15 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 4 1 60A654AA
-P 4275 1250
+P 13425 4750
 AR Path="/5EFC06D4/60A654AA" Ref="U?"  Part="4" 
 AR Path="/619E6F28/60A654AA" Ref="U?"  Part="4" 
 AR Path="/5EFC0623/60A654AA" Ref="U406"  Part="4" 
-F 0 "U406" H 4275 1575 50  0000 C CNN
-F 1 "74HCT08N" H 4275 1484 50  0000 C CNN
-F 2 "" H 4275 1250 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4275 1250 50  0001 C CNN
-	4    4275 1250
+F 0 "U406" H 13425 5075 50  0000 C CNN
+F 1 "74HCT08N" H 13425 4984 50  0000 C CNN
+F 2 "" H 13425 4750 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 13425 4750 50  0001 C CNN
+	4    13425 4750
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -2237,13 +2232,13 @@ Wire Wire Line
 Wire Wire Line
 	3300 5875 4575 5875
 Wire Wire Line
-	3125 1250 3175 1250
-Text Label 3175 1250 0    50   ~ 0
+	13725 4750 13775 4750
+Text Label 13775 4750 0    50   ~ 0
 CLK_MEM_IN
-Text Label 12350 3375 0    50   ~ 0
+Text Label 12750 3375 0    50   ~ 0
 CLK_MEM_IN
 Wire Wire Line
-	12250 3375 12350 3375
+	12650 3375 12750 3375
 Wire Wire Line
 	2250 5675 2300 5675
 Text Label 2300 5675 0    50   ~ 0
@@ -2406,8 +2401,8 @@ Wire Wire Line
 Text Notes 13675 7325 0    50   ~ 0
 When MEM_OUT and MAR[15] go low, we are accessing the code EEPROM\nToggle the 
 Wire Wire Line
-	3925 1150 3975 1150
-Text HLabel 3925 1150 0    50   Input ~ 0
+	2750 3950 2800 3950
+Text HLabel 2750 3950 0    50   Input ~ 0
 CLK
 $Comp
 L Breadboard_CPU-rescue:Q_NPN_CBE-Device Q402
@@ -2506,7 +2501,7 @@ Wire Wire Line
 	16125 10275 16175 10275
 Text Label 16125 10075 2    50   ~ 0
 CLK_MEM_IN
-Text Label 4625 1250 0    50   ~ 0
+Text Label 3450 4050 0    50   ~ 0
 CLK_MAR_IN
 Wire Wire Line
 	2800 2800 3400 2800
@@ -2518,7 +2513,7 @@ Wire Wire Line
 	3400 3000 3400 3100
 Connection ~ 2850 3000
 Wire Wire Line
-	4575 1250 4625 1250
+	3400 4050 3450 4050
 Text Label 3675 3300 2    50   ~ 0
 CLK_MAR_IN
 Wire Wire Line
@@ -2588,15 +2583,15 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 3 1 61B1F15A
-P 4450 12400
+P 3100 4050
 AR Path="/5EFC06D4/61B1F15A" Ref="U?"  Part="3" 
 AR Path="/5EFC0623/61B1F15A" Ref="U402"  Part="3" 
-F 0 "U402" H 4450 12725 50  0000 C CNN
-F 1 "74HCT08N" H 4450 12634 50  0000 C CNN
-F 2 "" H 4450 12400 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4450 12400 50  0001 C CNN
-	3    4450 12400
-	1    0    0    1   
+F 0 "U402" H 3100 4375 50  0000 C CNN
+F 1 "74HCT08N" H 3100 4284 50  0000 C CNN
+F 2 "" H 3100 4050 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3100 4050 50  0001 C CNN
+	3    3100 4050
+	1    0    0    -1  
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS32-74xx U?
@@ -2681,6 +2676,12 @@ Wire Wire Line
 	1450 2800 1500 2800
 Text HLabel 1450 2800 0    50   Input ~ 0
 ~CLK
+Connection ~ 12000 3025
+Connection ~ 12000 3825
+Wire Wire Line
+	12000 3825 13550 3825
+Wire Wire Line
+	10400 3825 12000 3825
 Wire Bus Line
 	9125 2275 9125 12925
 Wire Bus Line
