@@ -16,15 +16,15 @@ $EndDescr
 $Comp
 L Breadboard_CPU-rescue:74LS32-74xx U?
 U 4 1 5F92E394
-P 2850 1925
+P 9275 9500
 AR Path="/5EFC04D0/5F92E394" Ref="U?"  Part="4" 
 AR Path="/5EFC06D4/5F92E394" Ref="U503"  Part="4" 
-F 0 "U503" H 2850 2250 50  0000 C CNN
-F 1 "74HCT32N" H 2850 2159 50  0000 C CNN
-F 2 "" H 2850 1925 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 2850 1925 50  0001 C CNN
-	4    2850 1925
-	1    0    0    -1  
+F 0 "U503" H 9275 9825 50  0000 C CNN
+F 1 "74HCT32N" H 9275 9734 50  0000 C CNN
+F 2 "" H 9275 9500 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 9275 9500 50  0001 C CNN
+	4    9275 9500
+	-1   0    0    -1  
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U509
@@ -478,15 +478,15 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS32-74xx U?
 U 2 1 605D5434
-P 9275 9500
+P 2850 1925
 AR Path="/5EFC04D0/605D5434" Ref="U?"  Part="2" 
 AR Path="/5EFC06D4/605D5434" Ref="U502"  Part="2" 
-F 0 "U502" H 9275 9825 50  0000 C CNN
-F 1 "74HCT32N" H 9275 9734 50  0000 C CNN
-F 2 "" H 9275 9500 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 9275 9500 50  0001 C CNN
-	2    9275 9500
-	-1   0    0    -1  
+F 0 "U502" H 2850 2250 50  0000 C CNN
+F 1 "74HCT32N" H 2850 2159 50  0000 C CNN
+F 2 "" H 2850 1925 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 2850 1925 50  0001 C CNN
+	2    2850 1925
+	1    0    0    -1  
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS32-74xx U?

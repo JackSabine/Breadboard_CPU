@@ -754,7 +754,7 @@ Wire Wire Line
 	8300 11850 8300 11750
 Text Label 14325 13775 0    50   ~ 0
 IR_IN
-Text HLabel 16225 5425 2    50   Output ~ 0
+Text HLabel 14375 5050 2    50   Output ~ 0
 AREG_IN
 Text HLabel 11275 2175 2    50   Output ~ 0
 B2
@@ -1898,7 +1898,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3675 8400 50  0001 C CNN
 	4    3675 8400
 	1    0    0    -1  
 $EndComp
-Text HLabel 16225 5525 2    50   Output ~ 0
+Text HLabel 14375 4950 2    50   Output ~ 0
 ALU_USE_CFL_SAVED
 Wire Wire Line
 	3050 11525 3050 11325
