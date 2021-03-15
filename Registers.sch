@@ -2261,9 +2261,9 @@ Wire Wire Line
 	3700 12950 3650 12950
 Wire Wire Line
 	3650 12750 3700 12750
-Text Label 3700 12750 0    50   ~ 0
-~SP_EN_LD_HIGH
 Text Label 3700 12950 0    50   ~ 0
+~SP_EN_LD_HIGH
+Text Label 3700 12750 0    50   ~ 0
 ~SP_EN_LD_LOW
 Wire Wire Line
 	2950 14125 3050 14125
@@ -2300,9 +2300,9 @@ Wire Wire Line
 	3700 14225 3650 14225
 Wire Wire Line
 	3650 14025 3700 14025
-Text Label 3700 14025 0    50   ~ 0
-~SP_EN_OUT_HIGH
 Text Label 3700 14225 0    50   ~ 0
+~SP_EN_OUT_HIGH
+Text Label 3700 14025 0    50   ~ 0
 ~SP_EN_OUT_LOW
 Text HLabel 2300 12950 0    50   Input ~ 0
 ~CLK

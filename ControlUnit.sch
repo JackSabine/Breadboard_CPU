@@ -755,7 +755,7 @@ Wire Wire Line
 Text Label 14325 13775 0    50   ~ 0
 IR_IN
 Text HLabel 14375 5050 2    50   Output ~ 0
-AREG_IN
+ALU_AREG_IN
 Text HLabel 11275 2175 2    50   Output ~ 0
 B2
 Text HLabel 11275 2075 2    50   Output ~ 0
@@ -1140,7 +1140,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 15950 11725 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text HLabel 14325 14475 2    50   Output ~ 0
-TR_HALT
+TRG_HALT
 $Comp
 L Breadboard_CPU-rescue:74LS04-74xx U616
 U 6 1 62EF7408
@@ -1230,25 +1230,25 @@ F 3 "74xx/74hc_hct74.pdf" H 4375 8400 50  0001 C CNN
 	1    4375 8400
 	1    0    0    -1  
 $EndComp
-Text HLabel 4375 8050 1    50   Input ~ 0
+Text HLabel 4375 8750 3    50   Input ~ 0
 ~RST
 Wire Wire Line
-	4375 8050 4375 8100
+	4375 8750 4375 8700
 $Comp
 L Breadboard_CPU-rescue:VCC-power #PWR?
 U 1 1 6109BDDC
-P 4375 8750
+P 4375 8050
 AR Path="/5EFC0623/6109BDDC" Ref="#PWR?"  Part="1" 
 AR Path="/5F05F116/6109BDDC" Ref="#PWR0604"  Part="1" 
-F 0 "#PWR0604" H 4375 8600 50  0001 C CNN
-F 1 "VCC" H 4393 8923 50  0000 C CNN
-F 2 "" H 4375 8750 50  0001 C CNN
-F 3 "" H 4375 8750 50  0001 C CNN
-	1    4375 8750
-	1    0    0    1   
+F 0 "#PWR0604" H 4375 7900 50  0001 C CNN
+F 1 "VCC" H 4393 8223 50  0000 C CNN
+F 2 "" H 4375 8050 50  0001 C CNN
+F 3 "" H 4375 8050 50  0001 C CNN
+	1    4375 8050
+	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	4375 8700 4375 8750
+	4375 8100 4375 8050
 Wire Wire Line
 	4025 8300 4075 8300
 Wire Wire Line
@@ -1526,11 +1526,11 @@ Wire Wire Line
 	14375 5650 13475 5650
 Wire Wire Line
 	14375 5550 13475 5550
-Text Label 16250 11725 0    50   ~ 0
-~I[10:8]->BUS
+Text Label 16250 12225 0    50   ~ 0
+~sext(I[10:8])->BUS
 Text Label 16250 11225 0    50   ~ 0
 ~I[10:8]->RS
-Text Label 16250 12225 0    50   ~ 0
+Text Label 16250 11725 0    50   ~ 0
 ~I[7:5]->RS
 Text Label 16250 12725 0    50   ~ 0
 ~I[7:0]->BUS

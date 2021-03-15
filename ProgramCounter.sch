@@ -1348,9 +1348,9 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 3525 9200 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	3425 5375 3475 5375
-Text Label 3475 5375 0    50   ~ 0
-~PC_EN_LD_HIGH
 Text Label 3475 5575 0    50   ~ 0
+~PC_EN_LD_HIGH
+Text Label 3475 5375 0    50   ~ 0
 ~PC_EN_LD_LOW
 Wire Wire Line
 	10175 7675 10225 7675
@@ -1513,9 +1513,9 @@ Wire Wire Line
 	3475 6850 3425 6850
 Wire Wire Line
 	3425 6650 3475 6650
-Text Label 3475 6650 0    50   ~ 0
-~PC_EN_OUT_HIGH
 Text Label 3475 6850 0    50   ~ 0
+~PC_EN_OUT_HIGH
+Text Label 3475 6650 0    50   ~ 0
 ~PC_EN_OUT_LOW
 Text HLabel 2075 5575 0    50   Input ~ 0
 ~CLK

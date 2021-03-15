@@ -636,23 +636,23 @@ Wire Wire Line
 	6475 4825 6475 4775
 Text Notes 1850 2250 0    50   ~ 0
 Initial state: 0b0\nAfter MAR_IN rises 1x: 0b1 (ready to read in high byte)\nAfter MAR_IN rises 2x: 0b0 (ready to read in low byte)\nAt 3x, this tff has cycled to the first MAR_IN rising condition\n
-Text HLabel 2500 2550 1    50   Input ~ 0
+Text HLabel 2500 3250 3    50   Input ~ 0
 ~RST
 Wire Wire Line
-	2500 2550 2500 2600
+	2500 3250 2500 3200
 $Comp
 L Breadboard_CPU-rescue:VCC-power #PWR0402
 U 1 1 5FE5F94F
-P 2500 3250
-F 0 "#PWR0402" H 2500 3100 50  0001 C CNN
-F 1 "VCC" H 2518 3423 50  0000 C CNN
-F 2 "" H 2500 3250 50  0001 C CNN
-F 3 "" H 2500 3250 50  0001 C CNN
-	1    2500 3250
-	1    0    0    1   
+P 2500 2550
+F 0 "#PWR0402" H 2500 2400 50  0001 C CNN
+F 1 "VCC" H 2518 2723 50  0000 C CNN
+F 2 "" H 2500 2550 50  0001 C CNN
+F 3 "" H 2500 2550 50  0001 C CNN
+	1    2500 2550
+	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	2500 3200 2500 3250
+	2500 2600 2500 2550
 Text Notes 5900 3275 0    50   ~ 0
 Low byte
 Text Notes 5900 1125 0    50   ~ 0
