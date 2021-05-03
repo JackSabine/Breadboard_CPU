@@ -299,8 +299,8 @@ Text HLabel 14325 14375 2    50   Output ~ 0
 ALU_SAVE
 Text HLabel 14325 11325 2    50   Output ~ 0
 MEM_IN
-Text HLabel 14325 11425 2    50   Output ~ 0
-MAR_IN
+Text HLabel 18450 11575 2    50   Output ~ 0
+MARL_IN
 Wire Wire Line
 	13350 3425 13350 3375
 $Comp
@@ -752,8 +752,8 @@ Wire Wire Line
 Connection ~ 8300 11850
 Wire Wire Line
 	8300 11850 8300 11750
-Text Label 14325 13775 0    50   ~ 0
-IR_IN
+Text Label 18525 12425 0    50   ~ 0
+IRL_IN
 Text HLabel 14375 5050 2    50   Output ~ 0
 ALU_AREG_IN
 Text HLabel 11275 2175 2    50   Output ~ 0
@@ -854,27 +854,27 @@ Wire Wire Line
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 1 1 618B5634
-P 3750 6825
+P 5700 7350
 AR Path="/5EFC06D4/618B5634" Ref="U?"  Part="1" 
 AR Path="/5F05F116/618B5634" Ref="U602"  Part="1" 
-F 0 "U602" H 3750 7150 50  0000 C CNN
-F 1 "74HCT08N" H 3750 7059 50  0000 C CNN
-F 2 "" H 3750 6825 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3750 6825 50  0001 C CNN
-	1    3750 6825
+F 0 "U602" H 5700 7675 50  0000 C CNN
+F 1 "74HCT08N" H 5700 7584 50  0000 C CNN
+F 2 "" H 5700 7350 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 5700 7350 50  0001 C CNN
+	1    5700 7350
 	1    0    0    -1  
 $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 2 1 618B563A
-P 5700 7350
+P 5700 9600
 AR Path="/5EFC06D4/618B563A" Ref="U?"  Part="2" 
 AR Path="/5F05F116/618B563A" Ref="U602"  Part="2" 
-F 0 "U602" H 5700 7675 50  0000 C CNN
-F 1 "74HCT08N" H 5700 7584 50  0000 C CNN
-F 2 "" H 5700 7350 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 5700 7350 50  0001 C CNN
-	2    5700 7350
+F 0 "U602" H 5700 9925 50  0000 C CNN
+F 1 "74HCT08N" H 5700 9834 50  0000 C CNN
+F 2 "" H 5700 9600 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 5700 9600 50  0001 C CNN
+	2    5700 9600
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1206,59 +1206,57 @@ Text HLabel 8250 6550 0    50   Input ~ 0
 B1
 Text HLabel 8250 6450 0    50   Input ~ 0
 B0
-Text HLabel 3400 6925 0    50   Input ~ 0
+Text HLabel 5350 7450 0    50   Input ~ 0
 CLK
 Wire Wire Line
-	3400 6925 3450 6925
+	5350 7450 5400 7450
 Wire Wire Line
-	3400 6725 3450 6725
-Text Label 3400 6725 2    50   ~ 0
-IR_IN
-Text Label 4100 6825 0    50   ~ 0
-IR_CLK
+	5350 7250 5400 7250
+Text Label 5350 7250 2    50   ~ 0
+IRL_IN
 $Comp
 L Breadboard_CPU-rescue:74LS74-74xx U?
 U 1 1 6109BDD4
-P 4375 8400
+P -5750 6700
 AR Path="/5EFC0970/6109BDD4" Ref="U?"  Part="1" 
 AR Path="/5EFC0623/6109BDD4" Ref="U?"  Part="1" 
 AR Path="/5F05F116/6109BDD4" Ref="U604"  Part="1" 
-F 0 "U604" H 4175 8650 50  0000 C CNN
-F 1 "74HCT74N" H 4625 8650 50  0000 C CNN
-F 2 "" H 4375 8400 50  0001 C CNN
-F 3 "74xx/74hc_hct74.pdf" H 4375 8400 50  0001 C CNN
-	1    4375 8400
+F 0 "U604" H -5950 6950 50  0000 C CNN
+F 1 "74HCT74N" H -5500 6950 50  0000 C CNN
+F 2 "" H -5750 6700 50  0001 C CNN
+F 3 "74xx/74hc_hct74.pdf" H -5750 6700 50  0001 C CNN
+	1    -5750 6700
 	1    0    0    -1  
 $EndComp
-Text HLabel 4375 8750 3    50   Input ~ 0
+Text HLabel -5750 7050 3    50   Input ~ 0
 ~RST
 Wire Wire Line
-	4375 8750 4375 8700
+	-5750 7050 -5750 7000
 $Comp
 L Breadboard_CPU-rescue:VCC-power #PWR?
 U 1 1 6109BDDC
-P 4375 8050
+P -5750 6350
 AR Path="/5EFC0623/6109BDDC" Ref="#PWR?"  Part="1" 
 AR Path="/5F05F116/6109BDDC" Ref="#PWR0604"  Part="1" 
-F 0 "#PWR0604" H 4375 7900 50  0001 C CNN
-F 1 "VCC" H 4393 8223 50  0000 C CNN
-F 2 "" H 4375 8050 50  0001 C CNN
-F 3 "" H 4375 8050 50  0001 C CNN
-	1    4375 8050
+F 0 "#PWR0604" H -5750 6200 50  0001 C CNN
+F 1 "VCC" H -5732 6523 50  0000 C CNN
+F 2 "" H -5750 6350 50  0001 C CNN
+F 3 "" H -5750 6350 50  0001 C CNN
+	1    -5750 6350
 	-1   0    0    -1  
 $EndComp
 Wire Wire Line
-	4375 8100 4375 8050
+	-5750 6400 -5750 6350
 Wire Wire Line
-	4025 8300 4075 8300
+	-6100 6600 -6050 6600
 Wire Wire Line
-	4825 9000 4025 9000
+	-5300 7300 -6100 7300
 Wire Wire Line
-	4825 8500 4825 9000
+	-5300 6800 -5300 7300
 Wire Wire Line
-	4675 8500 4825 8500
+	-5450 6800 -5300 6800
 Wire Wire Line
-	4675 8300 4825 8300
+	-5450 6600 -5300 6600
 Text Label 10275 1975 2    50   ~ 0
 I8
 Text Label 10275 2075 2    50   ~ 0
@@ -1338,14 +1336,14 @@ COND_FL
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 3 1 618B5640
-P 5700 9600
+P -4425 7900
 AR Path="/5EFC06D4/618B5640" Ref="U?"  Part="3" 
 AR Path="/5F05F116/618B5640" Ref="U602"  Part="3" 
-F 0 "U602" H 5700 9925 50  0000 C CNN
-F 1 "74HCT08N" H 5700 9834 50  0000 C CNN
-F 2 "" H 5700 9600 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 5700 9600 50  0001 C CNN
-	3    5700 9600
+F 0 "U602" H -4425 8225 50  0000 C CNN
+F 1 "74HCT08N" H -4425 8134 50  0000 C CNN
+F 2 "" H -4425 7900 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H -4425 7900 50  0001 C CNN
+	3    -4425 7900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1362,30 +1360,28 @@ F 3 "" H 20375 10250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4100 6825 4050 6825
+	-6100 7300 -6100 6600
 Wire Wire Line
-	4025 9000 4025 8300
-Wire Wire Line
-	3975 8400 4075 8400
+	-6150 6700 -6050 6700
 Wire Wire Line
 	6000 9600 8250 9600
 Wire Wire Line
-	4825 7450 5400 7450
+	-5300 5750 -4725 5750
 Wire Wire Line
-	4825 7450 4825 8300
+	-5300 5750 -5300 6600
 Wire Wire Line
-	4825 9000 4825 9500
+	-5300 7300 -5300 7800
 Wire Wire Line
-	4825 9500 5400 9500
-Connection ~ 4825 9000
-Text Label 5350 7250 2    50   ~ 0
+	-5300 7800 -4725 7800
+Connection ~ -5300 7300
+Text Label -4775 5550 2    50   ~ 0
 IR_CLK
 Wire Wire Line
-	5350 7250 5400 7250
-Text Label 5350 9700 2    50   ~ 0
+	-4775 5550 -4725 5550
+Text Label -4775 8000 2    50   ~ 0
 IR_CLK
 Wire Wire Line
-	5350 9700 5400 9700
+	-4775 8000 -4725 8000
 Wire Wire Line
 	11800 15275 13025 15275
 Wire Wire Line
@@ -1566,9 +1562,9 @@ Text Label 12675 5800 2    50   ~ 0
 COND_FL
 Wire Wire Line
 	11775 4750 13075 4750
-Text HLabel 16250 10225 2    50   Output ~ 0
+Text HLabel 17700 10175 2    50   Output ~ 0
 ~PC_OUT
-Text HLabel 16250 9725 2    50   Output ~ 0
+Text HLabel 17700 9675 2    50   Output ~ 0
 ~PC_IN
 Text HLabel 16250 13225 2    50   Output ~ 0
 ~MEM_OUT
@@ -1839,35 +1835,33 @@ ALU_INVERT_B
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 4 1 618B5646
-P 3675 8400
+P -6450 6700
 AR Path="/5EFC06D4/618B5646" Ref="U?"  Part="4" 
 AR Path="/5F05F116/618B5646" Ref="U602"  Part="4" 
-F 0 "U602" H 3675 8725 50  0000 C CNN
-F 1 "74HCT08N" H 3675 8634 50  0000 C CNN
-F 2 "" H 3675 8400 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3675 8400 50  0001 C CNN
-	4    3675 8400
+F 0 "U602" H -6450 7025 50  0000 C CNN
+F 1 "74HCT08N" H -6450 6934 50  0000 C CNN
+F 2 "" H -6450 6700 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H -6450 6700 50  0001 C CNN
+	4    -6450 6700
 	1    0    0    -1  
 $EndComp
 Text HLabel 14375 4950 2    50   Output ~ 0
 ALU_USE_CFL_SAVED
-Text HLabel 3325 8500 0    50   Input ~ 0
+Text HLabel -6800 6800 0    50   Input ~ 0
 ~CLK
 Wire Wire Line
-	3325 8500 3375 8500
+	-6800 6800 -6750 6800
 Wire Wire Line
-	3325 8300 3375 8300
-Text Label 3325 8300 2    50   ~ 0
+	-6800 6600 -6750 6600
+Text Label -6800 6600 2    50   ~ 0
 IR_IN
 Wire Wire Line
-	15450 9725 15450 9775
-Connection ~ 15450 9725
+	17525 9025 17525 9075
 Wire Wire Line
-	15400 10225 15400 10275
-Connection ~ 15400 10225
-Text HLabel 15450 9775 3    50   Output ~ 0
+	18525 8850 18525 8900
+Text HLabel 17525 9075 3    50   Output ~ 0
 PC_IN
-Text HLabel 15400 10275 3    50   Output ~ 0
+Text HLabel 18525 8900 3    50   Output ~ 0
 PC_OUT
 Text HLabel 14375 5350 2    50   Output ~ 0
 ALU_OUT
@@ -1875,8 +1869,6 @@ Text HLabel 14375 5650 2    50   Output ~ 0
 ALU_AREG_OUT
 Wire Wire Line
 	13425 7825 15600 7825
-Wire Wire Line
-	13425 7725 15600 7725
 Wire Wire Line
 	15600 8225 15650 8225
 Wire Wire Line
@@ -1907,21 +1899,13 @@ Wire Wire Line
 	16250 7725 16300 7725
 Wire Wire Line
 	16250 8225 16300 8225
-Text HLabel 16300 7725 2    50   Output ~ 0
+Text HLabel 17775 8900 2    50   Output ~ 0
 ~SP_IN
-Text HLabel 16300 8225 2    50   Output ~ 0
+Text HLabel 17775 9400 2    50   Output ~ 0
 ~SP_OUT
-Wire Wire Line
-	15600 8225 15600 8275
-Connection ~ 15600 8225
-Text HLabel 15600 8275 3    50   Output ~ 0
+Text HLabel 18250 8825 3    50   Output ~ 0
 SP_OUT
-Wire Wire Line
-	15600 7725 15600 7675
-Connection ~ 15600 7725
-Wire Wire Line
-	15600 7725 15650 7725
-Text HLabel 15600 7675 1    50   Output ~ 0
+Text HLabel 18250 8500 1    50   Output ~ 0
 SP_IN
 Text Label 3600 12525 2    50   ~ 0
 OPC_1
@@ -1933,4 +1917,26 @@ Text HLabel 3600 11325 0    50   Input ~ 0
 CFL
 Text HLabel 14325 8425 2    50   Output ~ 0
 REG_ASSERT_RS0
+Text HLabel 18450 11675 2    50   Output ~ 0
+MARH_IN
+Text HLabel 18800 11975 0    50   Output ~ 0
+~PCL_IN
+Text HLabel 18825 12100 0    50   Output ~ 0
+~PCH_IN
+Text HLabel 18900 12200 0    50   Output ~ 0
+~PCH_OUT
+Text HLabel 18850 12300 0    50   Output ~ 0
+~PCL_OUT
+Text HLabel 5350 9700 0    50   Input ~ 0
+CLK
+Wire Wire Line
+	5350 9700 5400 9700
+Wire Wire Line
+	5350 9500 5400 9500
+Text Label 5350 9500 2    50   ~ 0
+IRH_IN
+Text Label 18525 12525 0    50   ~ 0
+IRH_IN
+Wire Wire Line
+	13425 7725 15650 7725
 $EndSCHEMATC
