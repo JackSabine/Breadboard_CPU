@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 8 8
+Sheet 7 8
 Title ""
 Date ""
 Rev ""
@@ -817,8 +817,6 @@ Connection ~ 10825 6225
 Wire Wire Line
 	10825 6225 10825 6275
 Wire Wire Line
-	-5150 6600 -5100 6600
-Wire Wire Line
 	10275 7475 10325 7475
 Wire Wire Line
 	10275 7575 10325 7575
@@ -1223,132 +1221,8 @@ Wire Wire Line
 Connection ~ 6500 7225
 Wire Wire Line
 	6500 7225 6500 7275
-$Comp
-L Breadboard_CPU-rescue:74LS74-74xx U?
-U 1 1 6006EF1A
-P -3075 5225
-AR Path="/5EFC0970/6006EF1A" Ref="U?"  Part="1" 
-AR Path="/5EFC0623/6006EF1A" Ref="U?"  Part="1" 
-AR Path="/5EFC0772/6006EF1A" Ref="U802"  Part="1" 
-F 0 "U802" H -3275 5475 50  0000 C CNN
-F 1 "74HCT74N" H -2850 5475 50  0000 C CNN
-F 2 "" H -3075 5225 50  0001 C CNN
-F 3 "74xx/74hc_hct74.pdf" H -3075 5225 50  0001 C CNN
-	1    -3075 5225
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS74-74xx U?
-U 2 1 6006EF20
-P -3075 6500
-AR Path="/5F05F116/6006EF20" Ref="U?"  Part="2" 
-AR Path="/5EFC0970/6006EF20" Ref="U?"  Part="2" 
-AR Path="/5EFC0623/6006EF20" Ref="U?"  Part="2" 
-AR Path="/5EFC0772/6006EF20" Ref="U802"  Part="2" 
-F 0 "U802" H -3275 6750 50  0000 C CNN
-F 1 "74HCT74N" H -2850 6750 50  0000 C CNN
-F 2 "" H -3075 6500 50  0001 C CNN
-F 3 "74xx/74hc_hct74.pdf" H -3075 6500 50  0001 C CNN
-	2    -3075 6500
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS74-74xx U?
-U 3 1 6006EF26
-P -2575 8225
-AR Path="/5EFC0970/6006EF26" Ref="U?"  Part="3" 
-AR Path="/5EFC0623/6006EF26" Ref="U?"  Part="3" 
-AR Path="/5EFC0772/6006EF26" Ref="U802"  Part="3" 
-F 0 "U802" H -2345 8271 50  0000 L CNN
-F 1 "74HCT74N" H -2345 8180 50  0000 L CNN
-F 2 "" H -2575 8225 50  0001 C CNN
-F 3 "74xx/74hc_hct74.pdf" H -2575 8225 50  0001 C CNN
-	3    -2575 8225
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	-1175 5550 -1125 5550
 Text HLabel 6500 4975 0    50   Input ~ 0
 CLK
-Wire Wire Line
-	-3475 5225 -3375 5225
-Text HLabel -3075 5575 3    50   Input ~ 0
-~RST
-Wire Wire Line
-	-3075 5575 -3075 5525
-$Comp
-L Breadboard_CPU-rescue:VCC-power #PWR?
-U 1 1 6026CFAD
-P -3075 4875
-AR Path="/5EFC0623/6026CFAD" Ref="#PWR?"  Part="1" 
-AR Path="/5F05F116/6026CFAD" Ref="#PWR?"  Part="1" 
-AR Path="/5EFC0772/6026CFAD" Ref="#PWR0801"  Part="1" 
-F 0 "#PWR0801" H -3075 4725 50  0001 C CNN
-F 1 "VCC" H -3057 5048 50  0000 C CNN
-F 2 "" H -3075 4875 50  0001 C CNN
-F 3 "" H -3075 4875 50  0001 C CNN
-	1    -3075 4875
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	-3075 4925 -3075 4875
-Wire Wire Line
-	-3375 5125 -3425 5125
-Wire Wire Line
-	-3425 5125 -3425 5825
-Wire Wire Line
-	-3425 5825 -2725 5825
-Wire Wire Line
-	-2725 5825 -2725 5325
-Wire Wire Line
-	-2725 5325 -2775 5325
-$Comp
-L Breadboard_CPU-rescue:74LS32-74xx U803
-U 3 1 602BDF6B
-P -5575 6100
-F 0 "U803" H -5575 6425 50  0000 C CNN
-F 1 "74LS32" H -5575 6334 50  0000 C CNN
-F 2 "" H -5575 6100 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H -5575 6100 50  0001 C CNN
-	3    -5575 6100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS32-74xx U803
-U 4 1 602BF537
-P -5500 6750
-F 0 "U803" H -5500 7075 50  0000 C CNN
-F 1 "74LS32" H -5500 6984 50  0000 C CNN
-F 2 "" H -5500 6750 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H -5500 6750 50  0001 C CNN
-	4    -5500 6750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS32-74xx U803
-U 5 1 602C05E9
-P -3450 8225
-F 0 "U803" H -3220 8271 50  0000 L CNN
-F 1 "74LS32" H -3220 8180 50  0000 L CNN
-F 2 "" H -3450 8225 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H -3450 8225 50  0001 C CNN
-	5    -3450 8225
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	-2775 5125 -2725 5125
-Text Label -2725 5325 0    50   ~ 0
-~PC_EN_LD_HIGH
-Text Label -2725 5125 0    50   ~ 0
-~PC_EN_LD_LOW
-Wire Wire Line
-	-5200 6750 -5150 6750
-Wire Wire Line
-	-5150 6750 -5150 6600
-Wire Wire Line
-	-5850 6650 -5800 6650
-Wire Wire Line
-	-5800 6850 -5850 6850
 Text HLabel 10225 2725 0    50   Input ~ 0
 ~PCL_OUT
 Wire Wire Line
@@ -1363,35 +1237,7 @@ Wire Wire Line
 	10275 2775 10325 2775
 Connection ~ 10275 2725
 Wire Wire Line
-	-6400 4225 -6350 4225
-Wire Wire Line
-	-5275 4125 -5325 4125
-Wire Wire Line
-	-5325 4325 -5275 4325
-Wire Wire Line
 	5725 2275 5775 2275
-$Comp
-L Breadboard_CPU-rescue:74LS32-74xx U803
-U 2 1 602BD413
-P -5250 7350
-F 0 "U803" H -5250 7675 50  0000 C CNN
-F 1 "74LS32" H -5250 7584 50  0000 C CNN
-F 2 "" H -5250 7350 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H -5250 7350 50  0001 C CNN
-	2    -5250 7350
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS32-74xx U803
-U 1 1 602BA702
-P -4975 4225
-F 0 "U803" H -4975 4550 50  0000 C CNN
-F 1 "74LS32" H -4975 4459 50  0000 C CNN
-F 2 "" H -4975 4225 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS32" H -4975 4225 50  0001 C CNN
-	1    -4975 4225
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5775 2275 5775 4675
 Wire Wire Line
@@ -1399,10 +1245,6 @@ Wire Wire Line
 Connection ~ 5775 2275
 Wire Wire Line
 	5775 2275 6550 2275
-Wire Wire Line
-	-5550 7250 -5600 7250
-Wire Wire Line
-	-5600 7450 -5550 7450
 Wire Wire Line
 	5725 7075 5775 7075
 Wire Wire Line
@@ -1412,171 +1254,8 @@ Wire Wire Line
 	5775 7075 6550 7075
 Wire Wire Line
 	5775 9475 6550 9475
-$Comp
-L Breadboard_CPU-rescue:VCC-power #PWR0803
-U 1 1 607F8C93
-P -3450 7625
-F 0 "#PWR0803" H -3450 7475 50  0001 C CNN
-F 1 "VCC" H -3433 7798 50  0000 C CNN
-F 2 "" H -3450 7625 50  0001 C CNN
-F 3 "" H -3450 7625 50  0001 C CNN
-	1    -3450 7625
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:GND-power #PWR0804
-U 1 1 607FA453
-P -3450 8825
-F 0 "#PWR0804" H -3450 8575 50  0001 C CNN
-F 1 "GND" H -3445 8652 50  0000 C CNN
-F 2 "" H -3450 8825 50  0001 C CNN
-F 3 "" H -3450 8825 50  0001 C CNN
-	1    -3450 8825
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	-4325 8775 -3450 8775
-Wire Wire Line
-	-3450 8775 -3450 8825
-Wire Wire Line
-	-3450 8725 -3450 8775
-Connection ~ -3450 8775
-Wire Wire Line
-	-3450 8775 -2575 8775
-Wire Wire Line
-	-2575 8775 -2575 8625
-Wire Wire Line
-	-4325 7725 -4325 7675
-Wire Wire Line
-	-4325 7675 -3450 7675
-Wire Wire Line
-	-3450 7675 -3450 7625
-Wire Wire Line
-	-3450 7675 -3450 7725
-Connection ~ -3450 7675
-Wire Wire Line
-	-3450 7675 -2575 7675
-Wire Wire Line
-	-2575 7675 -2575 7825
-Wire Wire Line
-	-3475 6500 -3375 6500
-Text HLabel -3075 6850 3    50   Input ~ 0
-~RST
-Wire Wire Line
-	-3075 6850 -3075 6800
-$Comp
-L Breadboard_CPU-rescue:VCC-power #PWR?
-U 1 1 608E9A7C
-P -3075 6150
-AR Path="/5EFC0623/608E9A7C" Ref="#PWR?"  Part="1" 
-AR Path="/5F05F116/608E9A7C" Ref="#PWR?"  Part="1" 
-AR Path="/5EFC0772/608E9A7C" Ref="#PWR0802"  Part="1" 
-F 0 "#PWR0802" H -3075 6000 50  0001 C CNN
-F 1 "VCC" H -3057 6323 50  0000 C CNN
-F 2 "" H -3075 6150 50  0001 C CNN
-F 3 "" H -3075 6150 50  0001 C CNN
-	1    -3075 6150
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	-3075 6200 -3075 6150
-Wire Wire Line
-	-3375 6400 -3425 6400
-Wire Wire Line
-	-3425 6400 -3425 7100
-Wire Wire Line
-	-3425 7100 -2725 7100
-Wire Wire Line
-	-2725 7100 -2725 6600
-Wire Wire Line
-	-2725 6600 -2775 6600
-Wire Wire Line
-	-2775 6400 -2725 6400
-Text Label -2725 6600 0    50   ~ 0
-~PC_EN_OUT_HIGH
-Text Label -2725 6400 0    50   ~ 0
-~PC_EN_OUT_LOW
-$Comp
-L Breadboard_CPU-rescue:74LS08-74xx U?
-U 2 1 60CADB66
-P -1350 3850
-AR Path="/5EFC06D4/60CADB66" Ref="U?"  Part="2" 
-AR Path="/5EFC0772/60CADB66" Ref="U801"  Part="2" 
-F 0 "U801" H -1350 4175 50  0000 C CNN
-F 1 "74HCT08N" H -1350 4084 50  0000 C CNN
-F 2 "" H -1350 3850 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H -1350 3850 50  0001 C CNN
-	2    -1350 3850
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS08-74xx U?
-U 4 1 60CADB6C
-P -825 6175
-AR Path="/5EFC06D4/60CADB6C" Ref="U?"  Part="4" 
-AR Path="/5EFC0772/60CADB6C" Ref="U801"  Part="4" 
-F 0 "U801" H -825 6500 50  0000 C CNN
-F 1 "74HCT08N" H -825 6409 50  0000 C CNN
-F 2 "" H -825 6175 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H -825 6175 50  0001 C CNN
-	4    -825 6175
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS08-74xx U?
-U 3 1 60CADB72
-P -825 5650
-AR Path="/5EFC06D4/60CADB72" Ref="U?"  Part="3" 
-AR Path="/5EFC0772/60CADB72" Ref="U801"  Part="3" 
-F 0 "U801" H -825 5975 50  0000 C CNN
-F 1 "74HCT08N" H -825 5884 50  0000 C CNN
-F 2 "" H -825 5650 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H -825 5650 50  0001 C CNN
-	3    -825 5650
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS08-74xx U?
-U 1 1 60CADB78
-P -1375 3075
-AR Path="/5EFC06D4/60CADB78" Ref="U?"  Part="1" 
-AR Path="/5EFC0772/60CADB78" Ref="U801"  Part="1" 
-F 0 "U801" H -1375 3400 50  0000 C CNN
-F 1 "74HCT08N" H -1375 3309 50  0000 C CNN
-F 2 "" H -1375 3075 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H -1375 3075 50  0001 C CNN
-	1    -1375 3075
-	1    0    0    -1  
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:74LS08-74xx U?
-U 5 1 60CADB7E
-P -4325 8225
-AR Path="/5EFC06D4/60CADB7E" Ref="U?"  Part="5" 
-AR Path="/5EFC0772/60CADB7E" Ref="U801"  Part="5" 
-F 0 "U801" H -4095 8271 50  0000 L CNN
-F 1 "74HCT08N" H -4095 8180 50  0000 L CNN
-F 2 "" H -4325 8225 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H -4325 8225 50  0001 C CNN
-	5    -4325 8225
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	-4325 8725 -4325 8775
-Wire Wire Line
-	-1175 5750 -1125 5750
-Wire Wire Line
-	-1725 2975 -1675 2975
-Wire Wire Line
-	-1725 3175 -1675 3175
-Text HLabel -1725 3175 0    50   Input ~ 0
-CLK
 Text HLabel 5725 2275 0    50   Input ~ 0
 ~PCL_IN
-Wire Wire Line
-	-1700 3750 -1650 3750
-Wire Wire Line
-	-1700 3950 -1650 3950
 Wire Wire Line
 	10275 7475 10275 7525
 Text HLabel 5725 7075 0    50   Input ~ 0

@@ -2736,21 +2736,6 @@ Text HLabel 20650 7525 3    50   Input ~ 0
 Wire Wire Line
 	20650 7525 20650 7475
 NoConn ~ 20950 7275
-$Comp
-L Breadboard_CPU-rescue:74LS74-74xx U?
-U 2 1 60AE31EF
-P 20625 4825
-AR Path="/5F05F116/60AE31EF" Ref="U?"  Part="2" 
-AR Path="/5EFC0970/60AE31EF" Ref="U?"  Part="2" 
-AR Path="/5EFC0623/60AE31EF" Ref="U?"  Part="2" 
-AR Path="/5EFC06D4/60AE31EF" Ref="U601"  Part="2" 
-F 0 "U601" H 20425 5075 50  0000 C CNN
-F 1 "74HCT74N" H 20850 5075 50  0000 C CNN
-F 2 "" H 20625 4825 50  0001 C CNN
-F 3 "74xx/74hc_hct74.pdf" H 20625 4825 50  0001 C CNN
-	2    20625 4825
-	1    0    0    -1  
-$EndComp
 Text HLabel 20625 5175 3    50   Input ~ 0
 ~RST
 Wire Wire Line
@@ -2783,4 +2768,18 @@ Wire Wire Line
 Connection ~ 19975 6125
 Wire Wire Line
 	19975 6125 20325 6125
+$Comp
+L Breadboard_CPU-rescue:74LS74-74xx U?
+U 1 1 69B2D25C
+P 20625 4825
+AR Path="/5EFC0970/69B2D25C" Ref="U?"  Part="1" 
+AR Path="/5EFC0623/69B2D25C" Ref="U?"  Part="1" 
+AR Path="/5EFC06D4/69B2D25C" Ref="U650"  Part="1" 
+F 0 "U650" H 20825 5075 50  0000 C CNN
+F 1 "~" H 20375 5075 50  0000 C CNN
+F 2 "" H 20625 4825 50  0001 C CNN
+F 3 "74xx/74hc_hct74.pdf" H 20625 4825 50  0001 C CNN
+	1    20625 4825
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
