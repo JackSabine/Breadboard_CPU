@@ -204,14 +204,14 @@ Wire Wire Line
 	11725 3300 12475 3300
 Wire Wire Line
 	13175 3650 13225 3650
-Text HLabel 4475 4250 0    50   Input ~ 0
+Text HLabel 4500 4250 0    50   Input ~ 0
 CLK
 Wire Wire Line
-	4525 4250 4475 4250
-Text HLabel 4475 4050 0    50   Input ~ 0
+	4550 4250 4500 4250
+Text HLabel 4500 4050 0    50   Input ~ 0
 MEM_IN
 Wire Wire Line
-	4475 4050 4525 4050
+	4500 4050 4550 4050
 $Comp
 L Breadboard_CPU-rescue:C_Small-Device C408
 U 1 1 5F0D1068
@@ -661,14 +661,14 @@ $EndComp
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 2 1 61B90A7D
-P 4825 4150
+P 4850 4150
 AR Path="/5EFC06D4/61B90A7D" Ref="U?"  Part="2" 
 AR Path="/5EFC0623/61B90A7D" Ref="U402"  Part="2" 
-F 0 "U402" H 4825 4475 50  0000 C CNN
-F 1 "74HCT08N" H 4825 4384 50  0000 C CNN
-F 2 "" H 4825 4150 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4825 4150 50  0001 C CNN
-	2    4825 4150
+F 0 "U402" H 4850 4475 50  0000 C CNN
+F 1 "74HCT08N" H 4850 4384 50  0000 C CNN
+F 2 "" H 4850 4150 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 4850 4150 50  0001 C CNN
+	2    4850 4150
 	1    0    0    -1  
 $EndComp
 Text Notes 7175 1025 0    118  ~ 0
@@ -1955,8 +1955,8 @@ PB_MODE
 Wire Wire Line
 	4175 6150 5450 6150
 Wire Wire Line
-	5125 4150 5175 4150
-Text Label 5175 4150 0    50   ~ 0
+	5150 4150 5200 4150
+Text Label 5200 4150 0    50   ~ 0
 CLK_MEM_IN
 Text Label 13625 3650 0    50   ~ 0
 CLK_MEM_IN
