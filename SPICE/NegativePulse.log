@@ -1,23 +1,23 @@
-Circuit: * C:\Users\jack\OneDrive\Documents\GitHub\Breadboard_CPU\NegativePulse.asc
+Circuit: * C:\Users\jack\OneDrive\Documents\GitHub\Breadboard_CPU\SPICE\NegativePulse.asc
 
 Direct Newton iteration for .op point succeeded.
 .step vvar=3.3
 .step vvar=5
 
-Date: Wed May 26 23:05:41 2021
-Total elapsed time: 1.770 seconds.
+Date: Sat Jun 12 12:15:38 2021
+Total elapsed time: 4.776 seconds.
 
 tnom = 27
 temp = 27
 method = modified trap
-totiter = 320808
-traniter = 320803
-tranpoints = 160292
-accept = 160209
-rejected = 83
+totiter = 480983
+traniter = 480978
+tranpoints = 240355
+accept = 240256
+rejected = 99
 matrix size = 10
 fillins = 0
 solver = Normal
-Matrix Compiler1:      30 opcodes  0.1/[0.1]/0.1
+Matrix Compiler1: 524 bytes object code size  0.1/0.1/[0.1]
 Matrix Compiler2: off  [0.1]/0.1/0.1
 
