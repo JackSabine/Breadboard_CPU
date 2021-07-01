@@ -1,5 +1,3 @@
-import sys
-
 from writer import Write
 
 def main():
@@ -14,7 +12,19 @@ def main():
     FileToWrite = "a.bin"
 
     Binary = bytearray(2 ** 15)
-    Binary[0] = 0x0a
+
+    with open(FileToCompile, 'r') as F:
+        Raw = F.readlines()
+        print(Raw)
+        Trimmed = []
+        for Line in Raw:
+            # Remove any lines that start with a comment or have no contents (newline only)
+            if(Line != '\n' and not Line.startswith(';')):
+                Trimmed.append(Line.replace('\n', ''))
+            
+
+        print(Trimmed)               
+
     Write(Binary, FileToWrite)
 
     return
