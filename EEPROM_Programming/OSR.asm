@@ -80,7 +80,7 @@ _OPEN_NOT_FOUND_RESTORE_COBINS:
     str     r0,     r4,     #0      ; Set COBins back to 0
 _OPEN_NOT_FOUND_FIN:
     add     r2,     r2              ; Mask = Mask + Mask (or effectively Mask = Mask << 1)
-    j       _INC_INNER
+    j     _INC_INNER
 _OPEN_FOUND:
     ; Coming into this block with HSAP low byte in r0 and mask in r2
     ; Next, push the low byte HSAP to the stack along with its mask

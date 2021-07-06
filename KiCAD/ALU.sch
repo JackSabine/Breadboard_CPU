@@ -1966,7 +1966,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 16925 17500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS153 U507
+L Breadboard_CPU-rescue:74LS153-74xx U507
 U 1 1 63DF5BEC
 P 11100 6575
 F 0 "U507" H 11200 7525 50  0000 C CNN

@@ -1267,4 +1267,5 @@ Wire Wire Line
 Connection ~ 10275 7525
 Wire Wire Line
 	10275 7525 10275 7575
+NoConn ~ 7550 9475
 $EndSCHEMATC

@@ -8,3 +8,6 @@ if(len(ALIASES) != len(REDUCED_LIST)):
     print("FAIL")
 else:
     print("SUCCESS")
+
+for a in ALIASES:
+    print(f"{str(bin(a)):>64}")

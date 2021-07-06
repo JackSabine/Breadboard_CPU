@@ -436,11 +436,11 @@ F 3 "" H 3475 12425 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 NoConn ~ 3975 13125
-Text HLabel 3975 13425 2    50   Output ~ 0
+Text HLabel 3975 13225 2    50   Output ~ 0
 RS2
 Text HLabel 3975 13325 2    50   Output ~ 0
 RS1
-Text HLabel 3975 13225 2    50   Output ~ 0
+Text HLabel 3975 13425 2    50   Output ~ 0
 RS0
 Wire Wire Line
 	3475 14175 3475 14125
@@ -1219,13 +1219,13 @@ Text Label 8200 13825 2    50   ~ 0
 ~I[7:0]->BUS
 Text Label 5600 13775 2    50   ~ 0
 ~sext(I[10:8])->BUS
-Text Label 2975 13825 2    50   ~ 0
+Text Label 2975 13725 2    50   ~ 0
 ~I[10:8]->RS
-Text Label 2975 13025 2    50   ~ 0
+Text Label 2975 13225 2    50   ~ 0
 I7
-Text Label 2975 12925 2    50   ~ 0
+Text Label 2975 13325 2    50   ~ 0
 I6
-Text Label 2975 12825 2    50   ~ 0
+Text Label 2975 13425 2    50   ~ 0
 I5
 Text HLabel 3975 12825 2    50   Output ~ 0
 RS0
@@ -1233,18 +1233,18 @@ Text HLabel 3975 12925 2    50   Output ~ 0
 RS1
 Text HLabel 3975 13025 2    50   Output ~ 0
 RS2
-Text Label 2975 13425 2    50   ~ 0
+Text Label 2975 13025 2    50   ~ 0
 I10
-Text Label 2975 13325 2    50   ~ 0
+Text Label 2975 12925 2    50   ~ 0
 I9
-Text Label 2975 13225 2    50   ~ 0
+Text Label 2975 12825 2    50   ~ 0
 I8
-Text Label 2975 13725 2    50   ~ 0
+Text Label 2975 13825 2    50   ~ 0
 ~I[7:5]->RS
 Wire Wire Line
 	3475 12425 3475 12475
 $Comp
-L 74xx:74LS153 U603
+L Breadboard_CPU-rescue:74LS153-74xx U603
 U 1 1 61F73C07
 P 2725 8300
 F 0 "U603" H 2475 9175 50  0000 C CNN
@@ -1479,8 +1479,6 @@ F 3 "~" H 1325 9075 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1325 8975 1325 8800
-Wire Wire Line
 	1325 9175 1325 9450
 $Comp
 L Breadboard_CPU-rescue:VCC-power #PWR?
@@ -1500,8 +1498,6 @@ Wire Wire Line
 Connection ~ 2725 7250
 Wire Wire Line
 	2725 7250 2725 7300
-Wire Wire Line
-	2725 7250 1675 7250
 Text Label 3225 7600 0    50   ~ 0
 COND_FL
 Text Label 7875 3725 0    50   ~ 0
@@ -1553,10 +1549,6 @@ Wire Wire Line
 Wire Wire Line
 	11550 7850 11550 8200
 Wire Wire Line
-	2225 8100 1675 8100
-Wire Wire Line
-	1675 8100 1675 8300
-Wire Wire Line
 	2225 8300 1675 8300
 Connection ~ 1675 8300
 Wire Wire Line
@@ -1571,11 +1563,6 @@ Wire Wire Line
 Connection ~ 1675 8500
 Wire Wire Line
 	1675 8500 1675 8600
-Wire Wire Line
-	2225 8800 1325 8800
-Connection ~ 1325 8800
-Wire Wire Line
-	1325 8800 1325 7250
 Wire Wire Line
 	2225 8600 1675 8600
 NoConn ~ 3225 8300
@@ -1601,9 +1588,9 @@ Wire Wire Line
 Wire Wire Line
 	15400 8150 15400 8550
 Text Label 2225 9100 2    50   ~ 0
-OPC_1
+OPC_2
 Text Label 2225 9000 2    50   ~ 0
-OPC_0
+OPC_1
 Text HLabel 14125 14600 2    50   Output ~ 0
 ALU_CFL_UPD
 Text HLabel 2225 7900 0    50   Input ~ 0
@@ -1999,11 +1986,26 @@ Text HLabel 14125 11750 2    50   Output ~ 0
 MEM_RD_HB
 NoConn ~ 14125 14100
 Wire Wire Line
-	1325 9450 2725 9450
-Wire Wire Line
-	1675 8100 1675 7250
-Connection ~ 1675 8100
-Connection ~ 1675 7250
+	1325 9450 1875 9450
 Wire Wire Line
 	1675 7250 1325 7250
+Wire Wire Line
+	2725 7250 1675 7250
+Connection ~ 1675 7250
+Wire Wire Line
+	1675 7250 1675 8300
+Wire Wire Line
+	1325 7250 1325 8975
+Wire Wire Line
+	1675 8600 1675 8800
+Wire Wire Line
+	1675 8800 2225 8800
+Connection ~ 1675 8600
+Wire Wire Line
+	2225 8100 1875 8100
+Wire Wire Line
+	1875 8100 1875 9450
+Connection ~ 1875 9450
+Wire Wire Line
+	1875 9450 2725 9450
 $EndSCHEMATC

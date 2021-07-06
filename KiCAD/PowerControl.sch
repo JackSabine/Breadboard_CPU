@@ -24,17 +24,6 @@ F 3 "~" H 3900 2900 50  0001 C CNN
 	1    3900 2900
 	0    -1   -1   0   
 $EndComp
-$Comp
-L Breadboard_CPU-rescue:D_Zener-Device D201
-U 1 1 5EFC19F2
-P 4300 3000
-F 0 "D201" V 4254 3079 50  0000 L CNN
-F 1 "10V" V 4345 3079 50  0000 L CNN
-F 2 "" H 4300 3000 50  0001 C CNN
-F 3 "~" H 4300 3000 50  0001 C CNN
-	1    4300 3000
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	3250 2800 3700 2800
 $Comp
@@ -152,8 +141,6 @@ F 3 "" H 4900 3550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4100 2800 4300 2800
-Wire Wire Line
 	5900 2800 6000 2800
 Wire Wire Line
 	6000 3150 6000 2800
@@ -171,18 +158,6 @@ Wire Wire Line
 Connection ~ 4900 2800
 Wire Wire Line
 	4900 2800 5300 2800
-Wire Wire Line
-	3900 3150 3900 3100
-Wire Wire Line
-	3900 3150 4300 3150
-Wire Wire Line
-	4300 2850 4300 2800
-Connection ~ 4300 2800
-Wire Wire Line
-	4300 2800 4900 2800
-Wire Wire Line
-	3900 3150 3900 3200
-Connection ~ 3900 3150
 Wire Wire Line
 	3900 3500 3900 3550
 Wire Wire Line
@@ -253,4 +228,8 @@ F 3 "" H 6550 2800 50  0001 C CNN
 $EndComp
 Text GLabel 3300 3100 0    50   Input ~ 0
 GND
+Wire Wire Line
+	3900 3100 3900 3200
+Wire Wire Line
+	4100 2800 4900 2800
 $EndSCHEMATC

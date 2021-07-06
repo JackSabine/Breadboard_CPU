@@ -2631,7 +2631,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 16425 10350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Diode:1N4001 D?
+L Breadboard_CPU-rescue:1N4001-Diode D?
 U 1 1 60D096CA
 P 4125 4950
 F 0 "D?" H 4125 4733 50  0000 C CNN
@@ -2642,7 +2642,7 @@ F 3 "http://www.vishay.com/docs/88503/1n4001.pdf" H 4125 4950 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Diode:1N4001 D?
+L Breadboard_CPU-rescue:1N4001-Diode D?
 U 1 1 60D0C3EB
 P 4125 5275
 F 0 "D?" H 4125 5058 50  0000 C CNN
@@ -3199,7 +3199,7 @@ Wire Wire Line
 Wire Wire Line
 	1425 11025 1475 11025
 $Comp
-L 74xx:74LS08 U702
+L Breadboard_CPU-rescue:74LS08-74xx U702
 U 2 1 63673E9D
 P 1775 8550
 F 0 "U702" H 1775 8875 50  0000 C CNN
@@ -3210,7 +3210,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 1775 8550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS08 U702
+L Breadboard_CPU-rescue:74LS08-74xx U702
 U 4 1 636774E8
 P 3200 12775
 F 0 "U702" H 3200 13100 50  0000 C CNN

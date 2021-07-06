@@ -327,23 +327,23 @@ Text HLabel 11775 3050 2    50   BiDi ~ 0
 B1
 Text HLabel 11775 3150 2    50   BiDi ~ 0
 B0
-Text HLabel 2075 6400 3    50   Input ~ 0
+Text HLabel 2075 5700 1    50   Input ~ 0
 ~RST
 Wire Wire Line
-	2075 6400 2075 6350
+	2075 5700 2075 5750
 $Comp
 L Breadboard_CPU-rescue:VCC-power #PWR0401
 U 1 1 5F643852
-P 2075 5675
-F 0 "#PWR0401" H 2075 5525 50  0001 C CNN
-F 1 "VCC" H 2093 5848 50  0000 C CNN
-F 2 "" H 2075 5675 50  0001 C CNN
-F 3 "" H 2075 5675 50  0001 C CNN
-	1    2075 5675
-	-1   0    0    -1  
+P 2075 6425
+F 0 "#PWR0401" H 2075 6275 50  0001 C CNN
+F 1 "VCC" H 2093 6598 50  0000 C CNN
+F 2 "" H 2075 6425 50  0001 C CNN
+F 3 "" H 2075 6425 50  0001 C CNN
+	1    2075 6425
+	1    0    0    1   
 $EndComp
 Wire Wire Line
-	2075 5750 2075 5675
+	2075 6350 2075 6425
 Wire Wire Line
 	2375 6050 2525 6050
 Text HLabel 2375 5950 2    50   Input ~ 0
@@ -2171,7 +2171,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS04" H 3875 7200 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS32 U?
+L Breadboard_CPU-rescue:74LS32-74xx U?
 U 1 1 69626707
 P 19400 8225
 F 0 "U?" H 19400 8550 50  0000 C CNN
@@ -2182,7 +2182,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 19400 8225 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS32 U?
+L Breadboard_CPU-rescue:74LS32-74xx U?
 U 2 1 69628A06
 P 11725 4800
 F 0 "U?" H 11725 5125 50  0000 C CNN
@@ -2193,7 +2193,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 11725 4800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS32 U?
+L Breadboard_CPU-rescue:74LS32-74xx U?
 U 3 1 6962A47E
 P 19400 8750
 F 0 "U?" H 19400 9075 50  0000 C CNN
@@ -2204,7 +2204,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 19400 8750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74xx:74LS32 U?
+L Breadboard_CPU-rescue:74LS32-74xx U?
 U 4 1 6962BF2D
 P 20475 6825
 F 0 "U?" H 20475 7150 50  0000 C CNN
@@ -2215,7 +2215,7 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 20475 6825 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L 74xx:74LS32 U?
+L Breadboard_CPU-rescue:74LS32-74xx U?
 U 5 1 696316BF
 P 11925 14750
 F 0 "U?" H 12155 14796 50  0000 L CNN
