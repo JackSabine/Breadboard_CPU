@@ -1,17 +1,10 @@
 from writer import Write
 from OpMaker import *
 from AssemblerClasses import *
+import sys
+import re
 
-def main():
-    """
-    if(len(sys.argv) < 2):
-        raise Exception("Provide an input file to compile")
-    
-    FileToCompile = sys.argv[1]
-    FileToWrite = sys.argv[2] if len(sys.argv) >= 3 else "a.bin"
-    """
-    FileToCompile = "OSR.asm"
-    FileToWrite = "a.bin"
+def Assemble(FileToCompile, FileToWrite):
 
     Binary = bytearray(2 ** 15)
     ORIG = 0x0000
@@ -50,11 +43,15 @@ def main():
                 CmdMatch = re.search(r".([A-Za-z]+)", CleanedSplitLines[i].WordList[0])
                 if(CmdMatch is not None):
                     Directive = CmdMatch.groups()[0]
-                    if(re.search(r"^.ORIG$", CmdMatch, re.IGNORECASE) is not None):
+                    if(re.search(r"^ORIG$", Directive, re.IGNORECASE) is not None):
                         if(len(CleanedSplitLines[i].WordList) != 2):
                             raise Exception(f"Incorrect number of arguments on line {CleanedSplitLines[i].LineNumber}")
-                        MatchA = re.search(r"^0?x?[0-9A-F]")
-                        if()
+                        MatchA = re.search(r"^(?:0x)?(?:x)?([0-9A-F]{4})$", CleanedSplitLines[i].WordList[1])
+                        if(MatchA is not None):
+                            ORIG = int(MatchA.groups()[0], base=16)
+                        else:
+                            raise Exception(f"Expected hex address on line {CleanedSplitLines[i].LineNumber} in formax 0xhhhh, xhhhh, or hhhh")
+
                     else:
                         raise Exception(f"Unrecognized assembler directive on line {CleanedSplitLines[i].LineNumber}")
                 else:
@@ -66,7 +63,7 @@ def main():
                     LabelMap[Line[:Line.find(":")]] = i - len(list(LabelMap.keys()))
 
         InstructionLineLists = list(filter(lambda Line: ( Line.WordList[0].endswith(":") or Line.WordList[0].startswith(".") )is not True, CleanedSplitLines))
-        print(LabelMap)
+        # print(LabelMap)
 
 
     ### GENERATE ARRAY OF HALF-WORD OPERATIONS ###
@@ -86,34 +83,54 @@ def main():
             # print(hex(Instruction))
         elif(Op in SINGR):
             Instruction |= SingR(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[1:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber))
-            print(hex(Instruction))
-            print(InstructionLineLists[ORIG_Offset].LineNumber)
+            # print(hex(Instruction))
+            # print(InstructionLineLists[ORIG_Offset].LineNumber)
         elif(Op in JUMPS):
             Instruction |= Jumps(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[1:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber), LabelMap, ORIG_Offset)
-            print(hex(Instruction))
-            print(InstructionLineLists[ORIG_Offset].LineNumber)
+            # print(hex(Instruction))
+            # print(InstructionLineLists[ORIG_Offset].LineNumber)
         elif(Op in NOARG):
             Instruction |= NoArg()
-            print(hex(Instruction))
-            print(InstructionLineLists[ORIG_Offset].LineNumber)
+            # print(hex(Instruction))
+            # print(InstructionLineLists[ORIG_Offset].LineNumber)
         elif(Op in BASER):
             Instruction |= BaseR(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[1:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber))
-            print(hex(Instruction))
-            print(InstructionLineLists[ORIG_Offset].LineNumber)
+            # print(hex(Instruction))
+            # print(InstructionLineLists[ORIG_Offset].LineNumber)
         elif(Op in OTHER):
             Instruction |= Other(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber))
-            print(hex(Instruction))
-            print(InstructionLineLists[ORIG_Offset].LineNumber)
+            # print(hex(Instruction))
+            # print(InstructionLineLists[ORIG_Offset].LineNumber)
         else:
             raise Exception(f"Operation {Operation} recognized in opmap but does not appear in any instruction collections")
 
         # Little endian
-        Binary[ORIG_Offset + 0] = Instruction & 0x00FF
-        Binary[ORIG_Offset + 1] = Instruction & 0xFF00
+        Binary[2*ORIG+2*ORIG_Offset + 0] = Instruction & 0x00FF
+        Binary[2*ORIG+2*ORIG_Offset + 1] = (Instruction & 0xFF00) >> 8
 
-    Write(Binary, FileToWrite, Flip=True)
+    Write(Binary, FileToWrite, Flip=False)
 
     return
 
 if __name__ == "__main__":
-    main()
+    if(len(sys.argv) < 2):
+        raise Exception("Not enough input arguments")
+
+    InFile = ""
+    OutFile = ""
+
+    
+
+    if(len(sys.argv) == 2):
+        FilePrefix = re.search(r"^([A-z0-9]+)(?:.asm)$", sys.argv[1])
+        if FilePrefix is not None:
+            InFile = f"{sys.argv[1]}"
+            OutFile = f"{FilePrefix}.bin"
+        else:
+            InFile = sys.argv[1]
+            OutFile = "a.bin"
+    else:
+        InFile = sys.argv[1]
+        OutFile = sys.argv[2]
+
+    

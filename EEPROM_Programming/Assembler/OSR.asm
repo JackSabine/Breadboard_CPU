@@ -1,4 +1,3 @@
-
 .ORIG 0x0000
 
 ; registers
@@ -6,26 +5,26 @@
 
 ; Startup OSR : set PC to program location in memory, configure stack pointer to 0x8200, mark all HSA bytes as 0x00
 startup:
-    ld      r0,     0x00
-    ld      r1,     0x82
-    setsp   r0
+    ; ld      r0,     0x00
+    ; ld      r1,     0x82
+    ; setsp   r0
 
-    ld      r1,     #16
-    ld      r2,     0xFF
-    ld      r3,     0xFE
-_HSA_LP:
-    str     r0,     r2,     #0
-    add     r3,     #-1
-    add     r1,     #-1
-    jnz     _HSA_LP
+;     ld      r1,     #16
+;     ld      r2,     0xFF
+;     ld      r3,     0xFE
+; _HSA_LP:
+;     str     r0,     r2,     #0
+;     add     r3,     #-1
+;     add     r1,     #-1
+;     jnz     _HSA_LP
 
 _INIT:
-    ld      r0,     0x00        ; Default PC
-    ld      r1,     0x08
-    ld      r4,     0x00        ; Default Frame Pointer
-    ld      r5,     0x82
-    ld      r6,     0x00        ; Default Globals TOS Pointer
-    ld      r7,     0x80
+    ld      r0,     0x80        ; Default PC
+    ld      r1,     0x00
+    ; ld      r4,     0x00        ; Default Frame Pointer
+    ; ld      r5,     0x82
+    ; ld      r6,     0x00        ; Default Globals TOS Pointer
+    ; ld      r7,     0x80
     
     start   r0
 
