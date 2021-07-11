@@ -1167,7 +1167,7 @@ ACU
 Text HLabel 2225 7900 0    50   Input ~ 0
 CFL
 Text HLabel 14125 8750 2    50   Output ~ 0
-RS0
+RSH
 Text HLabel 14125 2600 2    50   Output ~ 0
 MAHI
 Text HLabel 14125 8150 2    50   Output ~ 0

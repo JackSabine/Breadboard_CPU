@@ -1564,7 +1564,7 @@ F 3 "~" H 1800 5425 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text HLabel 1400 5050 0    50   Input ~ 0
-REG_ASSERT_RS0
+RSH
 Wire Wire Line
 	1400 4725 1450 4725
 Wire Wire Line

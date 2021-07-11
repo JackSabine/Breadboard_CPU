@@ -61,77 +61,12 @@ Wire Wire Line
 	4875 6700 4375 6700
 $Comp
 L Breadboard_CPU-rescue:LED-Device D?
-U 1 1 6175446F
-P 4425 9825
-AR Path="/5EFC0772/6175446F" Ref="D?"  Part="1" 
-AR Path="/6175446F" Ref="D107"  Part="1" 
-F 0 "D107" V 4372 9903 50  0000 L CNN
-F 1 "Blue" V 4463 9903 50  0000 L CNN
-F 2 "" H 4425 9825 50  0001 C CNN
-F 3 "~" H 4425 9825 50  0001 C CNN
-	1    4425 9825
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:LED-Device D?
-U 1 1 61754475
-P 4125 9825
-AR Path="/5EFC0772/61754475" Ref="D?"  Part="1" 
-AR Path="/61754475" Ref="D106"  Part="1" 
-F 0 "D106" V 4072 9903 50  0000 L CNN
-F 1 "Blue" V 4163 9903 50  0000 L CNN
-F 2 "" H 4125 9825 50  0001 C CNN
-F 3 "~" H 4125 9825 50  0001 C CNN
-	1    4125 9825
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:LED-Device D?
-U 1 1 6175447B
-P 3825 9825
-AR Path="/5EFC0772/6175447B" Ref="D?"  Part="1" 
-AR Path="/6175447B" Ref="D105"  Part="1" 
-F 0 "D105" V 3772 9903 50  0000 L CNN
-F 1 "Blue" V 3863 9903 50  0000 L CNN
-F 2 "" H 3825 9825 50  0001 C CNN
-F 3 "~" H 3825 9825 50  0001 C CNN
-	1    3825 9825
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:LED-Device D?
-U 1 1 61754481
-P 3525 9825
-AR Path="/5EFC0772/61754481" Ref="D?"  Part="1" 
-AR Path="/61754481" Ref="D104"  Part="1" 
-F 0 "D104" V 3472 9903 50  0000 L CNN
-F 1 "Blue" V 3563 9903 50  0000 L CNN
-F 2 "" H 3525 9825 50  0001 C CNN
-F 3 "~" H 3525 9825 50  0001 C CNN
-	1    3525 9825
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:LED-Device D?
-U 1 1 61754487
-P 3225 9825
-AR Path="/5EFC0772/61754487" Ref="D?"  Part="1" 
-AR Path="/61754487" Ref="D103"  Part="1" 
-F 0 "D103" V 3172 9903 50  0000 L CNN
-F 1 "Blue" V 3263 9903 50  0000 L CNN
-F 2 "" H 3225 9825 50  0001 C CNN
-F 3 "~" H 3225 9825 50  0001 C CNN
-	1    3225 9825
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Breadboard_CPU-rescue:LED-Device D?
 U 1 1 6175448D
 P 2925 9825
 AR Path="/5EFC0772/6175448D" Ref="D?"  Part="1" 
 AR Path="/6175448D" Ref="D102"  Part="1" 
 F 0 "D102" V 2872 9903 50  0000 L CNN
-F 1 "Blue" V 2963 9903 50  0000 L CNN
+F 1 "Red" V 2963 9903 50  0000 L CNN
 F 2 "" H 2925 9825 50  0001 C CNN
 F 3 "~" H 2925 9825 50  0001 C CNN
 	1    2925 9825
@@ -144,7 +79,7 @@ P 2625 9825
 AR Path="/5EFC0772/61754493" Ref="D?"  Part="1" 
 AR Path="/61754493" Ref="D101"  Part="1" 
 F 0 "D101" V 2572 9903 50  0000 L CNN
-F 1 "Blue" V 2663 9903 50  0000 L CNN
+F 1 "Green" V 2663 9903 50  0000 L CNN
 F 2 "" H 2625 9825 50  0001 C CNN
 F 3 "~" H 2625 9825 50  0001 C CNN
 	1    2625 9825
@@ -348,19 +283,6 @@ F 3 "~" H 4725 9475 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	4725 9675 4725 9625
-$Comp
-L Breadboard_CPU-rescue:LED-Device D?
-U 1 1 61754469
-P 4725 9825
-AR Path="/5EFC0772/61754469" Ref="D?"  Part="1" 
-AR Path="/61754469" Ref="D108"  Part="1" 
-F 0 "D108" V 4672 9903 50  0000 L CNN
-F 1 "Blue" V 4763 9903 50  0000 L CNN
-F 2 "" H 4725 9825 50  0001 C CNN
-F 3 "~" H 4725 9825 50  0001 C CNN
-	1    4725 9825
-	0    -1   -1   0   
-$EndComp
 Text GLabel 9850 2975 2    50   Output ~ 0
 CLK
 Wire Wire Line
@@ -476,8 +398,6 @@ F3 "~CLK" I R 9825 3275 50
 F4 "HALT_A" I L 9075 2975 50 
 F5 "HALT_B" I L 9075 3075 50 
 $EndSheet
-Text Notes 10925 5500 0    150  ~ 0
-Annotation Key:\n100's: Main Sheet\n200's: Power Module\n300's: Clock Module\n400's: Memory Module\n500's: ALU Module\n600's: Control Unit\n700's: Registers Module\n800's: PC Module
 $Sheet
 S 3300 5825 900  975 
 U 5EFC0623
@@ -737,9 +657,9 @@ F13 "RS1" I R 4200 2925 50
 F14 "RS2" I R 4200 2825 50 
 F15 "~RST" I L 3300 3875 50 
 F16 "RST" I L 3300 3750 50 
-F17 "RA0" I R 4200 3300 50 
-F18 "CLK" I L 3300 3475 50 
-F19 "~CLK" I L 3300 3600 50 
+F17 "CLK" I L 3300 3475 50 
+F18 "~CLK" I L 3300 3600 50 
+F19 "RSH" I R 4200 3325 50 
 $EndSheet
 Wire Wire Line
 	4200 5925 4375 5925
@@ -953,7 +873,7 @@ Wire Wire Line
 Wire Wire Line
 	4725 4275 4725 5500
 Wire Wire Line
-	4200 3300 4875 3300
+	4200 3325 4875 3325
 Text GLabel 3250 3475 0    50   Input ~ 0
 CLK
 Wire Wire Line
@@ -1124,19 +1044,21 @@ F33 "ACU" O R 6000 5175 50
 F34 "ARI" O R 6000 6075 50 
 F35 "HT" O R 6000 4325 50 
 F36 "CFL" I R 6000 4775 50 
-F37 "RS0" O L 4875 3300 50 
-F38 "PI" O R 6000 3225 50 
-F39 "MALI" O R 6000 3925 50 
-F40 "MAHI" O R 6000 3825 50 
-F41 "~PHO" O R 6000 3325 50 
-F42 "~PLO" O R 6000 3400 50 
-F43 "SLI" O R 6000 3100 50 
-F44 "SHI" O R 6000 3000 50 
-F45 "~SLO" O R 6000 2900 50 
-F46 "~SHO" O R 6000 2800 50 
-F47 "~PHI" O R 6000 3500 50 
-F48 "~PLI" O R 6000 3600 50 
-F49 "MRH" O R 6000 3725 50 
+F37 "PI" O R 6000 3225 50 
+F38 "MALI" O R 6000 3925 50 
+F39 "MAHI" O R 6000 3825 50 
+F40 "~PHO" O R 6000 3325 50 
+F41 "~PLO" O R 6000 3400 50 
+F42 "SLI" O R 6000 3100 50 
+F43 "SHI" O R 6000 3000 50 
+F44 "~SLO" O R 6000 2900 50 
+F45 "~SHO" O R 6000 2800 50 
+F46 "~PHI" O R 6000 3500 50 
+F47 "~PLI" O R 6000 3600 50 
+F48 "MRH" O R 6000 3725 50 
+F49 "SI" O L 4875 3425 50 
+F50 "SD" O L 4875 3525 50 
+F51 "RSH" O L 4875 3325 50 
 $EndSheet
 Wire Wire Line
 	8650 9350 8650 3075
@@ -1172,4 +1094,82 @@ Text GLabel 3225 8225 0    50   Input ~ 0
 RST
 Wire Wire Line
 	3275 8225 3225 8225
+$Comp
+L Breadboard_CPU-rescue:LED-Device D?
+U 1 1 620F57DA
+P 3225 9825
+AR Path="/5EFC0772/620F57DA" Ref="D?"  Part="1" 
+AR Path="/620F57DA" Ref="D?"  Part="1" 
+F 0 "D?" V 3172 9903 50  0000 L CNN
+F 1 "Red" V 3263 9903 50  0000 L CNN
+F 2 "" H 3225 9825 50  0001 C CNN
+F 3 "~" H 3225 9825 50  0001 C CNN
+	1    3225 9825
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Breadboard_CPU-rescue:LED-Device D?
+U 1 1 62109591
+P 4725 9825
+AR Path="/5EFC0772/62109591" Ref="D?"  Part="1" 
+AR Path="/62109591" Ref="D?"  Part="1" 
+F 0 "D?" V 4672 9903 50  0000 L CNN
+F 1 "Red" V 4763 9903 50  0000 L CNN
+F 2 "" H 4725 9825 50  0001 C CNN
+F 3 "~" H 4725 9825 50  0001 C CNN
+	1    4725 9825
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Breadboard_CPU-rescue:LED-Device D?
+U 1 1 6211DABC
+P 3525 9825
+AR Path="/5EFC0772/6211DABC" Ref="D?"  Part="1" 
+AR Path="/6211DABC" Ref="D?"  Part="1" 
+F 0 "D?" V 3472 9903 50  0000 L CNN
+F 1 "Red" V 3563 9903 50  0000 L CNN
+F 2 "" H 3525 9825 50  0001 C CNN
+F 3 "~" H 3525 9825 50  0001 C CNN
+	1    3525 9825
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Breadboard_CPU-rescue:LED-Device D?
+U 1 1 6211DAC2
+P 3825 9825
+AR Path="/5EFC0772/6211DAC2" Ref="D?"  Part="1" 
+AR Path="/6211DAC2" Ref="D?"  Part="1" 
+F 0 "D?" V 3772 9903 50  0000 L CNN
+F 1 "Red" V 3863 9903 50  0000 L CNN
+F 2 "" H 3825 9825 50  0001 C CNN
+F 3 "~" H 3825 9825 50  0001 C CNN
+	1    3825 9825
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Breadboard_CPU-rescue:LED-Device D?
+U 1 1 62131D13
+P 4125 9825
+AR Path="/5EFC0772/62131D13" Ref="D?"  Part="1" 
+AR Path="/62131D13" Ref="D?"  Part="1" 
+F 0 "D?" V 4072 9903 50  0000 L CNN
+F 1 "Red" V 4163 9903 50  0000 L CNN
+F 2 "" H 4125 9825 50  0001 C CNN
+F 3 "~" H 4125 9825 50  0001 C CNN
+	1    4125 9825
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Breadboard_CPU-rescue:LED-Device D?
+U 1 1 62131D19
+P 4425 9825
+AR Path="/5EFC0772/62131D19" Ref="D?"  Part="1" 
+AR Path="/62131D19" Ref="D?"  Part="1" 
+F 0 "D?" V 4372 9903 50  0000 L CNN
+F 1 "Red" V 4463 9903 50  0000 L CNN
+F 2 "" H 4425 9825 50  0001 C CNN
+F 3 "~" H 4425 9825 50  0001 C CNN
+	1    4425 9825
+	0    -1   -1   0   
+$EndComp
 $EndSCHEMATC

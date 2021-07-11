@@ -19,8 +19,8 @@ startup:
 ;     jnz     _HSA_LP
 
 _INIT:
-    ld      r0,     0x80        ; Default PC
-    ld      r1,     0x00
+    ld      r0,     0x00        ; Default PC 0x0400
+    ld      r1,     0x04
     ; ld      r4,     0x00        ; Default Frame Pointer
     ; ld      r5,     0x82
     ; ld      r6,     0x00        ; Default Globals TOS Pointer

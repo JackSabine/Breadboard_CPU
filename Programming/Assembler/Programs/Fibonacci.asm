@@ -1,4 +1,4 @@
-.ORIG 0x0080
+.ORIG 0x0400
 
 fibonacci:
     ld      r0,         #0
