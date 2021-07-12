@@ -31,7 +31,7 @@ _INIT:
 sprint:
     ret
 
-; Alloc OSR : need N (passed in r0) consecutive blocks in heap (using first fit algorithm)
+; Alloc OSR : need N passed on stack consecutive blocks in heap (using first fit algorithm)
 ; STACK
 ;   5+  HSAPL and Mask pair bytes
 ;   4   HSAP[H]
@@ -45,7 +45,6 @@ sprint:
 ;  -4   RetVal[L]
 ;  -5   N
 alloc:
-    push    r0                      ; Set N in stack
     ld      r0,     #0              ; Reset r0 to 0
     push    r0                      ; Make space for RetVal
     push    r0                      ; ""
@@ -191,3 +190,19 @@ _END_ALLOC:
     pop     r2                      ;  -5   N
 
     ret
+
+; defshape OSR : define a custom shape to the connected GPU to leverage simplified draw commands later in the program given heap addr for data, and NxM
+; STACK
+;   5+  HSAPL and Mask pair bytes
+;   4   HSAP[H]
+;   3   HSAP[L]
+;   2   i
+;   1   TOBins
+;   0   COBins
+;  -1   OldFramePointer[H]
+;  -2   OldFramePointer[L]
+;  -3   HeapDataPointer[H]
+;  -4   HeapDataPointer[L]
+;  -5   N (object height)
+;  -6   M (object width)
+defshape:   
