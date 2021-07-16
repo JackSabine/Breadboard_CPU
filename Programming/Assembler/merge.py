@@ -21,7 +21,7 @@ def Merge(InFiles, OutFile):
             for Idx in range(len(Bytes)):
                 Merged[Idx] |= Bytes[Idx]
 
-    Write(Merged, OutFile, Flip=True)
+    Write(Merged, OutFile)
 
 if __name__ == "__main__":
     FlagState = None

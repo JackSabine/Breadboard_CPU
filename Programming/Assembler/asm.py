@@ -1,5 +1,4 @@
-import os,sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import sys
 from writer import Write
 from OpMaker import *
 from AssemblerClasses import *
@@ -61,10 +60,10 @@ def Assemble(FileToCompile, FileToWrite):
         for i in range(len(CleanedSplitLines)):
             for Line in CleanedSplitLines[i].WordList:
                 if(Line.endswith(":")):
-                    LabelMap[Line[:Line.find(":")]] = i - len(list(LabelMap.keys()))
+                    LabelMap[Line[:Line.find(":")]] = i - len(list(LabelMap.keys())) - 1
 
         InstructionLineLists = list(filter(lambda Line: ( Line.WordList[0].endswith(":") or Line.WordList[0].startswith(".") )is not True, CleanedSplitLines))
-        # print(LabelMap)
+        print(LabelMap)
 
 
     ### GENERATE ARRAY OF HALF-WORD OPERATIONS ###
@@ -109,29 +108,29 @@ def Assemble(FileToCompile, FileToWrite):
         Binary[2*ORIG+2*ORIG_Offset + 0] = Instruction & 0x00FF
         Binary[2*ORIG+2*ORIG_Offset + 1] = (Instruction & 0xFF00) >> 8
 
-    Write(Binary, FileToWrite, Flip=False)
+    Write(Binary, FileToWrite)
 
     return
 
 if __name__ == "__main__":
-    if(len(sys.argv) < 2):
-        raise Exception("Not enough input arguments")
+    # if(len(sys.argv) < 2):
+    #     raise Exception("Not enough input arguments")
 
-    InFile = ""
-    OutFile = ""
-
-    
-
-    if(len(sys.argv) == 2):
-        FilePrefix = re.search(r"^([A-z0-9]+)(?:.asm)$", sys.argv[1])
-        if FilePrefix is not None:
-            InFile = f"{sys.argv[1]}"
-            OutFile = f"{FilePrefix}.bin"
-        else:
-            InFile = sys.argv[1]
-            OutFile = "a.bin"
-    else:
-        InFile = sys.argv[1]
-        OutFile = sys.argv[2]
+    InFile = "./Fibonacci.asm"
+    OutFile = "./Fib.bin"
 
     
+
+    # if(len(sys.argv) == 2):
+    #     FilePrefix = re.search(r"^([A-z0-9]+)(?:.asm)$", sys.argv[1])
+    #     if FilePrefix is not None:
+    #         InFile = f"{sys.argv[1]}"
+    #         OutFile = f"{FilePrefix}.bin"
+    #     else:
+    #         InFile = sys.argv[1]
+    #         OutFile = "a.bin"
+    # else:
+    #     InFile = sys.argv[1]
+    #     OutFile = sys.argv[2]
+
+    Assemble(FileToCompile=InFile, FileToWrite=OutFile)
