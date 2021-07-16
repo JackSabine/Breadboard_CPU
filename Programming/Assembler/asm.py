@@ -1,9 +1,8 @@
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import os,sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from writer import Write
 from OpMaker import *
 from AssemblerClasses import *
-import sys
 import re
 
 def Assemble(FileToCompile, FileToWrite):

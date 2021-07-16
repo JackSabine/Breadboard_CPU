@@ -2,7 +2,6 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from writer import Write
 from aliases import *
-import os
 
 # print("cd \"", os.path.dirname(os.path.abspath(__file__)), "\"", sep="")
 # print("format-hex a.bin | more")
@@ -17,29 +16,29 @@ ANDI    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|ARI,	      
 NEG     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|AUA|ASI|AIB|AAC,	ASO|CCU|RAS|RI,	                NI  ]
 CMP     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|ARI,	            RBS|RO|AUA|ASI|ARO|AIB|AAC,	    ASO|CCU,	            NI  ]
 LD      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|GBO|RI|CCU,	        NI  ]
-LDR     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|ARI,	            GBO|ASX|AUA|ASI|ARO|ACU,	    ASO|MALI,	            RBS|RO|ARI|RSH,	    AUA|ASI|ARO|ACO,	    ASO|MAHI,	    RAS|RI|MO|CCU,	            NI  ]
-STR     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|ARI,	            GBO|ASX|AUA|ASI|ARO|ACU,	    ASO|MALI,	            RBS|RO|ARI|RSH,	    AUA|ASI|ARO|ACO,	    ASO|MAHI,	    RAS|RO|MI,	                NI  ]
+LDR     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|ARI,	            GBO|ASX|AUA|ASI|ARO|ACU,	    ASO|MALI,	            RBS|RO|RSH|AUA|ASI|ACO,	        ASO|MAHI,	    RAS|RI|MO|CCU,	            NI  ]
+STR     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|ARI,	            GBO|ASX|AUA|ASI|ARO|ACU,	    ASO|MALI,	            RBS|RO|RSH|AUA|ASI|ACO,	        ASO|MAHI,	    RAS|RO|MI,	                NI  ]
 HLT     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      HT,                       NI  ]
-CALL    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    SD|PLO|MI|ARI,	        SLO|MALI,	        SHO|MAHI,	            SD|PHO|MI,	    GBO|ARO|ASI|AUA|ACU,	    ASO|PLI,	    PHO|ARI,	GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	NI  ]
-RET     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    SI|MO|PHI,	            SLO|MALI,	        SLO|MAHI,	            SI|MO|PLI,	    NI  ]
-TRAP    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    SD|PLO|MI,	            SLO|MALI,	        SHO|MAHI,	            SD|PHO|MI,	    GBO|PLI,	                GAO|PHI,	    NI  ]
+CALL    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    SD|PLO|MI|ARI,	        SLO|MALI,	                    SHO|MAHI,	            SD|PHO|MI,	    GBO|ARO|ASI|AUA|ACU,	    ASO|PLI,	    PHO|ARI,	GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	NI  ]
+RET     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    SI|MO|PHI,	            SLO|MALI,	                    SLO|MAHI,	            SI|MO|PLI,	    NI  ]
+TRAP    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    SD|PLO|MI,	            SLO|MALI,	                    SHO|MAHI,	            SD|PHO|MI,	    GBO|PLI,	                GAO|PHI,	    NI  ]
 SETBK   =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      NOINST,                   NI  ]
 START   =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|PLI,	            RAS|RO|RSH|PHI,	                NI  ]
 SETSP   =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|SLI,	            RAS|RO|RSH|SHI,	                NI  ]
 PUSH    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    RAS|RO|MI|SD,	        NI  ]
 POP     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                SHO|MAHI,	                    RAS|RI|MO|SI,	        NI  ]
-OR      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|AAC|AUA|ASI|AIB,   ASO|ARI,                        RAS|RO|AAC|AUA|ASI|AIB, ASO|RAS|RI,         RAS|RO|ARO|AUN|ASI,     ASO|RAS|RI,     RAS|RO|AAC|AUA|ASI|AIB,     ASO|RAS|RI|CCU, NI  ]
-ORI     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|AAC|AUA|ASI|AIB,   ASO|ARI,                        GBO|AUN|ARO|ASI,        ASO|RAS|RI,         RAS|RO|AAC|AUA|ASI|AIB, ASO|RAS|RI|CCU, NI  ]
+OR      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|AAC|AUA|ASI|AIB,   ASO|ARI,                        RAS|RO|AAC|AUA|ASI|AIB, ASO|RAS|RI,                     RAS|RO|ARO|AUN|ASI,     ASO|RAS|RI,     RAS|RO|AAC|AUA|ASI|AIB,     ASO|RAS|RI|CCU, NI  ]
+ORI     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|AAC|AUA|ASI|AIB,   ASO|ARI,                        GBO|AUN|ARO|ASI,        ASO|RAS|RI,                     RAS|RO|AAC|AUA|ASI|AIB, ASO|RAS|RI|CCU, NI  ]
 CPYSP   =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|RAS|RI,               SHO|RAS|RI|RSH,                 NI  ] 
-JMP     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JO      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JNO     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JZ      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JNZ     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JS      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JNS     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JC      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
-JNC     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	        GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JMP     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JO      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JNO     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JZ      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JNZ     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JS      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JNS     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JC      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
+JNC     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      PLO|ARI,	                GBO|ARO|ASI|AUA|ACU,	        ASO|PLI,	            PHO|ARI,	                    GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	    NI  ]
 
 
 BLANK = [PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      NOINST,                NI]
