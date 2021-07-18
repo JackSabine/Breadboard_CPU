@@ -390,8 +390,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS32" H 8650 3275 50  0001 C CNN
 	1    8650 3275
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	16600 6125 19975 6125
 $Comp
 L Breadboard_CPU-rescue:74LS74-74xx U?
 U 3 1 5F8AAB36
@@ -1257,7 +1255,7 @@ Wire Wire Line
 Wire Wire Line
 	19475 2600 19525 2600
 Text HLabel 19475 2600 0    50   Input ~ 0
-UPDATE_CC
+CCU
 Wire Wire Line
 	20125 2700 20175 2700
 Connection ~ 20175 2700
@@ -1751,7 +1749,6 @@ Wire Wire Line
 	12075 14000 12125 14000
 Wire Wire Line
 	15400 5650 15450 5650
-Connection ~ 16600 6125
 Wire Wire Line
 	19325 7675 19325 7625
 Connection ~ 19325 7675
@@ -1813,7 +1810,7 @@ L Breadboard_CPU-rescue:R-Device R519
 U 1 1 60235FFE
 P 19325 7875
 F 0 "R519" H 19395 7921 50  0000 L CNN
-F 1 "10k" H 19395 7830 50  0000 L CNN
+F 1 "1k" H 19395 7830 50  0000 L CNN
 F 2 "" V 19255 7875 50  0001 C CNN
 F 3 "~" H 19325 7875 50  0001 C CNN
 	1    19325 7875
@@ -1887,7 +1884,6 @@ Wire Wire Line
 	19975 4825 19975 6125
 Wire Wire Line
 	19975 4825 20325 4825
-Connection ~ 19975 6125
 Wire Wire Line
 	19975 6125 20325 6125
 $Comp
@@ -2467,4 +2463,9 @@ F 3 "" H 12950 13450 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	12950 13450 12950 13400
+Text HLabel 19925 6125 0    50   Input ~ 0
+CSU_CLK
+Wire Wire Line
+	19925 6125 19975 6125
+Connection ~ 19975 6125
 $EndSCHEMATC

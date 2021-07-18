@@ -63,7 +63,7 @@ def Assemble(FileToCompile, FileToWrite):
                     LabelMap[Line[:Line.find(":")]] = i - len(list(LabelMap.keys())) - 1
 
         InstructionLineLists = list(filter(lambda Line: ( Line.WordList[0].endswith(":") or Line.WordList[0].startswith(".") )is not True, CleanedSplitLines))
-        print(LabelMap)
+        # print(LabelMap)
 
 
     ### GENERATE ARRAY OF HALF-WORD OPERATIONS ###

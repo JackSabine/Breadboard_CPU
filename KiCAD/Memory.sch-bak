@@ -256,21 +256,21 @@ Wire Wire Line
 	10825 7250 10100 7250
 Wire Wire Line
 	10825 7150 10100 7150
-Text HLabel 11675 7050 2    50   BiDi ~ 0
-B7
-Text HLabel 11675 7150 2    50   BiDi ~ 0
-B6
-Text HLabel 11675 7250 2    50   BiDi ~ 0
-B5
-Text HLabel 11675 7350 2    50   BiDi ~ 0
-B4
-Text HLabel 11675 7450 2    50   BiDi ~ 0
-B3
-Text HLabel 11675 7550 2    50   BiDi ~ 0
-B2
-Text HLabel 11675 7650 2    50   BiDi ~ 0
-B1
 Text HLabel 11675 7750 2    50   BiDi ~ 0
+B7
+Text HLabel 11675 7650 2    50   BiDi ~ 0
+B6
+Text HLabel 11675 7550 2    50   BiDi ~ 0
+B5
+Text HLabel 11675 7450 2    50   BiDi ~ 0
+B4
+Text HLabel 11675 7350 2    50   BiDi ~ 0
+B3
+Text HLabel 11675 7250 2    50   BiDi ~ 0
+B2
+Text HLabel 11675 7150 2    50   BiDi ~ 0
+B1
+Text HLabel 11675 7050 2    50   BiDi ~ 0
 B0
 Entry Wire Line
 	10000 2550 10100 2450

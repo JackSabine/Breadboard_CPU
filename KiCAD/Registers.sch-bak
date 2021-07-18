@@ -31,7 +31,7 @@ Wire Wire Line
 	4400 5625 4400 6325
 Text Notes 12050 10350 0    118  ~ 0
 Register file
-Text Notes 2475 6700 0    118  ~ 0
+Text Notes 2725 6900 0    118  ~ 0
 Register Selector
 $Comp
 L 74xx:74LS27 U704
@@ -303,15 +303,10 @@ Wire Wire Line
 	6400 5275 6550 5275
 Wire Wire Line
 	3150 5925 3150 6275
-Connection ~ 3150 5925
 Wire Wire Line
 	3200 5925 3150 5925
 Wire Wire Line
 	3150 6275 3700 6275
-Wire Wire Line
-	3150 5825 3150 5925
-Wire Wire Line
-	3200 5825 3150 5825
 Wire Wire Line
 	2500 5725 2500 4875
 Wire Wire Line
@@ -1764,4 +1759,114 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS27" H 9000 2225 50  0001 C CNN
 	3    9000 2225
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	1625 7200 1625 7150
+Connection ~ 1625 7200
+Wire Wire Line
+	1625 7200 2600 7200
+$Comp
+L Breadboard_CPU-rescue:GND-power #PWR?
+U 1 1 60FC9E28
+P 1625 7600
+F 0 "#PWR?" H 1625 7350 50  0001 C CNN
+F 1 "GND" H 1630 7427 50  0000 C CNN
+F 2 "" H 1625 7600 50  0001 C CNN
+F 3 "" H 1625 7600 50  0001 C CNN
+	1    1625 7600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1625 7600 1625 7550
+Wire Wire Line
+	925  6500 975  6500
+Wire Wire Line
+	975  6950 925  6950
+Wire Wire Line
+	1275 6500 1325 6500
+$Comp
+L Breadboard_CPU-rescue:R-Device R?
+U 1 1 60FC9E32
+P 1125 6500
+AR Path="/5EFC06D4/60FC9E32" Ref="R?"  Part="1" 
+AR Path="/5EFC04D0/60FC9E32" Ref="R?"  Part="1" 
+F 0 "R?" H 1195 6546 50  0000 L CNN
+F 1 "4.7k" H 1195 6455 50  0000 L CNN
+F 2 "" V 1055 6500 50  0001 C CNN
+F 3 "~" H 1125 6500 50  0001 C CNN
+	1    1125 6500
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1275 6950 1325 6950
+$Comp
+L Breadboard_CPU-rescue:R-Device R?
+U 1 1 60FC9E39
+P 1125 6950
+F 0 "R?" H 1195 6996 50  0000 L CNN
+F 1 "10k" H 1195 6905 50  0000 L CNN
+F 2 "" V 1055 6950 50  0001 C CNN
+F 3 "~" H 1125 6950 50  0001 C CNN
+	1    1125 6950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Breadboard_CPU-rescue:R-Device R?
+U 1 1 60FC9E3F
+P 1625 7400
+F 0 "R?" H 1695 7446 50  0000 L CNN
+F 1 "1k" H 1695 7355 50  0000 L CNN
+F 2 "" V 1555 7400 50  0001 C CNN
+F 3 "~" H 1625 7400 50  0001 C CNN
+	1    1625 7400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1625 6250 1625 6300
+Wire Wire Line
+	1625 7250 1625 7200
+Wire Wire Line
+	1625 6750 1625 6700
+$Comp
+L Breadboard_CPU-rescue:Q_NPN_CBE-Device Q?
+U 1 1 60FC9E48
+P 1525 6950
+F 0 "Q?" H 1716 6996 50  0000 L CNN
+F 1 "Q_NPN_CBE" H 1716 6905 50  0000 L CNN
+F 2 "" H 1725 7050 50  0001 C CNN
+F 3 "~" H 1525 6950 50  0001 C CNN
+	1    1525 6950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Breadboard_CPU-rescue:Q_NPN_CBE-Device Q?
+U 1 1 60FC9E4E
+P 1525 6500
+F 0 "Q?" H 1716 6546 50  0000 L CNN
+F 1 "Q_NPN_CBE" H 1716 6455 50  0000 L CNN
+F 2 "" H 1725 6600 50  0001 C CNN
+F 3 "~" H 1525 6500 50  0001 C CNN
+	1    1525 6500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 60FC9E54
+P 1625 6250
+AR Path="/5F05F116/60FC9E54" Ref="#PWR?"  Part="1" 
+AR Path="/5EFC06D4/60FC9E54" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 1625 6100 50  0001 C CNN
+F 1 "+5V" H 1640 6423 50  0000 C CNN
+F 2 "" H 1625 6250 50  0001 C CNN
+F 3 "" H 1625 6250 50  0001 C CNN
+	1    1625 6250
+	1    0    0    -1  
+$EndComp
+Text HLabel 925  6950 0    50   Input ~ 0
+~RO
+Text HLabel 925  6500 0    50   Input ~ 0
+~RI
+Wire Wire Line
+	2600 7200 2600 5825
+Wire Wire Line
+	2600 5825 3200 5825
 $EndSCHEMATC

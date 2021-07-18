@@ -1,4 +1,4 @@
-.ORIG 0x0000
+.ORIG 0x0400
 
 fibonacci:
     ld      r0,         #0
@@ -14,6 +14,6 @@ _fib_LP:
     jo      _fib_RST
     str     r1,         r2,     #3
     add     r0,         r1
-    str     r0,         r2,     #3
     jo      _fib_RST
+    str     r0,         r2,     #3
     j       _fib_LP
