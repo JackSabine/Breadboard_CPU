@@ -113,24 +113,24 @@ def Assemble(FileToCompile, FileToWrite):
     return
 
 if __name__ == "__main__":
-    # if(len(sys.argv) < 2):
-    #     raise Exception("Not enough input arguments")
+    if(len(sys.argv) < 2):
+        raise Exception("Not enough input arguments")
 
-    InFile = "./Fibonacci.asm"
-    OutFile = "./Fib.bin"
+    # InFile = "./Fibonacci.asm"
+    # OutFile = "./Fib.bin"
 
     
 
-    # if(len(sys.argv) == 2):
-    #     FilePrefix = re.search(r"^([A-z0-9]+)(?:.asm)$", sys.argv[1])
-    #     if FilePrefix is not None:
-    #         InFile = f"{sys.argv[1]}"
-    #         OutFile = f"{FilePrefix}.bin"
-    #     else:
-    #         InFile = sys.argv[1]
-    #         OutFile = "a.bin"
-    # else:
-    #     InFile = sys.argv[1]
-    #     OutFile = sys.argv[2]
+    if(len(sys.argv) == 2):
+        FilePrefix = re.search(r"^([A-z0-9]+)(?:.asm)$", sys.argv[1])
+        if FilePrefix is not None:
+            InFile = f"{sys.argv[1]}"
+            OutFile = f"{FilePrefix.groups()[0]}.bin"
+        else:
+            InFile = sys.argv[1]
+            OutFile = "a.bin"
+    else:
+        InFile = sys.argv[1]
+        OutFile = sys.argv[2]
 
     Assemble(FileToCompile=InFile, FileToWrite=OutFile)

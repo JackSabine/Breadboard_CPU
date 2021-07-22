@@ -1,0 +1,77 @@
+m255
+K4
+z2
+!s11f vlog 2020.3 2020.07, Jul 22 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog
+vclockswitch
+Z1 !s110 1626916869
+!i10b 1
+!s100 8j^EFeHVYMH<a[5ciI`Yg0
+Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I1=B[G@;]7;R9:b0Djj_ML2
+R0
+Z3 w1626916862
+Z4 8C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/rtl/clockswitch.v
+Z5 FC:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/rtl/clockswitch.v
+!i122 0
+L0 1 54
+Z6 VDg1SIo80bB@j0V0VzS_@n1
+Z7 OV;L;2020.3;71
+r1
+!s85 0
+31
+Z8 !s108 1626916869.000000
+!s107 C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/sim/clockswitch_tb.v|C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/rtl/clockswitch.v|
+Z9 !s90 C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/rtl/clockswitch.v|C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/sim/clockswitch_tb.v|
+!i113 1
+Z10 tCvgOpt 0
+vclockswitch_tb
+R1
+!i10b 1
+!s100 4VkGgVbL0PFZZcRKF4d:b0
+R2
+I?X::b0IMUY_]=Zk`@5c6`3
+R0
+w1626916720
+8C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/sim/clockswitch_tb.v
+FC:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/sim/clockswitch_tb.v
+!i122 0
+L0 1 40
+R6
+R7
+r1
+!s85 0
+31
+R8
+Z11 !s107 C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/sim/clockswitch_tb.v|C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/rtl/clockswitch.v|
+R9
+!i113 1
+R10
+vdff
+R1
+!i10b 1
+!s100 AKCOW[ZmA_knH67RgPgz03
+R2
+IX[aDio8eUWj_DMU1I05DK3
+R0
+R3
+R4
+R5
+!i122 0
+L0 56 17
+R6
+R7
+r1
+!s85 0
+31
+R8
+R11
+R9
+!i113 1
+R10

@@ -1,0 +1,10 @@
+# Reading pref.tcl
+# vsim clockswitch_tb -do "C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/sim/temp/setup.do" -gui 
+# Start time: 21:21:20 on Jul 21,2021
+# Loading work.clockswitch_tb
+# Loading work.clockswitch
+# Loading work.dff
+# do C:/Users/jack/OneDrive/Documents/GitHub/Breadboard_CPU/Verilog/sim/temp/setup.do
+run
+# End time: 21:30:19 on Jul 21,2021, Elapsed time: 0:08:59
+# Errors: 0, Warnings: 0

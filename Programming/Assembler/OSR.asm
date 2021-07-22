@@ -9,9 +9,9 @@ startup:
     ld      r1,     0x82
     setsp   r0
 
-;     ld      r1,     #16
-;     ld      r2,     0xFF
-;     ld      r3,     0xFE
+    ld      r1,     #16
+    ld      r2,     0xFF
+    ld      r3,     0xFE
 ; _HSA_LP:
 ;     str     r0,     r2,     #0
 ;     add     r3,     #-1
