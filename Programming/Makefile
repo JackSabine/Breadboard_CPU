@@ -7,6 +7,7 @@ SRC_DIR			:= $(BASE)/Programs
 PROG_DIR		:= C:/cygwin64/home/jack/minipro
 PROG_CHIP		= AT28C256
 UCODE_CHIP		= AT28C64B
+NUM_MICROCODE_ROMS	= 5
 
 obj_files 		= OSR.bin HelloWorld.bin
 
@@ -25,8 +26,15 @@ progc:
 	$(PROG_DIR)/minipro.exe -w $(PROG_CHIP) -p $(PROG_DIR)/binaries/a.bin;
 
 
-progm:
-	$(PROG_DIR)/minipro.exe -w $(UCODE_CHIP) -p $(PROG_DIR)/binaries/microcode.bin;
+pml:
+	count=$(NUM_MICROCODE_ROMS); while [[ $$count -gt 0 ]] ; do \
+		$(PROG_DIR)/minipro.exe -w $(UCODE_CHIP) -p $(PROG_DIR)/binaries/microcode.bin ; \
+		((count = count - 1)) ; \
+		read -p "Press any key to continue ($(count) ROMs remaining)" -n 1 -s -r ; \
+	done
+	
+pm:
+	$(PROG_DIR)/minipro.exe -w $(UCODE_CHIP) -p $(PROG_DIR)/binaries/microcode.bin ;
 
 ucode:
 	py $(UTIL_DIR)/ucode_gen.py; cp $(UTIL_DIR)/microcode.bin $(PROG_DIR)/binaries/microcode.bin;
