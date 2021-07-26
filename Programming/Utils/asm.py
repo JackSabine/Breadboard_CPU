@@ -1,8 +1,6 @@
-import sys
+import sys, os, enum, re
 from writer import Write
-from OpMaker import *
-from AssemblerClasses import *
-import re
+from asm_helper import *
 
 def Assemble(FileToCompile, FileToWrite):
 
@@ -112,25 +110,38 @@ def Assemble(FileToCompile, FileToWrite):
 
     return
 
+class __FlagState(enum.Enum):
+    SRC_FILE     = 0
+    OUT_FILE     = 1
+
 if __name__ == "__main__":
     if(len(sys.argv) < 2):
         raise Exception("Not enough input arguments")
 
     # InFile = "./Fibonacci.asm"
     # OutFile = "./Fib.bin"
-
     
+    cwd = os.getcwd()
 
-    if(len(sys.argv) == 2):
-        FilePrefix = re.search(r"^([A-z0-9]+)(?:.asm)$", sys.argv[1])
-        if FilePrefix is not None:
-            InFile = f"{sys.argv[1]}"
-            OutFile = f"{FilePrefix.groups()[0]}.bin"
+    InFile  = None
+    OutFile = None
+    StateV  = None
+
+    for arg in sys.argv[1:]:
+        if(re.search(r"-c", arg, re.IGNORECASE)):
+            StateV = __FlagState.SRC_FILE
+        elif(re.search(r"-o", arg, re.IGNORECASE)):
+            StateV = __FlagState.OUT_FILE
         else:
-            InFile = sys.argv[1]
-            OutFile = "a.bin"
-    else:
-        InFile = sys.argv[1]
-        OutFile = sys.argv[2]
+            if(StateV == __FlagState.SRC_FILE):
+                InFile = arg
+            elif(StateV == __FlagState.OUT_FILE):
+                OutFile = arg   
+
+    if(OutFile is None):
+        OutFile = rf"{cwd}/a.bin"
+
+    if(InFile is None):
+        raise Exception("Specify an input file with -c <file>")
 
     Assemble(FileToCompile=InFile, FileToWrite=OutFile)

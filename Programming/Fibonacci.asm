@@ -11,9 +11,9 @@ _fib_RST:
     str     r0,         r2,     #3
 _fib_LP:
     add     r1,         r0
-    jo      _fib_RST
+    jc      _fib_RST
     str     r1,         r2,     #3
     add     r0,         r1
-    jo      _fib_RST
+    jc      _fib_RST
     str     r0,         r2,     #3
     j       _fib_LP

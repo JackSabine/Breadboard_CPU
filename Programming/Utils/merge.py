@@ -1,7 +1,6 @@
-import os,sys
+import sys
 import re
 import enum
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from writer import Write
 
 class __FlagState(enum.Enum):
