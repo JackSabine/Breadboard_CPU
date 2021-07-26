@@ -5,7 +5,8 @@ UTIL_DIR 		:= $(BASE)/Utils
 WORK_DIR		:= $(UTIL_DIR)/work
 SRC_DIR			:= $(BASE)/Programs
 PROG_DIR		:= C:/cygwin64/home/jack/minipro
-CHIP_NAME		= AT28C256
+PROG_CHIP		= AT28C256
+UCODE_CHIP		= AT28C64B
 
 obj_files 		= OSR.bin HelloWorld.bin
 
@@ -16,18 +17,25 @@ $(filter %.bin,$(obj_files)): %.bin: %.asm
 	
 workspace:
 	[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR)
-	
-merge:
-	cd $(WORK_DIR); py $(UTIL_DIR)/merge.py -m $(obj_files) -o $(WORK_DIR)/a.bin;
 
-prog:
-	mv $(WORK_DIR)/a.bin $(PROG_DIR)/binaries; $(PROG_DIR)/minipro.exe -w $(CHIP_NAME) -p $(PROG_DIR)/binaries/a.bin;
+merge:
+	cd $(WORK_DIR); py $(UTIL_DIR)/merge.py -m $(obj_files) -o $(WORK_DIR)/a.bin; cp $(WORK_DIR)/a.bin $(PROG_DIR)/binaries/a.bin;
+
+progc:
+	$(PROG_DIR)/minipro.exe -w $(PROG_CHIP) -p $(PROG_DIR)/binaries/a.bin;
+
+
+progm:
+	$(PROG_DIR)/minipro.exe -w $(UCODE_CHIP) -p $(PROG_DIR)/binaries/microcode.bin;
+
+ucode:
+	py $(UTIL_DIR)/ucode_gen.py; cp $(UTIL_DIR)/microcode.bin $(PROG_DIR)/binaries/microcode.bin;
 
 .PHONY: clean
 
 clean:
 	if [ -d "$(WORK_DIR)" ]; then \
-        rm -r $(WORK_DIR); \
+		rm -r $(WORK_DIR); \
 	fi
 
 	if [ -d "$(UTIL_DIR)/__pycache__" ]; then \
