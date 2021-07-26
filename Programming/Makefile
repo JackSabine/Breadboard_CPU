@@ -13,39 +13,46 @@ obj_files 		= OSR.bin HelloWorld.bin
 
 all: workspace $(obj_files) merge
 
-$(filter %.bin,$(obj_files)): %.bin: %.asm
-	py $(UTIL_DIR)/asm.py -c $(SRC_DIR)/$< -o $(WORK_DIR)/$@
+$(filter %.bin,$(obj_files)): %.bin: $(SRC_DIR)/%.asm
+	py $(UTIL_DIR)/asm.py -c $< -o $(WORK_DIR)/$@
 	
 workspace:
-	[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR)
+	@[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR)
 
 merge:
 	cd $(WORK_DIR); py $(UTIL_DIR)/merge.py -m $(obj_files) -o $(WORK_DIR)/a.bin; cp $(WORK_DIR)/a.bin $(PROG_DIR)/binaries/a.bin;
 
 progc:
-	$(PROG_DIR)/minipro.exe -w $(PROG_CHIP) -p $(PROG_DIR)/binaries/a.bin;
+	@cd $(PROG_DIR) ; \
+	./minipro.exe -p $(PROG_CHIP) -w binaries/a.bin;
 
 
 pml:
+	@cd $(PROG_DIR) ; \
 	count=$(NUM_MICROCODE_ROMS); while [[ $$count -gt 0 ]] ; do \
-		$(PROG_DIR)/minipro.exe -w $(UCODE_CHIP) -p $(PROG_DIR)/binaries/microcode.bin ; \
+		./minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin; \
 		((count = count - 1)) ; \
-		read -p "Press any key to continue ($(count) ROMs remaining)" -n 1 -s -r ; \
+		read -n 1 -s -r -p "Press any key to continue ($$count ROMs remaining) ('q' to exit)" key; \
+		if [ $$key = 'q' ]; then \
+			exit ; \
+		fi ; \
+		echo ; \
 	done
 	
 pm:
-	$(PROG_DIR)/minipro.exe -w $(UCODE_CHIP) -p $(PROG_DIR)/binaries/microcode.bin ;
+	@cd $(PROG_DIR) ; \
+	./minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin
 
-ucode:
-	py $(UTIL_DIR)/ucode_gen.py; cp $(UTIL_DIR)/microcode.bin $(PROG_DIR)/binaries/microcode.bin;
+ucode: workspace
+	@py $(UTIL_DIR)/ucode_gen.py -o $(WORK_DIR)/microcode.bin; cp $(WORK_DIR)/microcode.bin $(PROG_DIR)/binaries/microcode.bin;
 
 .PHONY: clean
 
 clean:
-	if [ -d "$(WORK_DIR)" ]; then \
+	@if [ -d "$(WORK_DIR)" ]; then \
 		rm -r $(WORK_DIR); \
 	fi
 
-	if [ -d "$(UTIL_DIR)/__pycache__" ]; then \
+	@if [ -d "$(UTIL_DIR)/__pycache__" ]; then \
 		rm -r $(UTIL_DIR)/__pycache__; \
 	fi

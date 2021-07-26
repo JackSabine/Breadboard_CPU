@@ -62,6 +62,10 @@ _lcd_init:
     ld      r0,     0x00
     str     r0,     r2      #2
 
+    pause
+
+    ld      r0,     0x55
+
     
 
 

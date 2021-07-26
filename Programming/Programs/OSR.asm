@@ -12,6 +12,8 @@ startup:
     ld      r1,     #16
     ld      r2,     0xFF
     ld      r3,     0xFE
+
+    pause
 ; _HSA_LP:
 ;     str     r0,     r2,     #0
 ;     add     r3,     #-1

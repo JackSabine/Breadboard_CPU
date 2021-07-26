@@ -22,7 +22,7 @@ OPCODE_MAP = {
 "LD":     0b01000,
 "LDR":    0b01001,
 "STR":    0b01010,
-"HLT":    0b01011,
+"PAUSE":  0b01011,
 "CALL":   0b01100,
 "RET":    0b01101,
 "TRAP":   0b01110,
@@ -57,7 +57,7 @@ IMM_POS = 0
 AMBIG = ["ADD", "AND", "OR"]
 SINGR = ["NOT", "NEG", "SETBK", "START", "SETSP", "PUSH", "POP", "CPYSP"]
 JUMPS = ["J", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL"]
-NOARG = ["HLT", "RET"]
+NOARG = ["PAUSE", "RET"]
 BASER = ["LDR", "STR"]
 OTHER = ["CMP", "LD", "TRAP"]
 

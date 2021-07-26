@@ -1,3 +1,4 @@
+import sys,re,enum
 from writer import Write
 from aliases import *
 
@@ -16,7 +17,7 @@ CMP     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|ARI,	      
 LD      =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|GBO|RI|CCU,	            NI  ]
 LDR     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|ARI,	                GBO|ASX|AUA|ASI|ARO|ACU,	    ASO|MALI,	            RBS|RO|RSH|AUA|ASI|ACO,	        ASO|MAHI,	    RAS|RI|MO|CCU,	            NI  ]
 STR     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RBS|RO|ARI,	                GBO|ASX|AUA|ASI|ARO|ACU,	    ASO|MALI,	            RBS|RO|RSH|AUA|ASI|ACO,	        ASO|MAHI,	    RAS|RO|MI,	                NI  ]
-HLT     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      HT,                           HT,                             NI  ]
+PAUSE   =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      HT,                           HT,                             NI  ]
 CALL    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                    SHO|MAHI,	                    SD|PLO|MI|ARI,	        SLO|MALI,	                    SHO|MAHI,	            SD|PHO|MI,	    GBO|ARO|ASI|AUA|ACU,	    ASO|PLI,	    PHO|ARI,	GAO|ARO|ASI|AUA|ACO,	ASO|PHI,	NI  ]
 RET     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                    SHO|MAHI,	                    SI|MO|PHI,	            SLO|MALI,	                    SLO|MAHI,	            SI|MO|PLI,	    NI  ]
 TRAP    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      SLO|MALI,	                    SHO|MAHI,	                    SD|PLO|MI,	            SLO|MALI,	                    SHO|MAHI,	            SD|PHO|MI,	    GBO|PLI,	                GAO|PHI,	    NI  ]
@@ -54,7 +55,7 @@ CMP,    # 00111
 LD,     # 01000
 LDR,    # 01001
 STR,    # 01010
-HLT,    # 01011
+PAUSE,  # 01011
 CALL,   # 01100
 RET,    # 01101
 TRAP,   # 01110
@@ -77,8 +78,6 @@ JC,     # 11110
 JNC     # 11111
 ]
 
-
-
 # EEPROM Address Pinout
 
 # A12 : CS[2]
@@ -95,9 +94,7 @@ JNC     # 11111
 # A01 : uInst[1]
 # A00 : uInst[0]
 
-
-
-def main():
+def ucode_gen(OutFile):
     NUM_UINST_BITS          =   4
     NUM_CONDFL_BITS         =   1
     NUM_OPC_BITS            =   5
@@ -150,9 +147,23 @@ def main():
                     if(Inst & NI == NI):
                         break
 
-    Write(Data, "microcode.bin")
+    Write(Data, OutFile)
 
     return
 
+class __FlagState(enum.Enum):
+    OUT_FILE     = 1
+
+    StateV = None
+
 if __name__ == "__main__":
-    main()
+    if(len(sys.argv) < 2):
+        OutFile = "microcode.bin"
+    else:
+        for arg in sys.argv[1:]:
+            if(re.search(r"-o", arg, re.IGNORECASE)):
+                StateV = __FlagState.OUT_FILE
+            else:
+                if(StateV == __FlagState.OUT_FILE):
+                    OutFile = arg   
+    ucode_gen(OutFile=OutFile)
