@@ -29,10 +29,10 @@ progc:
 
 pml:
 	@cd $(PROG_DIR) ; \
-	count=$(NUM_MICROCODE_ROMS); while [[ $$count -gt 0 ]] ; do \
+	while [ true ] ; do \
 		./minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin; \
 		((count = count - 1)) ; \
-		read -n 1 -s -r -p "Press any key to continue ($$count ROMs remaining) ('q' to exit)" key; \
+		read -n 1 -s -r -p "Press any key to continue ('q' to exit)" key; \
 		if [ $$key = 'q' ]; then \
 			exit ; \
 		fi ; \
