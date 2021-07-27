@@ -9,7 +9,7 @@ PROG_CHIP		= AT28C256
 UCODE_CHIP		= AT28C64B
 NUM_MICROCODE_ROMS	= 5
 
-obj_files 		= OSR.bin HelloWorld.bin
+obj_files 		= OSR.bin
 
 all: workspace $(obj_files) merge
 
