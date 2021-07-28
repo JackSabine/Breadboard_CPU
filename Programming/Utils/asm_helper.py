@@ -1,14 +1,19 @@
 import re
 
 class OLine:
-    def __init__(self, Text, LineNumber):
-        self.Text = Text
-        self.LineNumber = LineNumber
+    def __init__(self, Text: str, LineNumber: int):
+        self.Text: str = Text
+        self.LineNumber: int = LineNumber
 
 class OLineSplit:
-    def __init__(self, WordList, LineNumber):
-        self.WordList = WordList
-        self.LineNumber = LineNumber
+    def __init__(self, WordList: list[str], LineNumber: int):
+        self.WordList: list[str] = WordList
+        self.LineNumber: int = LineNumber
+
+class OLineGroup:
+    def __init__(self, Origin: int, Lines: list[OLineSplit]):
+        self.Orig: int = Origin
+        self.Lines: list[OLineSplit] = Lines
 
 OPCODE_MAP = {
 "ADD":    0b00000,
@@ -71,25 +76,30 @@ def __DecOrHexSearch(str):
     else:
         return None
 
-def Ambig(Args):
-    if(len(Args.WordList) != 2):
+def Ambig(Args: OLineSplit):
+    if(len(Args.WordList) != 3):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
-    MatchA = re.search(r"r([0-7])",Args.WordList[0],re.IGNORECASE)
-    MatchB = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
-    ValueC = __DecOrHexSearch(Args.WordList[1])
+    MatchA = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
+    MatchB = re.search(r"r([0-7])",Args.WordList[2],re.IGNORECASE)
+    ValueC = __DecOrHexSearch(Args.WordList[2])
     ArgA = 0x00
     ArgB = 0x00
+    Inst = 0x00
     if MatchA is None or (MatchB is None and ValueC is None):
         raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
     ArgA = int(MatchA.groups()[0]) << REGA_POS
     if(MatchB is None):
+        # Immediate value... use immediate val instruction version
+        Inst = OPCODE_MAP.get(Args.WordList[0].upper() + "I") << INSTRUCTION_POS
         ArgB = (ValueC & 0xFF) << IMM_POS
     else:
+        # Register argument... use reg-only instruction version
+        Inst = OPCODE_MAP.get(Args.WordList[0].upper()) << INSTRUCTION_POS
         ArgB = int(MatchB.groups()[0]) << REGB_POS
 
-    return ArgA | ArgB
+    return Inst | ArgA | ArgB
 
-def SingR(Args):
+def SingR(Args: OLineSplit):
     if(len(Args.WordList) != 1):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     MatchA = re.search(r"r([0-7])",Args.WordList[0],re.IGNORECASE)
@@ -99,13 +109,13 @@ def SingR(Args):
     
     return ArgA
 
-def Jumps(Args, SymbolTable, ORIG_Offset):
+def Jumps(Args: OLineSplit, SymbolTable: dict[str, int], OrigOffset: int):
     if(len(Args.WordList) != 1):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     if(SymbolTable.get(Args.WordList[0]) is None):
         raise Exception(f"Label {Args.WordList[0]} has no defined destination on line {Args.LineNumber}")
 
-    PCOffset = SymbolTable.get(Args.WordList[0]) - (ORIG_Offset + 1)
+    PCOffset = SymbolTable.get(Args.WordList[0]) - (OrigOffset + 1)
     MaxPos = (2**(NUM_JUMP_BITS-1))             # Example 1024 and -1023 (not typical -1024 to 1023 because of PC+1)
     MaxNeg = (-1*2**(NUM_JUMP_BITS-1) + 1)
     if(     PCOffset > MaxPos or PCOffset < MaxNeg    ):
@@ -116,7 +126,7 @@ def Jumps(Args, SymbolTable, ORIG_Offset):
 def NoArg():
     return 0x0000
 
-def BaseR(Args):
+def BaseR(Args: OLineSplit):
     if(len(Args.WordList) != 3):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     MatchA = re.search(r"r([0-7])",Args.WordList[0],re.IGNORECASE)
@@ -136,7 +146,7 @@ def BaseR(Args):
 
     return ArgA | ArgB | ArgC
 
-def Other(Args):
+def Other(Args: OLineSplit):
     # Args includes the opcode as Arg.WordList[0]
     # ["CMP", "LD", "TRAP"]
     ArgA = 0x00

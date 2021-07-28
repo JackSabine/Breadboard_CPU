@@ -44,6 +44,7 @@ _lcd_init:
 
     str     r2,     r4,     #1      ; PortB output mode
 
+    pause
 _lcd_start_fcn_set:
     ld      r1,     0x30            ; 0011 0000 for 0011 **** startup sequence
     str     r1,     r4,     #3

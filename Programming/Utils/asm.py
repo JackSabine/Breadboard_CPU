@@ -5,18 +5,20 @@ from asm_helper import *
 def Assemble(FileToCompile, FileToWrite):
 
     Binary = bytearray(2 ** 15)
-    ORIG = 0x0000
 
     ### CONVERT TEXT .ASM FILE INTO A LIST OF COMMAND ARG LIST AND LINE NUMBER PAIRS ###
     with open(FileToCompile, 'r') as F:
         Raw = F.readlines()
-        Indexed = []
+        Indexed: list[OLine] = []
+
+        # Create a list that contains every line in the passed file and its line number (hold onto line number in case we need to throw errors about a particular line)
         for Ind in range(len(Raw)):
             Indexed.append(OLine(Raw[Ind], Ind+1))
-        # print(Raw)
-        Lines = []
+
+        # Remove any lines that start with a comment or have no contents (newline only)
+        # We can't outright delete them from Indexed because we are iterating through indexed (could use filter but the lambda would become large)
+        Lines: list[OLine] = []
         for Line in Indexed:
-            # Remove any lines that start with a comment or have no contents (newline only)
             if(Line.Text != '\n' and not Line.Text.startswith(';')):
                 Tmp = Line.Text.replace('\n', '').replace(',', ' ')
                 if Tmp.find(";") != -1:
@@ -24,87 +26,119 @@ def Assemble(FileToCompile, FileToWrite):
                 else:
                     Lines.append(OLine(Tmp, Line.LineNumber))
 
-        # print(Lines)
-        SplitLines = []
+        # Split each line across whitespace into a list of operations/operands
+        SplitLines: list[OLineSplit] = []
         for Line in Lines:
             SplitLines.append(OLineSplit(Line.Text.split(), Line.LineNumber))
 
+        # Filter out any empty lines
         CleanedSplitLines = [OStrList for OStrList in SplitLines if OStrList.WordList != []]
-        LabelMap = {}
 
+        # Prepare to generate a label map based on the lines INDEX (not the line number!)
+        LabelMap: dict[str, int] = {}
+
+        # Need to iterate through all cleaned split lines and generate different groups of lines to assemble and a label directory/map
+
+        # Desired output:
+        #
+        # List of OLineGroup
+        # Label map
+
+        LineGroups: list[OLineGroup] = []
+        CurrentLineGroup: OLineGroup = None
+        CurrentLineGroupIdx: int = 0
         
-        # print(CleanedSplitLines)
+        for CSL_Index in range(len(CleanedSplitLines)):
+            # Check for assembler directives
+            DirectiveMatch      = re.search(r"\.([A-Za-z]+)",    CleanedSplitLines[CSL_Index].WordList[0])
+            LabelMatch          = re.search(r"([A-Za-z_0-9]+):",   CleanedSplitLines[CSL_Index].WordList[0])
+            InstructionMatch    = re.search(r"([A-Za-z]+)",     CleanedSplitLines[CSL_Index].WordList[0])
 
-        for i in range((len(CleanedSplitLines))):
-            if(CleanedSplitLines[i].WordList[0].startswith(".")):
-                # Assembler directive
-                CmdMatch = re.search(r".([A-Za-z]+)", CleanedSplitLines[i].WordList[0])
-                if(CmdMatch is not None):
-                    Directive = CmdMatch.groups()[0]
-                    if(re.search(r"^ORIG$", Directive, re.IGNORECASE) is not None):
-                        if(len(CleanedSplitLines[i].WordList) != 2):
-                            raise Exception(f"Incorrect number of arguments on line {CleanedSplitLines[i].LineNumber}")
-                        MatchA = re.search(r"^(?:0x)?(?:x)?([0-9A-F]{4})$", CleanedSplitLines[i].WordList[1])
-                        if(MatchA is not None):
-                            ORIG = int(MatchA.groups()[0], base=16)
-                        else:
-                            raise Exception(f"Expected hex address on line {CleanedSplitLines[i].LineNumber} in formax 0xhhhh, xhhhh, or hhhh")
-
+            if(DirectiveMatch is not None):
+                # Is an assembler directive
+                if(re.search(r"^ORIG$", DirectiveMatch.groups()[0], re.IGNORECASE) is not None):
+                    if(len(CleanedSplitLines[CSL_Index].WordList) != 2):
+                        raise Exception(f"Incorrect number of arguments on line {CleanedSplitLines[CSL_Index].LineNumber}")
+                    HexMatch = re.search(r"^(?:0x)?(?:x)?([0-9A-F]{4})$", CleanedSplitLines[CSL_Index].WordList[1], re.IGNORECASE)
+                    if HexMatch is not None:
+                        if(CurrentLineGroup is not None):
+                            LineGroups.append(CurrentLineGroup)
+                            CurrentLineGroupIdx = 0
+                        CurrentLineGroup = OLineGroup(int(HexMatch.groups()[0], base=16), [])
                     else:
-                        raise Exception(f"Unrecognized assembler directive on line {CleanedSplitLines[i].LineNumber}")
+                        raise Exception(f"Expected hex address on line {CleanedSplitLines[CSL_Index].LineNumber} in formax 0xhhhh, xhhhh, or hhhh")
+                else:                 
+                    raise Exception(f"Unterminated assembler directive on line {CleanedSplitLines[CSL_Index].LineNumber}")
+            
+            elif(LabelMatch is not None):           # Not a directive; could it be a label?
+                if(CurrentLineGroup is not None):
+                    LabelMap[LabelMatch.groups()[0]] = CurrentLineGroup.Orig + CurrentLineGroupIdx
                 else:
-                    raise Exception(f"Unterminated assembler directive on line {CleanedSplitLines[i].LineNumber}")
+                    raise Exception(f"Line {CleanedSplitLines[CSL_Index].LineNumber} must be under a .ORIG statement")
 
-        for i in range(len(CleanedSplitLines)):
-            for Line in CleanedSplitLines[i].WordList:
-                if(Line.endswith(":")):
-                    LabelMap[Line[:Line.find(":")]] = i - len(list(LabelMap.keys())) - 1
+            elif(InstructionMatch is not None):     # Not a directive nor a label; could it be an instruction?
+                if(CurrentLineGroup is not None):
+                    CurrentLineGroup.Lines.append(CleanedSplitLines[CSL_Index])
+                    CurrentLineGroupIdx += 1
+                else:
+                    raise Exception(f"Line {CleanedSplitLines[CSL_Index].LineNumber} must be under a .ORIG statement")
+            else:
+                raise Exception("What do it be then???")
 
-        InstructionLineLists = list(filter(lambda Line: ( Line.WordList[0].endswith(":") or Line.WordList[0].startswith(".") )is not True, CleanedSplitLines))
+        # Append the last line group
+        if(CurrentLineGroup is not None):
+            LineGroups.append(CurrentLineGroup)        
+        
+        
         # print(LabelMap)
 
 
     ### GENERATE ARRAY OF HALF-WORD OPERATIONS ###
-    for ORIG_Offset in range(len(InstructionLineLists)):
-        Operation = InstructionLineLists[ORIG_Offset].WordList[0]
-        Instruction = 0x0000
+    for LineGroup in LineGroups:
+        CurOrig: int = LineGroup.Orig
+        InstructionLineLists: list[OLineSplit] = LineGroup.Lines
 
-        if(OPCODE_MAP.get(Operation.upper()) is not None):
-            Instruction |= OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
-        else:
-            raise Exception(f"Unrecognized instruction {Operation} on line {InstructionLineLists[ORIG_Offset].LineNumber}")
+        for OrigOffset in range(len(InstructionLineLists)):
+            Operation: str = InstructionLineLists[OrigOffset].WordList[0]
+            Arguments: list[str] = InstructionLineLists[OrigOffset].WordList[1:]
+            Instruction = 0x0000
 
-        Op = Operation.upper()
+            if(OPCODE_MAP.get(Operation.upper()) is not None and Operation.upper() not in AMBIG):
+                Instruction |= OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
+            else:
+                raise Exception(f"Unrecognized instruction {Operation} on line {InstructionLineLists[OrigOffset].LineNumber}")
 
-        if(Op in AMBIG):
-            Instruction |= Ambig(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[1:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber))
-            # print(hex(Instruction))
-        elif(Op in SINGR):
-            Instruction |= SingR(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[1:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber))
-            # print(hex(Instruction))
-            # print(InstructionLineLists[ORIG_Offset].LineNumber)
-        elif(Op in JUMPS):
-            Instruction |= Jumps(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[1:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber), LabelMap, ORIG_Offset)
-            # print(hex(Instruction))
-            # print(InstructionLineLists[ORIG_Offset].LineNumber)
-        elif(Op in NOARG):
-            Instruction |= NoArg()
-            # print(hex(Instruction))
-            # print(InstructionLineLists[ORIG_Offset].LineNumber)
-        elif(Op in BASER):
-            Instruction |= BaseR(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[1:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber))
-            # print(hex(Instruction))
-            # print(InstructionLineLists[ORIG_Offset].LineNumber)
-        elif(Op in OTHER):
-            Instruction |= Other(OLineSplit(WordList=InstructionLineLists[ORIG_Offset].WordList[:], LineNumber=InstructionLineLists[ORIG_Offset].LineNumber))
-            # print(hex(Instruction))
-            # print(InstructionLineLists[ORIG_Offset].LineNumber)
-        else:
-            raise Exception(f"Operation {Operation} recognized in opmap but does not appear in any instruction collections")
+            Op = Operation.upper()
 
-        # Little endian
-        Binary[2*ORIG+2*ORIG_Offset + 0] = Instruction & 0x00FF
-        Binary[2*ORIG+2*ORIG_Offset + 1] = (Instruction & 0xFF00) >> 8
+            if(Op in AMBIG):
+                Instruction = Ambig(Args=OLineSplit(WordList=InstructionLineLists[OrigOffset].WordList[:], LineNumber=InstructionLineLists[OrigOffset].LineNumber))
+                # print(hex(Instruction))
+            elif(Op in SINGR):
+                Instruction |= SingR(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber))
+                # print(hex(Instruction))
+                # print(InstructionLineLists[ORIG_Offset].LineNumber)
+            elif(Op in JUMPS):
+                Instruction |= Jumps(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber), SymbolTable=LabelMap, OrigOffset=OrigOffset)
+                # print(hex(Instruction))
+                # print(InstructionLineLists[ORIG_Offset].LineNumber)
+            elif(Op in NOARG):
+                Instruction |= NoArg()
+                # print(hex(Instruction))
+                # print(InstructionLineLists[ORIG_Offset].LineNumber)
+            elif(Op in BASER):
+                Instruction |= BaseR(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber))
+                # print(hex(Instruction))
+                # print(InstructionLineLists[ORIG_Offset].LineNumber)
+            elif(Op in OTHER):
+                Instruction |= Other(Args=OLineSplit(WordList=InstructionLineLists[OrigOffset].WordList[:], LineNumber=InstructionLineLists[OrigOffset].LineNumber))
+                # print(hex(Instruction))
+                # print(InstructionLineLists[ORIG_Offset].LineNumber)
+            else:
+                raise Exception(f"Operation {Operation} recognized in opmap but does not appear in any instruction collections")
+
+            # Little endian
+            Binary[2*CurOrig+2*OrigOffset + 0] = Instruction & 0x00FF
+            Binary[2*CurOrig+2*OrigOffset + 1] = (Instruction & 0xFF00) >> 8
 
     Write(Binary, FileToWrite)
 
@@ -115,17 +149,19 @@ class __FlagState(enum.Enum):
     OUT_FILE     = 1
 
 if __name__ == "__main__":
-    if(len(sys.argv) < 2):
-        raise Exception("Not enough input arguments")
 
-    # InFile = "./Fibonacci.asm"
-    # OutFile = "./Fib.bin"
-    
+
     cwd = os.getcwd()
 
     InFile  = None
     OutFile = None
     StateV  = None
+
+    # InFile = "./Programs/OSR.asm"
+    # OutFile = "./Utils/Testing.bin"
+
+    if(len(sys.argv) < 2):
+        raise Exception("Not enough input arguments")
 
     for arg in sys.argv[1:]:
         if(re.search(r"-c", arg, re.IGNORECASE)):
