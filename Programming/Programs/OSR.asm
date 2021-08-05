@@ -13,16 +13,13 @@ startup:
     ld      r2,     0xFF
     ld      r3,     0xFE
 
-    pause
-
     call    _lcd_init
 
-    pause
-_hsa_lp:
-    str     r0,     r2,     #0
-    add     r3,     #-1
-    add     r1,     #-1
-    jnz     _hsa_lp
+; _hsa_lp:
+;     str     r0,     r2,     #0
+;     add     r3,     #-1
+;     add     r1,     #-1
+;     jnz     _hsa_lp
 _config_env:
     ld      r0,     0x00        ; Default PC 0x0400
     ld      r1,     0x04
@@ -30,6 +27,8 @@ _config_env:
     ld      r5,     0x82
     ld      r6,     0x00        ; Default Globals TOS Pointer
     ld      r7,     0x80
+
+    pause
     
     start   r0
 
@@ -37,34 +36,32 @@ _lcd_init:
     ; Need RS (4)=0, R/W (5)=0, CE (6)=1, and DB7-DB0=0x00
     ld      r4,     0x00
     ld      r5,     0xFF
-    ld      r2,     0x00
-    ld      r3,     0x01
+    ld      r3,     0x00
+    ld      r2,     0x01
     str     r3,     r4,     #2      ; PortA = 0x01
     str     r2,     r4,     #3      ; PortB = 0x00
 
-    str     r2,     r4,     #1      ; PortB output mode
-
-    pause
+    str     r3,     r4,     #1      ; PortB output mode
 _lcd_start_fcn_set:
     ld      r1,     0x30            ; 0011 0000 for 0011 **** startup sequence
     str     r1,     r4,     #3
 
-    ld      r0,     #3
+    ld      r0,     #3              ; Clock in 0x30 three times
 _lcd_start_fcn_set_lp:
     str     r2,     r4,     #2      ; PortA = 0x00
-    ld      r1,     #1
+    ld      r1,     #1              ; wait_lp_1 executes this many times
 _lcd_start_fcn_set_lp_wait_lp_1:
     add     r1,     #-1
     jnz     _lcd_start_fcn_set_lp_wait_lp_1
 
     str     r3,     r4,     #2      ; PortA = 0x01
+    ld      r1,     #1              ; wait_lp_2 executes this many times
 _lcd_start_fcn_set_lp_wait_lp_2:
     add     r1,     #-1
     jnz     _lcd_start_fcn_set_lp_wait_lp_2
 
     add     r0,     #-1
     jnz     _lcd_start_fcn_set_lp
-
 
     ld      r1,     0x38            ; 0011 1000 for Function Set N = 1 (multi-line display) and F = 0 (5x8 dot character)
     str     r1,     r4,     #3
@@ -82,6 +79,11 @@ _lcd_start_fcn_set_lp_wait_lp_2:
     str     r3,     r4,     #2      ; PortA = 0x01
 
     ld      r1,     0x06            ; 0000 0110 for Entry Mode Set with I/D = 1 for the cursor to move right and SH to 0 to not shift the display
+    str     r1,     r4,     #3
+    str     r2,     r4,     #2      ; PortA = 0x00
+    str     r3,     r4,     #2      ; PortA = 0x01
+
+    ld      r1,     0x0F            ; 0000 1111 for Display ON/OFF control (set Display (on) = 1, Cursor (on) = 1, cursor Blink (on) = 1)
     str     r1,     r4,     #3
     str     r2,     r4,     #2      ; PortA = 0x00
     str     r3,     r4,     #2      ; PortA = 0x01

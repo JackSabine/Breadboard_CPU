@@ -103,8 +103,9 @@ def Assemble(FileToCompile, FileToWrite):
             Arguments: list[str] = InstructionLineLists[OrigOffset].WordList[1:]
             Instruction = 0x0000
 
-            if(OPCODE_MAP.get(Operation.upper()) is not None and Operation.upper() not in AMBIG):
-                Instruction |= OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
+            if(OPCODE_MAP.get(Operation.upper()) is not None):
+                if(Operation.upper() not in AMBIG):
+                    Instruction |= OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
             else:
                 raise Exception(f"Unrecognized instruction {Operation} on line {InstructionLineLists[OrigOffset].LineNumber}")
 
