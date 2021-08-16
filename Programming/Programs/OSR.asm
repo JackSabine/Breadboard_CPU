@@ -27,8 +27,6 @@ _config_env:
     ld      r5,     0x82
     ld      r6,     0x00        ; Default Globals TOS Pointer
     ld      r7,     0x80
-
-    pause
     
     start   r0
 
