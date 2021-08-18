@@ -1,6 +1,4 @@
-import sys
-import re
-import enum
+import sys, re, enum
 from writer import Write
 
 class __FlagState(enum.Enum):

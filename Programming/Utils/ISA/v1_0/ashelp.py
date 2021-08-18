@@ -1,3 +1,11 @@
+import os, sys
+path: str = os.path.dirname(__file__)
+while(not path.endswith("ISA")):
+    path = os.path.dirname(path)
+sys.path.append(os.path.dirname(path))
+
+from ISA.v1_0.ucodedef import *
+
 import re
 
 class OLine:
@@ -14,6 +22,15 @@ class OLineGroup:
     def __init__(self, Origin: int, Lines: list[OLineSplit]):
         self.Orig: int = Origin
         self.Lines: list[OLineSplit] = Lines
+
+INSTRUCTION_POS = 11
+NUM_JUMP_BITS = INSTRUCTION_POS
+NUM_BASER_OFFSET_BITS = 5
+NUM_IMM_BITS = 8
+
+REGA_POS = 8
+REGB_POS = 5
+IMM_POS = 0
 
 OPCODE_MAP = {
 "ADD":    0b00000,
@@ -49,15 +66,6 @@ OPCODE_MAP = {
 "JC":     0b11110,
 "JNC":    0b11111
 }
-
-INSTRUCTION_POS = 11
-NUM_JUMP_BITS = INSTRUCTION_POS
-NUM_BASER_OFFSET_BITS = 5
-NUM_IMM_BITS = 8
-
-REGA_POS = 8
-REGB_POS = 5
-IMM_POS = 0
 
 AMBIG = ["ADD", "AND", "OR"]
 SINGR = ["NOT", "NEG", "SETBK", "START", "SETSP", "PUSH", "POP", "CPYSP"]

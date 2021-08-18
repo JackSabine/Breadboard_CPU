@@ -14,7 +14,6 @@ ROM_POS5  = 5
 ROM_POS6  = 6
 ROM_POS7  = 7
 
-
 AAC	    =   1   <<      (ROM_GRP2 + ROM_POS4)
 ACO	    =   1   <<      (ROM_GRP4 + ROM_POS0)
 ACU	    =   1   <<      (ROM_GRP2 + ROM_POS7)
@@ -57,3 +56,14 @@ SLI	    =   1   <<      (ROM_GRP2 + ROM_POS1)
 SLO	    =   1   <<      (ROM_GRP5 + ROM_POS3)
 
 NOINST  =   0
+
+NUM_UINST_BITS          =   4
+NUM_CONDFL_BITS         =   1
+NUM_OPC_BITS            =   5
+NUM_CS_BITS             =   3
+NUM_ADDRESS_PINS        =   NUM_UINST_BITS+NUM_CONDFL_BITS+NUM_OPC_BITS+NUM_CS_BITS
+POS_CS                  =   0+NUM_UINST_BITS+NUM_CONDFL_BITS+NUM_OPC_BITS
+POS_OPC                 =   0+NUM_UINST_BITS+NUM_CONDFL_BITS
+POS_CONDFL              =   0+NUM_UINST_BITS
+POS_UINST               =   0
+INVERTING_MASK          =   GAO|GBO|MO|NI|PHI|PHO|PLI|PLO|RAS|RBS|RI|RO|SHO|SLO

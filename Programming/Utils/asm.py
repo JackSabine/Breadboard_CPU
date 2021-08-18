@@ -1,6 +1,6 @@
 import sys, os, enum, re
 from writer import Write
-from asm_helper import *
+from ISA.v1_0.ashelp import *
 
 def Assemble(FileToCompile, FileToWrite):
 
@@ -150,8 +150,6 @@ class __FlagState(enum.Enum):
     OUT_FILE     = 1
 
 if __name__ == "__main__":
-
-
     cwd = os.getcwd()
 
     InFile  = None
