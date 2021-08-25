@@ -118,8 +118,8 @@ def Assemble(FileToCompile, FileToWrite):
                 Instruction |= SingR(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber))
                 # print(hex(Instruction))
                 # print(InstructionLineLists[ORIG_Offset].LineNumber)
-            elif(Op in JUMPS):
-                Instruction |= Jumps(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber), SymbolTable=LabelMap, OrigOffset=OrigOffset)
+            elif(Op in PCOFF):
+                Instruction |= PCOff(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber), SymbolTable=LabelMap, OrigOffset=OrigOffset)
                 # print(hex(Instruction))
                 # print(InstructionLineLists[ORIG_Offset].LineNumber)
             elif(Op in NOARG):

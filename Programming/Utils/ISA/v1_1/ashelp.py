@@ -35,11 +35,11 @@ IMM_POS = 0
 OPCODE_MAP = {
 "ADD":    0b00000,
 "ADDI":   0b00001,
-"BLANK":  0b00010,
+"LEA":    0b00010,
 "NOT":    0b00011,
 "AND":    0b00100,
 "ANDI":   0b00101,
-"NEG":    0b00110,
+"STP":    0b00110,
 "CMP":    0b00111,
 "LD":     0b01000,
 "LDR":    0b01001,
@@ -48,7 +48,7 @@ OPCODE_MAP = {
 "CALL":   0b01100,
 "RET":    0b01101,
 "TRAP":   0b01110,
-"SETBK":  0b01111,
+"STPI":   0b01111,
 "START":  0b10000,
 "SETSP":  0b10001,
 "PUSH":   0b10010,
@@ -67,9 +67,9 @@ OPCODE_MAP = {
 "JNC":    0b11111
 }
 
-AMBIG = ["ADD", "AND", "OR"]
-SINGR = ["NOT", "NEG", "SETBK", "START", "SETSP", "PUSH", "POP", "CPYSP"]
-PCOFF = ["J", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL"]
+AMBIG = ["ADD", "AND", "OR", "STP"]
+SINGR = ["NOT", "START", "SETSP", "PUSH", "POP", "CPYSP"]
+PCOFF = ["J", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL", "LEA"]
 NOARG = ["PAUSE", "RET"]
 BASER = ["LDR", "STR"]
 OTHER = ["CMP", "LD", "TRAP"]
