@@ -1,6 +1,6 @@
 import sys, os, enum, re
 from writer import Write
-from ISA.v1_0.ashelp import *
+from ISA.v1_1.ashelp import *
 
 def Assemble(FileToCompile, FileToWrite):
 

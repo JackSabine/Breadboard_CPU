@@ -5,7 +5,7 @@ from ISA.Macros import *
 # print("cd \"", os.path.dirname(os.path.abspath(__file__)), "\"", sep="")
 # print("format-hex a.bin | more")
 
-import ISA.v1_0.ucodedef as ucode
+import ISA.v1_1.ucodedef as ucode
 
 # EEPROM Address Pinout
 

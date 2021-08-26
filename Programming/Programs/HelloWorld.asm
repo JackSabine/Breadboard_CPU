@@ -1,3 +1,5 @@
+; Built for ISA v1.0
+
 .ORIG 0x0400
 
 helloworld:
