@@ -1,4 +1,5 @@
 import os, sys
+from typing import Match
 path: str = os.path.dirname(__file__)
 while(not path.endswith("ISA")):
     path = os.path.dirname(path)
@@ -31,6 +32,16 @@ NUM_IMM_BITS = 8
 REGA_POS = 8
 REGB_POS = 5
 IMM_POS = 0
+
+def __DecOrHexSearch(str, Limit):
+    MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
+    MatchHex = re.search(r"0?x([0-9A-F]+)",str,re.IGNORECASE)
+    if MatchDec is not None:
+        return int(MatchDec.groups()[0])
+    elif MatchHex is not None:
+        return int(MatchHex.groups()[0],base=16)
+    else:
+        return None
 
 OPCODE_MAP = {
 "ADD":    0b00000,
@@ -67,45 +78,73 @@ OPCODE_MAP = {
 "JNC":    0b11111
 }
 
-AMBIG = ["ADD", "AND", "OR", "STP"]
-SINGR = ["NOT", "START", "SETSP", "PUSH", "POP", "CPYSP"]
-PCOFF = ["J", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL", "LEA"]
-NOARG = ["PAUSE", "RET"]
-BASER = ["LDR", "STR"]
+TWOREG = {"ADD", "AND", "OR"}
+REGIMM = {"ADDI", "ANDI", "ORI"}
+SINGR = {"NOT", "START", "SETSP", "PUSH", "POP", "CPYSP"}
+PCOFF = {"J", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL", "LEA"}
+NOARG = {"PAUSE", "RET"}
+BASER = {"LDR", "STR"}
+PORTIMM = {"STPI"}
+PORTREG = {"STP"}
+
 OTHER = ["CMP", "LD", "TRAP"]
 
-def __DecOrHexSearch(str):
-    MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
-    MatchHex = re.search(r"0?x([0-9A-F]+)",str,re.IGNORECASE)
-    if MatchDec is not None:
-        return int(MatchDec.groups()[0])
-    elif MatchHex is not None:
-        return int(MatchHex.groups()[0],base=16)
-    else:
-        return None
+def CreateBitArgs(Operation: str, Args: OLineSplit, SymbolTable: map[str, int], OrigOffset: int) -> int:
+    BitArgs = 0x0000
 
-def Ambig(Args: OLineSplit):
+    if(Operation in TWOREG):
+        BitArgs |= TwoReg(Args)
+    elif(Operation in REGIMM):
+        BitArgs |= RegImm(Args)
+    elif(Operation in SINGR):
+        BitArgs |= SingR(Args)
+    elif(Operation in PCOFF):
+        BitArgs |= PCOff(Args, SymbolTable, OrigOffset)
+    elif(Operation in NOARG):
+        BitArgs |= NoArg()
+    elif(Operation in BASER):
+        BitArgs |= BaseR(Args)
+    elif(Operation in OTHER):
+        BitArgs |= Other(Operation, Args)
+    else:
+        raise Exception(f"Operation {Operation} recognized in opmap but does not appear in any instruction collections")
+    
+    return 0
+
+def TwoReg(Args: OLineSplit) -> int:
     if(len(Args.WordList) != 3):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     MatchA = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
     MatchB = re.search(r"r([0-7])",Args.WordList[2],re.IGNORECASE)
-    ValueC = __DecOrHexSearch(Args.WordList[2])
     ArgA = 0x00
     ArgB = 0x00
-    Inst = 0x00
-    if MatchA is None or (MatchB is None and ValueC is None):
-        raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
-    ArgA = int(MatchA.groups()[0]) << REGA_POS
-    if(MatchB is None):
-        # Immediate value... use immediate val instruction version
-        Inst = OPCODE_MAP.get(Args.WordList[0].upper() + "I") << INSTRUCTION_POS
-        ArgB = (ValueC & 0xFF) << IMM_POS
-    else:
-        # Register argument... use reg-only instruction version
-        Inst = OPCODE_MAP.get(Args.WordList[0].upper()) << INSTRUCTION_POS
-        ArgB = int(MatchB.groups()[0]) << REGB_POS
 
-    return Inst | ArgA | ArgB
+    if MatchA is None or MatchB is None:
+        raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
+
+    ArgA = int(MatchA.groups()[0]) << REGA_POS
+    ArgB = int(MatchB.groups()[0]) << REGB_POS
+
+    return ArgA | ArgB
+
+def RegImm(Args: OLineSplit) -> int:
+
+    if(len(Args.WordList) != 3):
+        raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
+
+    MatchA = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
+    ValueC = __DecOrHexSearch(Args.WordList[2])
+
+    ArgA = 0x00
+    ArgB = 0x00
+
+    if MatchA is None or ValueC is None:
+        raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
+
+    ArgA = int(MatchA.groups()[0]) << REGA_POS
+    ArgB = (ValueC & 0xFF) << IMM_POS
+
+    return ArgA | ArgB
 
 def SingR(Args: OLineSplit):
     if(len(Args.WordList) != 1):
@@ -154,29 +193,29 @@ def BaseR(Args: OLineSplit):
 
     return ArgA | ArgB | ArgC
 
-def Other(Args: OLineSplit):
+def Other(Operation: str, Args: OLineSplit):
     # Args includes the opcode as Arg.WordList[0]
     # ["CMP", "LD", "TRAP"]
     ArgA = 0x00
     ArgB = 0x00
-    if(re.search(r"^CMP$", Args.WordList[0], re.IGNORECASE)):
-        if(len(Args.WordList) != 2 + 1):
+    if(re.search(r"^CMP$", Operation, re.IGNORECASE)):
+        if(len(Args.WordList) != 2):
             raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
-        MatchA = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
-        MatchB = re.search(r"r([0-7])",Args.WordList[2],re.IGNORECASE)
+        MatchA = re.search(r"r([0-7])",Args.WordList[0],re.IGNORECASE)
+        MatchB = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
         if MatchA is None or MatchB is None:
             raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
 
         ArgA = int(MatchA.groups()[0]) << REGA_POS
         ArgB = int(MatchB.groups()[0]) << REGB_POS
 
-    elif(re.search(r"^LD$", Args.WordList[0], re.IGNORECASE)):
-        if(len(Args.WordList) != 2 + 1):
+    elif(re.search(r"^LD$", Operation, re.IGNORECASE)):
+        if(len(Args.WordList) != 2):
             raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
 
-        MatchA = re.search(r"r([0-7])", Args.WordList[1], re.IGNORECASE)
+        MatchA = re.search(r"r([0-7])", Args.WordList[0], re.IGNORECASE)
 
-        ValueB = __DecOrHexSearch(Args.WordList[2])
+        ValueB = __DecOrHexSearch(Args.WordList[1])
         if MatchA is None or ValueB is None:
             raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
 
@@ -189,11 +228,45 @@ def Other(Args: OLineSplit):
             raise Exception(f"LD immediate value on line {Args.LineNumber} exceeds max range [{MaxNeg},{MaxPos}]")
         ArgB = (Immediate & 0xFF) << IMM_POS
 
-    elif(re.search(r"^TRAP$", Args.WordList[0], re.IGNORECASE)):
-        if(len(Args.WordList) != 1 + 1):
+    elif(re.search(r"^TRAP$", Operation, re.IGNORECASE)):
+        if(len(Args.WordList) != 1):
             raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
 
         raise Exception(f"Not implemented")
     else:
-        raise Exception(f"Operation {Args.WordList[0]} recognized as type \"Other\", but does not match any instructions")
+        raise Exception(f"Operation {Operation} recognized as type \"Other\", but does not match any instructions")
     return ArgA | ArgB
+
+def PortReg(Args: OLineSplit) -> int:
+    if(len(Args.WordList) != 2):
+        raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
+
+    ArgA = 0x00
+    ArgB = 0x00
+    
+    # Syntax: STP [A-H], r[0-7]
+    MatchPort: re.Match = re.search(r"[A-H]",Args.WordList[0],re.IGNORECASE)
+    MatchReg: re.Match = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
+    if MatchPort is not None or MatchReg is not None:
+        raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
+    ArgA = int(ord(MatchPort.groups()[0]) - ord("A")) << REGA_POS
+    ArgB = int(MatchReg.groups()[0]) << REGB_POS
+    
+    return ArgA | ArgB
+
+def PortImm(Args: OLineSplit) -> int:
+    # Syntax: STPI [A-H], #/0x{Val}
+
+    if(len(Args.WordList) != 2):
+        raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
+
+    ArgA = 0x00
+    ArgB = 0x00
+
+    MatchPort: re.Match = re.search(r"[A-H]",Args.WordList[0],re.IGNORECASE)
+    ValueC = __DecOrHexSearch(Args.WordList[1])
+
+    if MatchPort is None or ValueC is not None:
+        raise Exception(f"Incorrect arguments on line {Args.LineNumber}")
+
+    return 0

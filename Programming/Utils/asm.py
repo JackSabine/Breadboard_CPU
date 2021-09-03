@@ -93,51 +93,35 @@ def Assemble(FileToCompile, FileToWrite):
         # print(LabelMap)
 
 
-    ### GENERATE ARRAY OF HALF-WORD OPERATIONS ###
+    ### GENERATE ARRAY OF 16b INSTRUCTIONS ###
     for LineGroup in LineGroups:
         CurOrig: int = LineGroup.Orig
         InstructionLineLists: list[OLineSplit] = LineGroup.Lines
 
         for OrigOffset in range(len(InstructionLineLists)):
             Operation: str = InstructionLineLists[OrigOffset].WordList[0]
-            Arguments: list[str] = InstructionLineLists[OrigOffset].WordList[1:]
+            WordList: list[str] = InstructionLineLists[OrigOffset].WordList[1:]
+            LineNumber: int = InstructionLineLists[OrigOffset].LineNumber
+
+            Arguments: OLineSplit = OLineSplit(WordList, LineNumber)
+
             Instruction = 0x0000
+            InstructionOp = 0x0000
+            InstructionArgs = 0x0000
 
             if(OPCODE_MAP.get(Operation.upper()) is not None):
-                if(Operation.upper() not in AMBIG):
-                    Instruction |= OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
+                InstructionOp |= OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
             else:
-                raise Exception(f"Unrecognized instruction {Operation} on line {InstructionLineLists[OrigOffset].LineNumber}")
+                raise Exception(f"Unrecognized instruction {Operation} on line {LineNumber}")
 
             Op = Operation.upper()
 
-            if(Op in AMBIG):
-                Instruction = Ambig(Args=OLineSplit(WordList=InstructionLineLists[OrigOffset].WordList[:], LineNumber=InstructionLineLists[OrigOffset].LineNumber))
-                # print(hex(Instruction))
-            elif(Op in SINGR):
-                Instruction |= SingR(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber))
-                # print(hex(Instruction))
-                # print(InstructionLineLists[ORIG_Offset].LineNumber)
-            elif(Op in PCOFF):
-                Instruction |= PCOff(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber), SymbolTable=LabelMap, OrigOffset=OrigOffset)
-                # print(hex(Instruction))
-                # print(InstructionLineLists[ORIG_Offset].LineNumber)
-            elif(Op in NOARG):
-                Instruction |= NoArg()
-                # print(hex(Instruction))
-                # print(InstructionLineLists[ORIG_Offset].LineNumber)
-            elif(Op in BASER):
-                Instruction |= BaseR(Args=OLineSplit(WordList=Arguments, LineNumber=InstructionLineLists[OrigOffset].LineNumber))
-                # print(hex(Instruction))
-                # print(InstructionLineLists[ORIG_Offset].LineNumber)
-            elif(Op in OTHER):
-                Instruction |= Other(Args=OLineSplit(WordList=InstructionLineLists[OrigOffset].WordList[:], LineNumber=InstructionLineLists[OrigOffset].LineNumber))
-                # print(hex(Instruction))
-                # print(InstructionLineLists[ORIG_Offset].LineNumber)
-            else:
-                raise Exception(f"Operation {Operation} recognized in opmap but does not appear in any instruction collections")
+            InstructionArgs = CreateBitArgs(Operation, Arguments, LabelMap)
 
-            # Little endian
+            Instruction = InstructionOp | InstructionArgs
+            
+
+            # Little endian arrangement in code EEPROM
             Binary[2*CurOrig+2*OrigOffset + 0] = Instruction & 0x00FF
             Binary[2*CurOrig+2*OrigOffset + 1] = (Instruction & 0xFF00) >> 8
 

@@ -14,7 +14,7 @@ startup:
     ld      r1,     #16
     ld      r2,     0xFF
     ld      r3,     0xFE
-
+    
     call    _lcd_init
 
 ; _hsa_lp:
@@ -34,14 +34,13 @@ _config_env:
 
 _lcd_init:
     ; Need RS (4)=0, R/W (5)=0, CE (6)=1, and DB7-DB0=0x00
-    ld      r4,     0x00
-    ld      r5,     0xFF
     ld      r3,     0x00
     ld      r2,     0x01
     str     r3,     r4,     #2      ; PortA = 0x01
     str     r2,     r4,     #3      ; PortB = 0x00
 
     str     r3,     r4,     #1      ; PortB output mode
+    stp     
 _lcd_start_fcn_set:
     ld      r1,     0x30            ; 0011 0000 for 0011 **** startup sequence
     str     r1,     r4,     #3
@@ -51,7 +50,7 @@ _lcd_start_fcn_set_lp:
     str     r2,     r4,     #2      ; PortA = 0x00
     ld      r1,     #1              ; wait_lp_1 executes this many times
 _lcd_start_fcn_set_lp_wait_lp_1:
-    add     r1,     #-1
+    addi    r1,     #-1
     jnz     _lcd_start_fcn_set_lp_wait_lp_1
 
     str     r3,     r4,     #2      ; PortA = 0x01
