@@ -1,47 +1,24 @@
 import os, sys
-from typing import Match
 path: str = os.path.dirname(__file__)
 while(not path.endswith("ISA")):
     path = os.path.dirname(path)
 sys.path.append(os.path.dirname(path))
 
-from ISA.v1_0.ucodedef import *
+from ISA.Macros import *
 
 import re
 
-class OLine:
-    def __init__(self, Text: str, LineNumber: int):
-        self.Text: str = Text
-        self.LineNumber: int = LineNumber
-
-class OLineSplit:
-    def __init__(self, WordList: list[str], LineNumber: int):
-        self.WordList: list[str] = WordList
-        self.LineNumber: int = LineNumber
-
-class OLineGroup:
-    def __init__(self, Origin: int, Lines: list[OLineSplit]):
-        self.Orig: int = Origin
-        self.Lines: list[OLineSplit] = Lines
-
-INSTRUCTION_POS = 11
-NUM_JUMP_BITS = INSTRUCTION_POS
-NUM_BASER_OFFSET_BITS = 5
-NUM_IMM_BITS = 8
-
-REGA_POS = 8
-REGB_POS = 5
-IMM_POS = 0
-
-def __DecOrHexSearch(str, Limit):
+def __DecOrHexSearch(str):
     MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
     MatchHex = re.search(r"0?x([0-9A-F]+)",str,re.IGNORECASE)
+    RetVal = None
+
     if MatchDec is not None:
-        return int(MatchDec.groups()[0])
+        RetVal = int(MatchDec.groups()[0])
     elif MatchHex is not None:
-        return int(MatchHex.groups()[0],base=16)
-    else:
-        return None
+        RetVal = int(MatchHex.groups()[0],base=16)
+
+    return RetVal
 
 OPCODE_MAP = {
 "ADD":    0b00000,
@@ -78,18 +55,18 @@ OPCODE_MAP = {
 "JNC":    0b11111
 }
 
-TWOREG = {"ADD", "AND", "OR"}
-REGIMM = {"ADDI", "ANDI", "ORI"}
-SINGR = {"NOT", "START", "SETSP", "PUSH", "POP", "CPYSP"}
-PCOFF = {"J", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL", "LEA"}
-NOARG = {"PAUSE", "RET"}
-BASER = {"LDR", "STR"}
-PORTIMM = {"STPI"}
-PORTREG = {"STP"}
+TWOREG = ["ADD", "AND", "OR"]
+REGIMM = ["ADDI", "ANDI", "ORI"]
+SINGR = ["NOT", "START", "SETSP", "PUSH", "POP", "CPYSP"]
+PCOFF = ["J", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL", "LEA"]
+NOARG = ["PAUSE", "RET"]
+BASER = ["LDR", "STR"]
+PORTIMM = ["STPI"]
+PORTREG = ["STP"]
 
 OTHER = ["CMP", "LD", "TRAP"]
 
-def CreateBitArgs(Operation: str, Args: OLineSplit, SymbolTable: map[str, int], OrigOffset: int) -> int:
+def CreateBitArgs(Operation: str, Args: OLineSplit, SymbolTable: dict[str, int], OrigOffset: int) -> int:
     BitArgs = 0x0000
 
     if(Operation in TWOREG):
@@ -109,7 +86,7 @@ def CreateBitArgs(Operation: str, Args: OLineSplit, SymbolTable: map[str, int], 
     else:
         raise Exception(f"Operation {Operation} recognized in opmap but does not appear in any instruction collections")
     
-    return 0
+    return BitArgs
 
 def TwoReg(Args: OLineSplit) -> int:
     if(len(Args.WordList) != 3):

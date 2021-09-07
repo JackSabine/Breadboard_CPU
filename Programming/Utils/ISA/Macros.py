@@ -67,3 +67,27 @@ POS_OPC                 =   0+NUM_UINST_BITS+NUM_CONDFL_BITS
 POS_CONDFL              =   0+NUM_UINST_BITS
 POS_UINST               =   0
 INVERTING_MASK          =   GAO|GBO|MO|NI|PHI|PHO|PLI|PLO|RAS|RBS|RI|RO|SHO|SLO
+
+class OLine:
+    def __init__(self, Text: str, LineNumber: int):
+        self.Text: str = Text
+        self.LineNumber: int = LineNumber
+
+class OLineSplit:
+    def __init__(self, WordList: list[str], LineNumber: int):
+        self.WordList: list[str] = WordList
+        self.LineNumber: int = LineNumber
+
+class OLineGroup:
+    def __init__(self, Origin: int, Lines: list[OLineSplit]):
+        self.Orig: int = Origin
+        self.Lines: list[OLineSplit] = Lines
+
+INSTRUCTION_POS = 11
+NUM_JUMP_BITS = INSTRUCTION_POS
+NUM_BASER_OFFSET_BITS = 5
+NUM_IMM_BITS = 8
+
+REGA_POS = 8
+REGB_POS = 5
+IMM_POS = 0
