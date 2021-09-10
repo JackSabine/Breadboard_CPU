@@ -91,7 +91,7 @@ _lcd_start_fcn_set_lp_wait_lp_2:
     ret
 
 ; Begin OSR code
-sprint:
+sprint_routine:
     ret
 
 ; Alloc OSR : need N passed on stack consecutive blocks in heap (using first fit algorithm)

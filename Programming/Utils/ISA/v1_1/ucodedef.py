@@ -5,7 +5,7 @@ while(not path.endswith("ISA")):
     path = os.path.dirname(path)
 sys.path.append(os.path.dirname(path))
 
-from ISA.Macros import *
+from ISA.macros import *
 
 ADD     =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|ARI,	                RBS|RO|AUA|ASI|ARO|CSU,	        ASO|CCU|RAS|RI,	        NI  ]
 ADDI    =   [ PLO|MALI, PHO|MAHI, PI|MO|ILI, MO|MRH|IHI,      RAS|RO|ARI,     	            GBO|AUA|ASI|ARO|CSU,            ASO|CCU|RAS|RI,         NI  ]

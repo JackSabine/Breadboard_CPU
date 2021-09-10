@@ -4,7 +4,7 @@ while(not path.endswith("ISA")):
     path = os.path.dirname(path)
 sys.path.append(os.path.dirname(path))
 
-from ISA.Macros import *
+from ISA.macros import *
 
 import re
 

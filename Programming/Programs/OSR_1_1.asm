@@ -11,18 +11,18 @@ startup:
     ld      r1,     0x82
     setsp   r0
 
+    call    lcd_init
+
     ld      r1,     #16
     ld      r2,     0xFF
     ld      r3,     0xFE
-    
-    call    _lcd_init
 
-; _hsa_lp:
+; hsa_lp:
 ;     str     r0,     r2,     #0
 ;     add     r3,     #-1
 ;     add     r1,     #-1
-;     jnz     _hsa_lp
-_config_env:
+;     jnz     hsa_lp
+config_env:
     ld      r0,     0x00        ; Default PC 0x0400
     ld      r1,     0x04
     ld      r4,     0x00        ; Default Frame Pointer
@@ -32,62 +32,63 @@ _config_env:
     
     start   r0
 
-_lcd_init:
+lcd_init:
     ; Need RS (4)=0, R/W (5)=0, CE (6)=1, and DB7-DB0=0x00
-    ld      r3,     0x00
-    ld      r2,     0x01
-    str     r3,     r4,     #2      ; PortA = 0x01
-    str     r2,     r4,     #3      ; PortB = 0x00
+    stpi    A,      0x01
+    stpi    B,      0x00
 
-    str     r3,     r4,     #1      ; PortB output mode
-    stp     
-_lcd_start_fcn_set:
-    ld      r1,     0x30            ; 0011 0000 for 0011 **** startup sequence
-    str     r1,     r4,     #3
+lcd_start_fcn_set:
+    stpi    B,      0x30            ; 0011 0000 for 0011 **** startup sequence
 
-    ld      r0,     #3              ; Clock in 0x30 three times
-_lcd_start_fcn_set_lp:
-    str     r2,     r4,     #2      ; PortA = 0x00
-    ld      r1,     #1              ; wait_lp_1 executes this many times
-_lcd_start_fcn_set_lp_wait_lp_1:
+    ld      r1,     #3              ; Clock in 0x30 three times
+lcd_start_fcn_set_lp:
+    stpi    A,      0x00            ; CE = 0
+
+    ld      r0,     #1              ; wait_lp iter 1 time
+    trap    wait_lp_routine
+
+    stpi    A,      0x01            ; CE = 1
+
+    ld      r0,     #1
+    trap    wait_lp_routine
+
     addi    r1,     #-1
-    jnz     _lcd_start_fcn_set_lp_wait_lp_1
+    jnz     lcd_start_fcn_set_lp
 
-    str     r3,     r4,     #2      ; PortA = 0x01
-    ld      r1,     #1              ; wait_lp_2 executes this many times
-_lcd_start_fcn_set_lp_wait_lp_2:
-    add     r1,     #-1
-    jnz     _lcd_start_fcn_set_lp_wait_lp_2
+    stpi    B,      0x38            ; 0011 1000 for Function Set N = 1 (multi-line display) and F = 0 (5x8 dot character)
+    stpi    A,      0x00
+    stpi    A,      0x01
 
-    add     r0,     #-1
-    jnz     _lcd_start_fcn_set_lp
+    stpi    B,      0x08            ; 0000 1000 for Display ON/OFF control (enforced D = 0, C = 0, B = 0 during initialization)
+    stpi    A,      0x00
+    stpi    A,      0x01
 
-    ld      r1,     0x38            ; 0011 1000 for Function Set N = 1 (multi-line display) and F = 0 (5x8 dot character)
-    str     r1,     r4,     #3
-    str     r2,     r4,     #2      ; PortA = 0x00
-    str     r3,     r4,     #2      ; PortA = 0x01
+    stpi    B,      0x01            ; 0000 0001 for Clear Display (sets 20H to all DDRAM locs, 00H to DDRAM addr, return cursor to original position)
+    stpi    A,      0x00
+    stpi    A,      0x01
 
-    ld      r1,     0x08            ; 0000 1000 for Display ON/OFF control (enforced D = 0, C = 0, B = 0 during initialization)
-    str     r1,     r4,     #3
-    str     r2,     r4,     #2      ; PortA = 0x00
-    str     r3,     r4,     #2      ; PortA = 0x01
+    stpi    B,      0x06            ; 0000 0110 for Entry Mode Set with I/D = 1 for the cursor to move right and SH to 0 to not shift the display
+    stpi    A,      0x00
+    stpi    A,      0x01
 
-    ld      r1,     0x01            ; 0000 0001 for Clear Display (sets 20H to all DDRAM locs, 00H to DDRAM addr, return cursor to original position)
-    str     r1,     r4,     #3
-    str     r2,     r4,     #2      ; PortA = 0x00
-    str     r3,     r4,     #2      ; PortA = 0x01
-
-    ld      r1,     0x06            ; 0000 0110 for Entry Mode Set with I/D = 1 for the cursor to move right and SH to 0 to not shift the display
-    str     r1,     r4,     #3
-    str     r2,     r4,     #2      ; PortA = 0x00
-    str     r3,     r4,     #2      ; PortA = 0x01
-
-    ld      r1,     0x0F            ; 0000 1111 for Display ON/OFF control (set Display (on) = 1, Cursor (on) = 1, cursor Blink (on) = 1)
-    str     r1,     r4,     #3
-    str     r2,     r4,     #2      ; PortA = 0x00
-    str     r3,     r4,     #2      ; PortA = 0x01
+    stpi    B,      0x0F            ; 0000 1111 for Display ON/OFF control (set Display (on) = 1, Cursor (on) = 1, cursor Blink (on) = 1)
+    stpi    A,      0x00
+    stpi    A,      0x01
     ; Display initialized
 
     ret
 
-sprint .EXTERN:
+; TRAP TABLE
+.ORIG   0x0100
+wait_lp .EXPORT:
+    jmp     wait_lp_routine
+sprint .EXPORT:
+    jmp     sprint_routine
+
+wait_lp_routine:
+    addi    r0,     #-1
+    jnz     wait_lp_routine
+    ret
+
+sprint_routine:
+    ret
