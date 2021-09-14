@@ -1,9 +1,10 @@
-.INCLUDE    OSR_1_1
 ; Built for ISA v1.1
 
+.INCLUDE    OSR_1_1
+.ORIG       0x0400
 HelloWorld:
     lea     r0,     MyLabel
-    trap    sprint_routine
+    trap    sprint
     jmp     around
 
 MyLabel         .STRINGZ    "Hello, World!"
