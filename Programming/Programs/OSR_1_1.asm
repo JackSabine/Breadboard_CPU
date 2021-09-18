@@ -12,11 +12,10 @@ startup:
     setsp   r0
 
     call    lcd_init
-    trap    sprint
 
-    ld      r1,     #16
-    ld      r2,     0xFF
-    ld      r3,     0xFE
+    ; ld      r1,     #16
+    ; ld      r2,     0xFF
+    ; ld      r3,     0xFE
 
 ; hsa_lp:
 ;     str     r0,     r2,     #0
