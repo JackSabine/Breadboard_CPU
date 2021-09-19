@@ -14,17 +14,7 @@ def __DecOrHexSearch(str):
 
     return RetVal
 
-def Assemble(FileToCompile, FileToWrite):
-
-    # Read in data 
-    with open(FileToCompile, 'r') as F:
-        Raw = F.readlines()
-    
-    # UneditedLines is an ordered list of all lines in FileToCompile
-    UneditedLines: list[OLine] = []
-    for i in range(len(Raw)):
-        UneditedLines.append(OLine(Text=Raw[i], LineNumber=i+1))
-
+def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
     # Need to iterate through each line and filter out excess whitespace, comments, blank lines
     FilteredSplitLines: list[OLineSplit] = []
     CurText: str
@@ -47,6 +37,9 @@ def Assemble(FileToCompile, FileToWrite):
             # Split each line by spaces (commas replaced with spaces)
             FilteredSplitLines.append(OLineSplit(WordList=CurText.split(), LineNumber=CurNum))
 
+    return FilteredSplitLines
+
+def __CreateLineGroups(FilteredSplitLines: list[OLineSplit]) -> tuple[list[OLineGroup], list[str]]:
     # Identify assembler directives and do not translate those to binary
     # Current directives:
     # .ORIG (active until next ORIG found)
@@ -77,7 +70,7 @@ def Assemble(FileToCompile, FileToWrite):
             elif(re.search(r"^.INCLUDE$",   FSLine.WordList[0], re.IGNORECASE) is not None):
                 if(len(FSLine.WordList) < 2):
                     raise Exception(f"Insufficient number of arguments for .INCLUDE directive on line {FSLine.LineNumber}")
-                IncludeFile = re.search(r"([A-Za-z0-9]+).h", FSLine.WordList[1])
+                IncludeFile = re.search(r"([A-Za-z0-9_]+.h)", FSLine.WordList[1])
                 if(IncludeFile is not None):
                     IncludeFiles.append(IncludeFile.groups()[0])
                 else:
@@ -88,17 +81,66 @@ def Assemble(FileToCompile, FileToWrite):
             else:
                 raise Exception(f"Line {FSLine.LineNumber} does not fall under any .ORIG directive")
 
+    return (LineGroups, IncludeFiles)
+
+def __ParseHeaders(IncludeFiles: list[str], SourceDir: str) -> dict[str, str]:
+    IncludedMacros: dict[str, str] = {}
+    CurrentMacro: str
+    MacroMatch: re.Match
+    for IncF in IncludeFiles:
+        # Search in the directory above the assembler
+        if(not os.path.exists(f"{SourceDir}\\{IncF}")):
+            raise Exception(f"{IncF} does not exist in {SourceDir}")
+        else:
+            with open(f"{SourceDir}\\{IncF}") as IncludedFile:
+                IncludedFileLines = IncludedFile.readlines()
+                for CurrentMacro in IncludedFileLines:
+                    # Ensure that the macro begins with a letter (no numbers or symbols)
+                    MacroMatch = re.search(r"#define ([A-Za-z][A-Za-z0-9_]+)[\s\t]+([0-9x#]+)", CurrentMacro)
+                    if(MacroMatch is not None):
+                        IncludedMacros[MacroMatch.groups()[0]] = MacroMatch.groups()[1]
+    return IncludedMacros
+
+def Assemble(FileToCompile, FileToWrite):
     
+    SourceDir: str = os.path.dirname(os.path.abspath(FileToCompile))
+
+    # Read in data 
+    with open(FileToCompile, 'r') as F:
+        Raw = F.readlines()
+    
+    # UneditedLines is an ordered list of all lines in FileToCompile
+    UneditedLines: list[OLine] = []
+    for i in range(len(Raw)):
+        UneditedLines.append(OLine(Text=Raw[i], LineNumber=i+1))
+
+    del i, F, Raw
+
+    # Convert our raw text into a list of lines split into their arguments and with an associated line number
+    FilteredSplitLines: list[OLineSplit]
+    FilteredSplitLines = __FilterLinesAndSplitOnSpaces(UneditedLines)
+    del UneditedLines
+
+    # Separate the Filtered lines
+    LineGroups: list[OLineGroup]
+    IncludeFiles: list[str]
+    LineGroups, IncludeFiles = __CreateLineGroups(FilteredSplitLines)
+    del FilteredSplitLines
+
+    # Assemble a dictionary of macros from IncludeFiles
+    IncludedMacros: dict[str, str]
+    IncludedMacros = __ParseHeaders(IncludeFiles, SourceDir)
+
 
     return
 
 
 class __FlagState(enum.Enum):
-    SRC_FILE     = 0
-    OUT_FILE     = 1
+    SRC_FILE    = 0
+    OUT_FILE    = 1
 
 if __name__ == "__main__":
-    cwd = os.getcwd()
+    cwd: str = os.getcwd()
 
     InFile  = None
     OutFile = None
