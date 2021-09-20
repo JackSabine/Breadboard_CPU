@@ -19,24 +19,28 @@ def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
     FilteredSplitLines: list[OLineSplit] = []
     CurText: str
     CurNum: int
+    IsCurALabel: bool
     for ULine in UneditedLines:
         CurText = ULine.Text
         CurNum = ULine.LineNumber
+        IsCurALabel = True
 
         if(CurText.find(";") != -1):
             CurText = CurText[ : CurText.find(";") ]
         
-        CurText = CurText.strip()
+        # If we find a single character, continue parsing
+        if(re.search(r"[\S]+", CurText)):
+            IsCurAnInstruction = CurText.startswith(("\t", " "))
+            CurText = CurText.strip()
+            # Delete newlines and replace commas with spaces
+            CurText = CurText.replace("\n", "").replace(",", " ")
+            print("{:<40} is {:<3} an instruction".format(CurText, "" if IsCurAnInstruction else "not"))
 
-        # Delete newlines and replace commas with spaces
-        CurText = CurText.replace("\n", "").replace(",", " ")
-
-        # Remove blank lines
-        if CurText != "":
-
-            # Split each line by spaces (commas replaced with spaces)
-            FilteredSplitLines.append(OLineSplit(WordList=CurText.split(), LineNumber=CurNum))
-
+            # Remove blank lines
+            if CurText != "":
+                # Split each line by spaces (commas replaced with spaces)
+                FilteredSplitLines.append(OLineSplit(WordList=CurText.split(), LineNumber=CurNum, IsAnInstruction=IsCurAnInstruction))
+        
     return FilteredSplitLines
 
 def __CreateLineGroups(FilteredSplitLines: list[OLineSplit]) -> tuple[list[OLineGroup], list[str]]:
@@ -101,12 +105,26 @@ def __ParseHeaders(IncludeFiles: list[str], SourceDir: str) -> dict[str, str]:
                         IncludedMacros[MacroMatch.groups()[0]] = MacroMatch.groups()[1]
     return IncludedMacros
 
+def __IdentifyLabels(LineGroup: OLineGroup) -> dict[str, int]:
+    # Need to idenfity code labels and ROM labels (eg. STRINGZ, BLKW)
+    LabelMap: dict[str, int] = {}
+    CurrentMemLoc: int = LineGroup.Orig
+    
+    for SplitLine in LineGroup.Lines:
+        if(SplitLine.IsAnInstruction):
+            CurrentMemLoc += 1
+        else:
+            #
+            pass
+
+    return LabelMap
+
 def Assemble(FileToCompile, FileToWrite):
     
     SourceDir: str = os.path.dirname(os.path.abspath(FileToCompile))
 
     # Read in data 
-    with open(FileToCompile, 'r') as F:
+    with open(FileToCompile, "r") as F:
         Raw = F.readlines()
     
     # UneditedLines is an ordered list of all lines in FileToCompile
@@ -130,6 +148,11 @@ def Assemble(FileToCompile, FileToWrite):
     # Assemble a dictionary of macros from IncludeFiles
     IncludedMacros: dict[str, str]
     IncludedMacros = __ParseHeaders(IncludeFiles, SourceDir)
+
+    LabelMap: dict[str, int] = {}
+    for Lines in LineGroups:
+        LabelMap = LabelMap | __IdentifyLabels(Lines)       # Merge two dicts (3.9 or later)
+        
 
 
     return

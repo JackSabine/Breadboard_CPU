@@ -74,9 +74,10 @@ class OLine:
         self.LineNumber: int = LineNumber
 
 class OLineSplit:
-    def __init__(self, WordList: list[str], LineNumber: int):
+    def __init__(self, WordList: list[str], LineNumber: int, IsAnInstruction: bool):
         self.WordList: list[str] = WordList
         self.LineNumber: int = LineNumber
+        self.IsAnInstruction: bool = IsAnInstruction
 
 class OLineGroup:
     def __init__(self, Origin: int, Lines: list[OLineSplit]):

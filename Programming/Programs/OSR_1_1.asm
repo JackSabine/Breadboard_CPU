@@ -32,6 +32,8 @@ config_env:
     
     start   r0
 
+foo         .STRINGZ    "Hello"
+
 lcd_init:
     ; Need RS (4)=0, R/W (5)=0, CE (6)=1, and DB7-DB0=0x00
     stpi    PBDIR,  0x00            ; Set PortB to output 
