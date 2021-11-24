@@ -19,11 +19,12 @@ def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
     FilteredSplitLines: list[OLineSplit] = []
     CurText: str
     CurNum: int
-    IsCurALabel: bool
+    IsCurAnInstruction: bool
+
     for ULine in UneditedLines:
         CurText = ULine.Text
         CurNum = ULine.LineNumber
-        IsCurALabel = True
+        
 
         if(CurText.find(";") != -1):
             CurText = CurText[ : CurText.find(";") ]
@@ -34,7 +35,7 @@ def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
             CurText = CurText.strip()
             # Delete newlines and replace commas with spaces
             CurText = CurText.replace("\n", "").replace(",", " ")
-            print("{:<40} is {:<3} an instruction".format(CurText, "" if IsCurAnInstruction else "not"))
+            # print("{:<40} is {:<3} an instruction".format(CurText, "" if IsCurAnInstruction else "not"))
 
             # Remove blank lines
             if CurText != "":
@@ -107,15 +108,48 @@ def __ParseHeaders(IncludeFiles: list[str], SourceDir: str) -> dict[str, str]:
 
 def __IdentifyLabels(LineGroup: OLineGroup) -> dict[str, int]:
     # Need to idenfity code labels and ROM labels (eg. STRINGZ, BLKW)
+    # Syntax of labels:
+    #   Regular label
+    #       ["label_name:"]
+    #   BLKW
+    #       ["label_name", ".BLKW", "hex/dec value"]
+    #   STRINGZ
+    #       ["label_name", ".STRINGZ", "'character_string'"]
     LabelMap: dict[str, int] = {}
+
     CurrentMemLoc: int = LineGroup.Orig
-    
+    CurrentLabel: str
+    LabelTmp: re.Match
+    RgxTmp: re.Match
+
     for SplitLine in LineGroup.Lines:
         if(SplitLine.IsAnInstruction):
             CurrentMemLoc += 1
         else:
-            #
-            pass
+            # Identify a label
+            LabelTmp = re.match(r"^([A-Za-z_][A-Za-z0-9_]*):*$", SplitLine.WordList[0])
+
+            if(len(SplitLine.WordList) == 1):
+                # Simple code label
+                if(LabelTmp is not None):
+                    CurrentLabel = LabelTmp.groups()[0]
+                    LabelMap[CurrentLabel] = CurrentMemLoc
+                else:
+                    raise Exception(f"Simple label on line {SplitLine.LineNumber} does not match standard format")
+            
+            elif(len(SplitLine.WordList) == 3):
+                # Label with arguments
+                if(re.match(r"^.STRINGZ$", SplitLine.WordList[1], re.IGNORECASE) is not None):
+                    RgxTmp = re.match(r"^\"(.*)\"$", SplitLine.WordList[2])
+                    
+                elif(re.match(r"^.BLKW", SplitLine.WordList[1], re.IGNORECASE) is not None):
+                    pass
+                else:
+                    raise Exception(f"Label type {SplitLine.WordList[1]} does not match any defined types")
+            else:
+                raise Exception(f"Incorrect number of arguments for label on line {SplitLine.LineNumber}")
+
+
 
     return LabelMap
 
@@ -150,8 +184,20 @@ def Assemble(FileToCompile, FileToWrite):
     IncludedMacros = __ParseHeaders(IncludeFiles, SourceDir)
 
     LabelMap: dict[str, int] = {}
-    for Lines in LineGroups:
-        LabelMap = LabelMap | __IdentifyLabels(Lines)       # Merge two dicts (3.9 or later)
+    AdditionToLabelMap: dict[str, int]
+    for LineGroup in LineGroups:
+        AdditionToLabelMap = __IdentifyLabels(LineGroup)
+        for Label in AdditionToLabelMap.keys():
+            if(LabelMap.get(Label) is not None):
+                raise Exception(f"One or more duplicates exist of label {Label}")
+
+        LabelMap = LabelMap | AdditionToLabelMap       # Merge two dicts (3.9 or later)
+
+    # Now we have a dictionary of labels, a dictionary of macros, and line groups
+
+    # LineGroups contains non-expanded labels
+    # Strings will have each char occupy a mem address in ROM - the high byte cannot be accessed outside of uCode, so each char will technically occupy two memory locations in ROM
+    pass
         
 
 

@@ -1,6 +1,6 @@
 import sys,re,enum
 from writer import Write
-from ISA.Macros import *
+from Utils.ISA.macros import *
 
 # print("cd \"", os.path.dirname(os.path.abspath(__file__)), "\"", sep="")
 # print("format-hex a.bin | more")
