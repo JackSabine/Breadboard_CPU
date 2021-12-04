@@ -61,7 +61,7 @@ NUM_UINST_BITS          =   4
 NUM_CONDFL_BITS         =   1
 NUM_OPC_BITS            =   5
 NUM_CS_BITS             =   3
-NUM_ADDRESS_PINS        =   NUM_UINST_BITS+NUM_CONDFL_BITS+NUM_OPC_BITS+NUM_CS_BITS
+NUM_UCODE_ADDRESS_PINS  =   NUM_UINST_BITS+NUM_CONDFL_BITS+NUM_OPC_BITS+NUM_CS_BITS
 POS_CS                  =   0+NUM_UINST_BITS+NUM_CONDFL_BITS+NUM_OPC_BITS
 POS_OPC                 =   0+NUM_UINST_BITS+NUM_CONDFL_BITS
 POS_CONDFL              =   0+NUM_UINST_BITS
@@ -84,6 +84,16 @@ class OLineGroup:
         self.Orig: int = Origin
         self.Lines: list[OLineSplit] = Lines
 
+class OSymbolicMemoryCell:
+    def __init__(self, IsAnInstruction = False, LineSplitObject = None, Data = 0x0000, CodeLineNumber = 0, CodeLabel = None):
+        self.IsAnInstruction = False
+        self.OLineSplit = LineSplitObject
+        self.Data = Data
+        self.CodeLineNumber = CodeLineNumber
+        self.CodeLabel = CodeLabel
+
+        return
+
 INSTRUCTION_POS = 11
 NUM_JUMP_BITS = INSTRUCTION_POS
 NUM_BASER_OFFSET_BITS = 5
@@ -92,3 +102,5 @@ NUM_IMM_BITS = 8
 REGA_POS = 8
 REGB_POS = 5
 IMM_POS = 0
+
+NUM_CODE_ADDRESS_PINS = 15

@@ -24,7 +24,7 @@ import ISA.v1_1.ucodedef as ucode
 # A00 : uInst[0]
 
 def ucode_gen(OutFile):
-    Data = bytearray(2 ** NUM_ADDRESS_PINS)
+    Data = bytearray(2 ** NUM_UCODE_ADDRESS_PINS)
     InstToWrite = 0x00
 
     for ROMid in range(2**NUM_CS_BITS):

@@ -1,5 +1,6 @@
 import sys, re, enum
 from writer import Write
+from ISA.macros import NUM_CODE_ADDRESS_PINS
 
 class __FlagState(enum.Enum):
     MERGE_FILES     = 0
@@ -10,7 +11,7 @@ def Merge(InFiles, OutFile):
     if(InFiles == []):
         raise Exception("No input files provided")
 
-    Merged = bytearray(2**15)
+    Merged = bytearray(2**NUM_CODE_ADDRESS_PINS)
 
     for File in InFiles:
         with open(File, "rb") as Inp:
