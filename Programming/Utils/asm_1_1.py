@@ -1,6 +1,7 @@
 import sys, os, enum, re
 from writer import Write
 from ISA.v1_1.ashelp import *
+from ISA.Macros import *
 
 def __DecOrHexSearch(str):
     MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
@@ -155,61 +156,27 @@ def Assemble(FileToCompile, FileToWrite):
     # Assemble a dictionary of macros from IncludeFiles
     IncludedMacros: dict[str, str]
     IncludedMacros = __ParseHeaders(IncludeFiles, SourceDir)
+    del IncludeFiles
 
-    # Convert the list of instructions into a populated memory map (expands multi-cell label arrays (strings, blockwords) while keeping inst's single cell)
+    MemoryMap: OSymbolicMemoryMap = OSymbolicMemoryMap(2**NUM_CODE_ADDRESS_PINS)
+    # BEGIN FCN
 
-    MemoryMap: list[OSymbolicMemoryCell] = [OSymbolicMemoryCell()] * (2**NUM_CODE_ADDRESS_PINS)
-    Offset: int
+    # Parse the label and its (potential) associated data 
 
-    for LineGroup in LineGroups:
-        Offset = 0
+    # Syntax of labels:
+    #   Code label  -> do not increment offset (no code space dedicated to code labels)
+    #       ["label_name:"]
+    #   > r"^([A-Za-z_][A-Za-z0-9_]*):$"
+    #
+    #   BLKW        -> increment offset by hex/dec value
+    #       ["label_name:", ".BLKW", "hex/dec value"]
+    #   > r"^.BLKW"
+    #
+    #   STRINGZ     -> increment offset by length of <character_string> plus 1 for null terminator
+    #       ["label_name:", ".STRINGZ", "<character_string>"]
+    #   > r"^.STRINGZ$"
 
-        for SplitLine in LineGroup.Lines:
-            MemoryMap[LineGroup.Orig + Offset].IsAnInstruction = SplitLine.IsAnInstruction
-            MemoryMap[LineGroup.Orig + Offset].CodeLineNumber = SplitLine.LineNumber
-            if(SplitLine.IsAnInstruction):
-                MemoryMap[LineGroup.Orig + Offset].OLineSplit = SplitLine.WordList
-                Offset += 1
-            else:
-                # Determine the label and whether it is a string, blkw, or code label
-                # Need to idenfity code labels and ROM labels (eg. STRINGZ, BLKW)
-                # Syntax of labels:
-                #   Regular label
-                #       ["label_name:"]
-                #   BLKW
-                #       ["label_name", ".BLKW", "hex/dec value"]
-                #   STRINGZ
-                #       ["label_name", ".STRINGZ", "<character_string>"]
-                
-
-                if(len(SplitLine.WordList) == 1):
-                    # Code label
-                    LabelTmp = re.match(r"^([A-Za-z_][A-Za-z0-9_]*):$", SplitLine.WordList[0])
-                    if(LabelTmp is not None):
-                        MemoryMap[LineGroup.Orig + Offset].CodeLabel = LabelTmp.groups()[0]
-                        
-                        Offset += 0
-                    else:
-                        raise Exception(f"Code label on line {SplitLine.LineNumber} does not match standard format")
-                elif(len(SplitLine.WordList) == 3):
-                    pass                
-                    # Label with arguments
-                    if(re.match(r"^.STRINGZ$", SplitLine.WordList[1], re.IGNORECASE) is not None):
-                        RgxTmp = re.match(r"^\"(.*)\"$", SplitLine.WordList[2])
-                        
-                    elif(re.match(r"^.BLKW", SplitLine.WordList[1], re.IGNORECASE) is not None):
-                        pass
-                    else:
-                        raise Exception(f"Label type {SplitLine.WordList[1]} does not match any defined types")
-                else:
-                    raise Exception(f"Incorrect number of arguments for label on line {SplitLine.LineNumber}")
-                Offset += 1000
-
-
-            
-        
-
-        pass
+    # END FCN
         
 
 

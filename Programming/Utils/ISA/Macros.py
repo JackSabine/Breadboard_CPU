@@ -73,26 +73,87 @@ class OLine:
         self.Text: str = Text
         self.LineNumber: int = LineNumber
 
+        return
+
 class OLineSplit:
     def __init__(self, WordList: list[str], LineNumber: int, IsAnInstruction: bool):
         self.WordList: list[str] = WordList
         self.LineNumber: int = LineNumber
         self.IsAnInstruction: bool = IsAnInstruction
+        
+        return
 
 class OLineGroup:
     def __init__(self, Origin: int, Lines: list[OLineSplit]):
         self.Orig: int = Origin
         self.Lines: list[OLineSplit] = Lines
 
-class OSymbolicMemoryCell:
-    def __init__(self, IsAnInstruction = False, LineSplitObject = None, Data = 0x0000, CodeLineNumber = 0, CodeLabel = None):
-        self.IsAnInstruction = False
-        self.OLineSplit = LineSplitObject
-        self.Data = Data
-        self.CodeLineNumber = CodeLineNumber
-        self.CodeLabel = CodeLabel
-
         return
+
+class OSymbolicMemoryCell:
+    def __init__(self):
+        self.__IsAnInstruction: bool = False
+        self.__WordList: list[str] = []
+        self.__ImmediateData: int = 0x0000
+        return
+    
+    def CreateInstruction(self, WordList: list[str]) -> None:
+        self.__WordList = WordList
+        self.__IsAnInstruction = True
+        return
+    
+    def CreateImmediate(self, ImmediateData: int) -> None:
+        self.__ImmediateData = ImmediateData
+        self.__IsAnInstruction = False
+        return
+
+class OSymbolicMemoryMap:
+
+    def __init__(self, MemorySize):
+        self.MemoryBlock: list[OSymbolicMemoryCell] = [OSymbolicMemoryCell()] * MemorySize
+        self.__MemorySize = MemorySize
+        self.SymbolTable: dict[str, int] = {}
+        return
+
+    def __PlaceLabel(self, MemoryIndex: int, Label: str, LineNumber: int) -> None:
+        if(self.SymbolTable.get(Label) is not None): 
+            raise Exception(f"Redefinition of label {Label} on line {LineNumber}")
+
+        self.SymbolTable[Label] = MemoryIndex
+
+        return None
+
+    def PlaceInstruction(self, MemoryIndex: int, WordList: list[str], LineNumber: int, Label: str = None) -> int:
+        if(Label is not None):
+            self.__PlaceLabel(MemoryIndex, Label, LineNumber)
+
+        self.MemoryBlock[MemoryIndex].CreateInstruction(WordList)
+
+        return (MemoryIndex + 1)
+
+    def GenerateBlock(self, MemoryIndex: int, BlockSize: int, LineNumber: int, Label: str) -> int:
+        IndexOffset: int
+
+        self.__PlaceLabel(MemoryIndex, Label, LineNumber)
+
+        for IndexOffset in range(BlockSize):
+            self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(0)
+
+        return (MemoryIndex + IndexOffset)
+
+    def GenerateString(self, MemoryIndex: int, String: str, LineNumber: int, Label: str) -> int:
+        IndexOffset: int = 0
+
+        self.__PlaceLabel(MemoryIndex, Label, LineNumber)
+
+        for Char in String:
+            self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(ord(Char))
+            IndexOffset += 1
+        
+        self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(0)
+        IndexOffset += 1
+
+        return (MemoryIndex + IndexOffset)
 
 INSTRUCTION_POS = 11
 NUM_JUMP_BITS = INSTRUCTION_POS
@@ -104,3 +165,8 @@ REGB_POS = 5
 IMM_POS = 0
 
 NUM_CODE_ADDRESS_PINS = 15
+
+if __name__ == "__main__":
+    x = OSymbolicMemoryMap(2048)
+
+    print("Hello")
