@@ -1,6 +1,24 @@
 import sys, os, enum, re
 from writer import Write
-from ISA.v1_1.ashelp import *
+from ISA.v1_0.macros import *
+from ISA.v1_0.ucode.ashelp import *
+from ISA.v1_0.ucode.ucodedef import *
+
+class OLine:
+    def __init__(self, Text: str, LineNumber: int):
+        self.Text: str = Text
+        self.LineNumber: int = LineNumber
+
+class OLineSplit:
+    def __init__(self, WordList: list[str], LineNumber: int, IsAnInstruction: bool):
+        self.WordList: list[str] = WordList
+        self.LineNumber: int = LineNumber
+        self.IsAnInstruction: bool = IsAnInstruction
+
+class OLineGroup:
+    def __init__(self, Origin: int, Lines: list[OLineSplit]):
+        self.Orig: int = Origin
+        self.Lines: list[OLineSplit] = Lines
 
 def Assemble(FileToCompile, FileToWrite):
 

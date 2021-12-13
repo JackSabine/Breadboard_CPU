@@ -1,9 +1,15 @@
-import sys, os, enum, re
-from writer import Write
-from ISA.v1_1.ashelp import *
-from ISA.Macros import *
+import os, sys
+path: str = os.path.dirname(__file__)
+while(not path.endswith("ISA")):
+    path = os.path.dirname(path)
+sys.path.append(os.path.dirname(path))
 
-def __DecOrHexSearch(str):
+import enum, re
+from writer import Write
+from ISA.v1_1.ucode.ashelp import *
+from ISA.v1_1.ucode.macros import *
+
+def __DecOrHexSearch(str) -> int:
     MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
     MatchHex = re.search(r"0?x([0-9A-F]+)",str,re.IGNORECASE)
     RetVal = None
@@ -14,6 +20,7 @@ def __DecOrHexSearch(str):
         RetVal = int(MatchHex.groups()[0],base=16)
 
     return RetVal
+
 
 def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
     # Need to iterate through each line and filter out excess whitespace, comments, blank lines
@@ -44,6 +51,7 @@ def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
                 FilteredSplitLines.append(OLineSplit(WordList=CurText.split(), LineNumber=CurNum, IsAnInstruction=IsCurAnInstruction))
         
     return FilteredSplitLines
+
 
 def __CreateLineGroups(FilteredSplitLines: list[OLineSplit]) -> tuple[list[OLineGroup], list[str]]:
     # Identify assembler directives and do not translate those to binary
@@ -89,6 +97,7 @@ def __CreateLineGroups(FilteredSplitLines: list[OLineSplit]) -> tuple[list[OLine
 
     return (LineGroups, IncludeFiles)
 
+
 def __ParseHeaders(IncludeFiles: list[str], SourceDir: str) -> dict[str, str]:
     IncludedMacros: dict[str, str] = {}
     CurrentMacro: str
@@ -107,25 +116,83 @@ def __ParseHeaders(IncludeFiles: list[str], SourceDir: str) -> dict[str, str]:
                         IncludedMacros[MacroMatch.groups()[0]] = MacroMatch.groups()[1]
     return IncludedMacros
 
-def __IdentifyLabels(LineGroup: OLineGroup) -> dict[str, int]:
 
-    LabelMap: dict[str, int] = {}
+def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) -> None:
+        # Parse the label and its (potential) associated data 
 
-    CurrentMemLoc: int = LineGroup.Orig
-    CurrentLabel: str
-    LabelTmp: re.Match
-    RgxTmp: re.Match
+    # Syntax of labels:
+    #   Code label  -> do not increment offset (no code space dedicated to code labels)
+    #       ["label_name:"]
+    #   > r"^([A-Za-z_][A-Za-z0-9_]*):$"
+    #
+    #   BLKW        -> increment offset by hex/dec value
+    #       ["label_name:", ".BLKW", "hex/dec value"]
+    #   > r"^.BLKW"
+    #
+    #   STRINGZ     -> increment offset by length of <character_string> plus 1 for null terminator
+    #       ["label_name:", ".STRINGZ", "<character_string>"]
+    #   > r"^.STRINGZ$"
+    #   > r"^\"(.*)\"$"
+  
+    MemoryIndex: int
+    CurCodeLabel: str
+    CurBlockLabel: str
+    WordListLen: int
+    RegexLabelTemp: re.Match
+    RegexStringTemp: re.Match
+    BlockwordTemp: int
 
-    for SplitLine in LineGroup.Lines:
-        if(SplitLine.IsAnInstruction):
-            CurrentMemLoc += 1
+
+    MemoryIndex = LineGroup.Orig
+
+    for LineSplit in LineGroup.Lines:
+        if(LineSplit.IsAnInstruction):
+            MemoryIndex = MemoryMap.PlaceInstruction(
+                MemoryIndex=MemoryIndex,
+                WordList=LineSplit.WordList,
+                LineNumber=LineSplit.LineNumber,
+                Label=CurCodeLabel
+            )
+            CurCodeLabel = None     # Clear the current label so it's only paired with one code line
+
         else:
-            # Identify a label
-            pass
+            # Determine what kind of label it is
+            WordListLen = len(LineSplit.WordList)
+            RegexLabelTemp = re.search(r"^([A-Za-z_][A-Za-z0-9_]*):$", LineSplit.WordList[0])
+
+            if(RegexLabelTemp is None):
+                raise Exception(f"Label on line {LineSplit.LineNumber} is not of the expected format")
+
+            if(WordListLen == 1):
+                # Code label
+                CurCodeLabel = RegexLabelTemp.groups()[0]
+            elif(WordListLen == 3):
+                CurBlockLabel = RegexLabelTemp.groups()[0]
 
 
+                if(re.search(r"^.BLKW", LineSplit.WordList[1]) is not None):
+                    BlockwordTemp = __DecOrHexSearch(LineSplit.WordList[2])
+                    if(BlockwordTemp is int):
+                        MemoryIndex = MemoryMap.GenerateBlock(
+                            MemoryIndex=MemoryIndex,
+                            BlockSize=BlockwordTemp,
+                            LineNumber=LineSplit.LineNumber,
+                            Label=CurBlockLabel
+                        )
+                    else:
+                        raise Exception(f"Blockword length for label {CurBlockLabel} on line {LineSplit.LineNumber} cannot be determined")
+                elif(re.search(r"^.STRINGZ$", LineSplit.WordList[1]) is not None):
+                    RegexStringTemp = re.search(r"^\"(.*)\"$", LineSplit.WordList[2])
+                    if(RegexStringTemp is not None):
+                        MemoryIndex = MemoryMap.GenerateString(
+                            MemoryIndex=MemoryIndex,
+                            String=RegexStringTemp.groups()[0],
+                            LineNumber=LineSplit.LineNumber,
+                            Label=CurBlockLabel
+                        )
 
-    return LabelMap
+    return
+
 
 def Assemble(FileToCompile, FileToWrite):
     
@@ -159,26 +226,11 @@ def Assemble(FileToCompile, FileToWrite):
     del IncludeFiles
 
     MemoryMap: OSymbolicMemoryMap = OSymbolicMemoryMap(2**NUM_CODE_ADDRESS_PINS)
-    # BEGIN FCN
 
-    # Parse the label and its (potential) associated data 
-
-    # Syntax of labels:
-    #   Code label  -> do not increment offset (no code space dedicated to code labels)
-    #       ["label_name:"]
-    #   > r"^([A-Za-z_][A-Za-z0-9_]*):$"
-    #
-    #   BLKW        -> increment offset by hex/dec value
-    #       ["label_name:", ".BLKW", "hex/dec value"]
-    #   > r"^.BLKW"
-    #
-    #   STRINGZ     -> increment offset by length of <character_string> plus 1 for null terminator
-    #       ["label_name:", ".STRINGZ", "<character_string>"]
-    #   > r"^.STRINGZ$"
-
-    # END FCN
+    for LineGroup in LineGroups:
+        __PopulateMemoryMap(MemoryMap, LineGroup)
         
-
+    MemoryMap.ToFile("Test.txt")
 
     return
 
