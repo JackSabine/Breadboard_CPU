@@ -84,7 +84,7 @@ class OSymbolicMemoryMap:
         CurLineStr: str
 
         for i in range(self.__MemorySize):
-            CurLineStr = "{} : 0x{:0{}X} : {}\n".format(
+            CurLineStr = "{}\t: 0x{:0{}X} : {}\n".format(
                 str.ljust(self.__SymbolLookup[i], Label_MaxLen) if self.__SymbolLookup.get(i) is not None else str.ljust("", Label_MaxLen),
                 i,
                 NumHexDigits,
