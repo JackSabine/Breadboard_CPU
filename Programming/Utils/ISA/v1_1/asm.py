@@ -53,7 +53,7 @@ def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
     return FilteredSplitLines
 
 
-def __CreateLineGroups(FilteredSplitLines: list[OLineSplit]) -> tuple[list[OLineGroup], list[str]]:
+def __ParseAssemblerDirectives(FilteredSplitLines: list[OLineSplit]) -> tuple[list[OLineGroup], list[str]]:
     # Identify assembler directives and do not translate those to binary
     # Current directives:
     # .ORIG (active until next ORIG found)
@@ -217,7 +217,7 @@ def Assemble(FileToCompile, FileToWrite):
     # Separate the Filtered lines
     LineGroups: list[OLineGroup]
     IncludeFiles: list[str]
-    LineGroups, IncludeFiles = __CreateLineGroups(FilteredSplitLines)
+    LineGroups, IncludeFiles = __ParseAssemblerDirectives(FilteredSplitLines)
     del FilteredSplitLines
 
     # Assemble a dictionary of macros from IncludeFiles
@@ -230,7 +230,7 @@ def Assemble(FileToCompile, FileToWrite):
     for LineGroup in LineGroups:
         __PopulateMemoryMap(MemoryMap, LineGroup)
         
-    MemoryMap.ToFile("Test.txt")
+    # MemoryMap.ToFile("Test.txt")
 
     return
 

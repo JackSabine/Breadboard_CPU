@@ -83,12 +83,22 @@ class OSymbolicMemoryMap:
 
         CurLineStr: str
 
+        CurLineStr = "{}\t| {}  | {}\n".format(
+            str.ljust("Labels", Label_MaxLen),
+            str.ljust("Addrs", NumHexDigits),
+            str.ljust("Memory contents (inst./imm.)", 30)
+        )
+        f.write(CurLineStr)
+
+        CurLineStr = "-"*(Label_MaxLen+NumHexDigits+2+30+10) + "\n"
+        f.write(CurLineStr)
+
         for i in range(self.__MemorySize):
-            CurLineStr = "{}\t: 0x{:0{}X} : {}\n".format(
+            CurLineStr = "{}\t| 0x{:0{}X} | {}\n".format(
                 str.ljust(self.__SymbolLookup[i], Label_MaxLen) if self.__SymbolLookup.get(i) is not None else str.ljust("", Label_MaxLen),
                 i,
                 NumHexDigits,
-                "\t".join(self.MemoryBlock[i].GetWordList()) if self.MemoryBlock[i].IsCellAnInstruction() is True else self.MemoryBlock[i].GetFormattedCellChar()
+                "\t".join(self.MemoryBlock[i].GetWordList()) if self.MemoryBlock[i].IsCellAnInstruction() else self.MemoryBlock[i].GetFormattedCellChar()
             )
 
             f.write(CurLineStr)
