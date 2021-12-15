@@ -26,17 +26,20 @@ class OSymbolicMemoryCell:
     def __init__(self):
         self.__IsAnInstruction: bool = False
         self.__WordList: list[str] = []
-        self.__ImmediateData: int = 0x0000
+        self.__ImmediateData: int = None
+        self.__AssociatedLineNumber: int = None
         return
     
-    def CreateInstruction(self, WordList: list[str]) -> None:
+    def CreateInstruction(self, WordList: list[str], LineNumber: int) -> None:
         self.__WordList = WordList
         self.__IsAnInstruction = True
+        self.__AssociatedLineNumber = LineNumber
         return
     
-    def CreateImmediate(self, ImmediateData: int) -> None:
+    def CreateImmediate(self, ImmediateData: int, LineNumber: int) -> None:
         self.__ImmediateData = ImmediateData
         self.__IsAnInstruction = False
+        self.__AssociatedLineNumber = LineNumber
         return
 
     def GetWordList(self) -> list[str]:
@@ -53,6 +56,9 @@ class OSymbolicMemoryCell:
             return "NULL"
         else:
             return f"'{chr(self.__ImmediateData)}'"
+
+    def GetAssociatedLineNumber(self) -> int:
+        return self.__AssociatedLineNumber
 
 class OSymbolicMemoryMap:
 
@@ -120,7 +126,7 @@ class OSymbolicMemoryMap:
         if(Label is not None):
             self.__PlaceLabel(MemoryIndex, Label, LineNumber)
 
-        self.MemoryBlock[MemoryIndex].CreateInstruction(WordList)
+        self.MemoryBlock[MemoryIndex].CreateInstruction(WordList, LineNumber)
 
         return (MemoryIndex + 1)
 
@@ -130,7 +136,7 @@ class OSymbolicMemoryMap:
         self.__PlaceLabel(MemoryIndex, Label, LineNumber)
 
         for IndexOffset in range(BlockSize):
-            self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(0)
+            self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(0, LineNumber)
 
         return (MemoryIndex + IndexOffset)
 
@@ -140,10 +146,10 @@ class OSymbolicMemoryMap:
         self.__PlaceLabel(MemoryIndex, Label, LineNumber)
 
         for Char in String:
-            self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(ord(Char))
+            self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(ord(Char), LineNumber)
             IndexOffset += 1
         
-        self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(0)
+        self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(0, LineNumber)
         IndexOffset += 1
 
         return (MemoryIndex + IndexOffset)

@@ -22,38 +22,38 @@ def __DecOrHexSearch(str):
     return RetVal
 
 OPCODE_MAP = {
-"ADD":    0b00000,
-"ADDI":   0b00001,
-"LEA":    0b00010,
-"NOT":    0b00011,
-"AND":    0b00100,
-"ANDI":   0b00101,
-"STP":    0b00110,
-"CMP":    0b00111,
-"LD":     0b01000,
-"LDR":    0b01001,
-"STR":    0b01010,
-"PAUSE":  0b01011,
-"CALL":   0b01100,
-"RET":    0b01101,
-"TRAP":   0b01110,
-"STPI":   0b01111,
-"START":  0b10000,
-"SETSP":  0b10001,
-"PUSH":   0b10010,
-"POP":    0b10011,
-"OR":     0b10100,
-"ORI":    0b10101,
-"CPYSP":  0b10110,
-"J":      0b10111,
-"JO":     0b11000,
-"JNO":    0b11001,
-"JZ":     0b11010,
-"JNZ":    0b11011,
-"JS":     0b11100,
-"JNS":    0b11101,
-"JC":     0b11110,
-"JNC":    0b11111
+    "ADD":    0b00000,
+    "ADDI":   0b00001,
+    "LEA":    0b00010,
+    "NOT":    0b00011,
+    "AND":    0b00100,
+    "ANDI":   0b00101,
+    "STP":    0b00110,
+    "CMP":    0b00111,
+    "LD":     0b01000,
+    "LDR":    0b01001,
+    "STR":    0b01010,
+    "PAUSE":  0b01011,
+    "CALL":   0b01100,
+    "RET":    0b01101,
+    "TRAP":   0b01110,
+    "STPI":   0b01111,
+    "START":  0b10000,
+    "SETSP":  0b10001,
+    "PUSH":   0b10010,
+    "POP":    0b10011,
+    "OR":     0b10100,
+    "ORI":    0b10101,
+    "CPYSP":  0b10110,
+    "J":      0b10111,
+    "JO":     0b11000,
+    "JNO":    0b11001,
+    "JZ":     0b11010,
+    "JNZ":    0b11011,
+    "JS":     0b11100,
+    "JNS":    0b11101,
+    "JC":     0b11110,
+    "JNC":    0b11111
 }
 
 TWOREG = ["ADD", "AND", "OR"]
@@ -67,29 +67,29 @@ PORTREG = ["STP"]
 
 OTHER = ["CMP", "LD", "TRAP"]
 
-def CreateBitArgs(Operation: str, Args: OLineSplit, SymbolTable: dict[str, int], OrigOffset: int) -> int:
+def CreateBitArgs(Operation: str, Args: list[str], SymbolTable: dict[str, int], Instruction_MemoryIndex: int, LineNumber: int) -> int:
     BitArgs = 0x0000
 
     if(Operation in TWOREG):
-        BitArgs |= TwoReg(Args)
+        BitArgs = TwoReg(Args, LineNumber)
     elif(Operation in REGIMM):
-        BitArgs |= RegImm(Args)
+        BitArgs = RegImm(Args, LineNumber)
     elif(Operation in SINGR):
-        BitArgs |= SingR(Args)
+        BitArgs = SingR(Args, LineNumber)
     elif(Operation in PCOFF):
-        BitArgs |= PCOff(Args, SymbolTable, OrigOffset)
+        BitArgs = PCOff(Args, LineNumber, SymbolTable, Instruction_MemoryIndex)
     elif(Operation in NOARG):
-        BitArgs |= NoArg()
+        BitArgs = NoArg()
     elif(Operation in BASER):
-        BitArgs |= BaseR(Args)
+        BitArgs = BaseR(Args, LineNumber)
     elif(Operation in OTHER):
-        BitArgs |= Other(Operation, Args)
+        BitArgs = Other(Operation, Args, LineNumber)
     else:
         raise Exception(f"Operation {Operation} recognized in opmap but does not appear in any instruction collections")
     
     return BitArgs
 
-def TwoReg(Args: OLineSplit) -> int:
+def TwoReg(Args: list[str], LineNumber: int) -> int:
     if(len(Args.WordList) != 3):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     MatchA = re.search(r"r([0-7])",Args.WordList[1],re.IGNORECASE)
@@ -105,7 +105,7 @@ def TwoReg(Args: OLineSplit) -> int:
 
     return ArgA | ArgB
 
-def RegImm(Args: OLineSplit) -> int:
+def RegImm(Args: list[str], LineNumber: int) -> int:
 
     if(len(Args.WordList) != 3):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
@@ -124,7 +124,7 @@ def RegImm(Args: OLineSplit) -> int:
 
     return ArgA | ArgB
 
-def SingR(Args: OLineSplit):
+def SingR(Args: list[str], LineNumber: int):
     if(len(Args.WordList) != 1):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     MatchA = re.search(r"r([0-7])",Args.WordList[0],re.IGNORECASE)
@@ -134,13 +134,13 @@ def SingR(Args: OLineSplit):
     
     return ArgA
 
-def PCOff(Args: OLineSplit, SymbolTable: dict[str, int], OrigOffset: int):
+def PCOff(Args: list[str], LineNumber: int, SymbolTable: dict[str, int], Instruction_MemoryIndex: int):
     if(len(Args.WordList) != 1):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     if(SymbolTable.get(Args.WordList[0]) is None):
         raise Exception(f"Label {Args.WordList[0]} has no defined destination on line {Args.LineNumber}")
 
-    PCOffset = SymbolTable.get(Args.WordList[0]) - (OrigOffset + 1)
+    PCOffset = SymbolTable.get(Args.WordList[0]) - (Instruction_MemoryIndex + 1)
     MaxPos = (2**(NUM_JUMP_BITS-1))             # Example 1024 and -1023 (not typical -1024 to 1023 because of PC+1)
     MaxNeg = (-1*2**(NUM_JUMP_BITS-1) + 1)
     if(     PCOffset > MaxPos or PCOffset < MaxNeg    ):
@@ -151,7 +151,7 @@ def PCOff(Args: OLineSplit, SymbolTable: dict[str, int], OrigOffset: int):
 def NoArg():
     return 0x0000
 
-def BaseR(Args: OLineSplit):
+def BaseR(Args: list[str], LineNumber: int):
     if(len(Args.WordList) != 3):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
     MatchA = re.search(r"r([0-7])",Args.WordList[0],re.IGNORECASE)
@@ -171,7 +171,7 @@ def BaseR(Args: OLineSplit):
 
     return ArgA | ArgB | ArgC
 
-def Other(Operation: str, Args: OLineSplit):
+def Other(Operation: str, Args: list[str], LineNumber: int):
     # Args includes the opcode as Arg.WordList[0]
     # ["CMP", "LD", "TRAP"]
     ArgA = 0x00
@@ -215,7 +215,7 @@ def Other(Operation: str, Args: OLineSplit):
         raise Exception(f"Operation {Operation} recognized as type \"Other\", but does not match any instructions")
     return ArgA | ArgB
 
-def PortReg(Args: OLineSplit) -> int:
+def PortReg(Args: list[str], LineNumber: int) -> int:
     if(len(Args.WordList) != 2):
         raise Exception(f"Incorrect number of arguments on line {Args.LineNumber}")
 
@@ -232,7 +232,7 @@ def PortReg(Args: OLineSplit) -> int:
     
     return ArgA | ArgB
 
-def PortImm(Args: OLineSplit) -> int:
+def PortImm(Args: list[str], LineNumber: int) -> int:
     # Syntax: STPI [A-H], #/0x{Val}
 
     if(len(Args.WordList) != 2):

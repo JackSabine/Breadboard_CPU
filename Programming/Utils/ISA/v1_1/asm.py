@@ -31,8 +31,7 @@ def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
 
     for ULine in UneditedLines:
         CurText = ULine.Text
-        CurNum = ULine.LineNumber
-        
+        CurNum = ULine.LineNumber    
 
         if(CurText.find(";") != -1):
             CurText = CurText[ : CurText.find(";") ]
@@ -142,7 +141,6 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) ->
     RegexStringTemp: re.Match
     BlockwordTemp: int
 
-
     MemoryIndex = LineGroup.Orig
 
     for LineSplit in LineGroup.Lines:
@@ -168,7 +166,6 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) ->
                 CurCodeLabel = RegexLabelTemp.groups()[0]
             elif(WordListLen == 3):
                 CurBlockLabel = RegexLabelTemp.groups()[0]
-
 
                 if(re.search(r"^.BLKW", LineSplit.WordList[1]) is not None):
                     BlockwordTemp = __DecOrHexSearch(LineSplit.WordList[2])
@@ -199,15 +196,17 @@ def Assemble(FileToCompile, FileToWrite):
     SourceDir: str = os.path.dirname(os.path.abspath(FileToCompile))
 
     # Read in data 
-    with open(FileToCompile, "r") as F:
-        Raw = F.readlines()
+    with open(FileToCompile, "r") as FileToCompile_Handle:
+        Raw = FileToCompile_Handle.readlines()
     
     # UneditedLines is an ordered list of all lines in FileToCompile
     UneditedLines: list[OLine] = []
     for i in range(len(Raw)):
         UneditedLines.append(OLine(Text=Raw[i], LineNumber=i+1))
 
-    del i, F, Raw
+    FileToCompile_Handle.close()
+
+    del i, FileToCompile_Handle, Raw
 
     # Convert our raw text into a list of lines split into their arguments and with an associated line number
     FilteredSplitLines: list[OLineSplit]
@@ -231,6 +230,44 @@ def Assemble(FileToCompile, FileToWrite):
         __PopulateMemoryMap(MemoryMap, LineGroup)
         
     # MemoryMap.ToFile("Test.txt")
+
+    # Perform macro substitution
+    
+
+    ProgramMemory: bytearray = bytearray(2**NUM_CODE_ADDRESS_PINS)
+
+
+
+    # Iterate over each instruction in MemoryMap
+    Operation: str
+    Arguments: list[str]
+
+
+
+    for i in range(len(MemoryMap.MemoryBlock)):
+        if(MemoryMap.MemoryBlock[i].IsCellAnInstruction()):
+            
+            Operation = MemoryMap.MemoryBlock[i].GetWordList()[0].upper()
+            Arguments = MemoryMap.MemoryBlock[i].GetWordList()[1:]
+
+            InstructionOp = OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
+
+            InstructionArgs = CreateBitArgs(
+                Operation               =   Operation, 
+                Args                    =   Arguments,
+                SymbolTable             =   MemoryMap.SymbolTable,
+                Instruction_MemoryIndex =   i,
+                LineNumber              =   MemoryMap.MemoryBlock[i].GetAssociatedLineNumber()
+            )
+
+            Instruction = InstructionOp | InstructionArgs
+
+            ProgramMemory[i] = Instruction
+        else:
+            # No instruction to assemble, just copy raw data
+            ProgramMemory[i] = MemoryMap.MemoryBlock[i].GetCellValue()
+        
+    Write(ProgramMemory, FileToWrite)
 
     return
 
