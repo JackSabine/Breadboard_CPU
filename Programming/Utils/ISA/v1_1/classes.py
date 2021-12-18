@@ -26,7 +26,7 @@ class OSymbolicMemoryCell:
     def __init__(self):
         self.__IsAnInstruction: bool = False
         self.__WordList: list[str] = []
-        self.__ImmediateData: int = None
+        self.__ImmediateData: int = 0x00
         self.__AssociatedLineNumber: int = None
         return
     
@@ -72,44 +72,40 @@ class OSymbolicMemoryMap:
         return
 
     def ToFile(self, FileName) -> None:
-        f = open(FileName, "w")
-        
-        # Determine the longest label
-        Label_MaxLen: int = 0
-        Label_CurLen: int
-        for Label in self.SymbolTable.keys():
-            Label_CurLen = len(Label)
-            if(Label_CurLen > Label_MaxLen):
-                Label_MaxLen = Label_CurLen
+        with open(FileName, "w") as f:
+            
+            # Determine the longest label
+            Label_MaxLen: int = 0
+            Label_CurLen: int
+            for Label in self.SymbolTable:
+                Label_CurLen = len(Label)
+                if(Label_CurLen > Label_MaxLen):
+                    Label_MaxLen = Label_CurLen
 
-        
+            # Determine number of hex digits
+            NumHexDigits: int = 1 + math.floor(math.log(self.__MemorySize) / math.log(16))
 
-        # Determine number of hex digits
-        NumHexDigits: int = 1 + math.floor(math.log(self.__MemorySize) / math.log(16))
+            CurLineStr: str
 
-        CurLineStr: str
-
-        CurLineStr = "{}\t| {}  | {}\n".format(
-            str.ljust("Labels", Label_MaxLen),
-            str.ljust("Addrs", NumHexDigits),
-            str.ljust("Memory contents (inst./imm.)", 30)
-        )
-        f.write(CurLineStr)
-
-        CurLineStr = "-"*(Label_MaxLen+NumHexDigits+2+30+10) + "\n"
-        f.write(CurLineStr)
-
-        for i in range(self.__MemorySize):
-            CurLineStr = "{}\t| 0x{:0{}X} | {}\n".format(
-                str.ljust(self.__SymbolLookup[i], Label_MaxLen) if self.__SymbolLookup.get(i) is not None else str.ljust("", Label_MaxLen),
-                i,
-                NumHexDigits,
-                "\t".join(self.MemoryBlock[i].GetWordList()) if self.MemoryBlock[i].IsCellAnInstruction() else self.MemoryBlock[i].GetFormattedCellChar()
+            CurLineStr = "{}\t| {}  | {}\n".format(
+                str.ljust("Labels", Label_MaxLen),
+                str.ljust("Addrs", NumHexDigits),
+                str.ljust("Memory contents (inst./imm.)", 30)
             )
-
             f.write(CurLineStr)
 
-        f.close()
+            CurLineStr = "-"*(Label_MaxLen+NumHexDigits+2+30+10) + "\n"
+            f.write(CurLineStr)
+
+            for i in range(self.__MemorySize):
+                CurLineStr = "{}\t| 0x{:0{}X} | {}\n".format(
+                    str.ljust(self.__SymbolLookup[i], Label_MaxLen) if self.__SymbolLookup.get(i) is not None else str.ljust("", Label_MaxLen),
+                    i,
+                    NumHexDigits,
+                    "\t".join(self.MemoryBlock[i].GetWordList()) if self.MemoryBlock[i].IsCellAnInstruction() else self.MemoryBlock[i].GetFormattedCellChar()
+                )
+
+                f.write(CurLineStr)
 
         return
 
@@ -141,14 +137,14 @@ class OSymbolicMemoryMap:
         return (MemoryIndex + IndexOffset)
 
     def GenerateString(self, MemoryIndex: int, String: str, LineNumber: int, Label: str) -> int:
-        IndexOffset: int = 0
+        IndexOffset: int
 
         self.__PlaceLabel(MemoryIndex, Label, LineNumber)
 
-        for Char in String:
+        for IndexOffset, Char in enumerate(String):
             self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(ord(Char), LineNumber)
-            IndexOffset += 1
         
+        IndexOffset += 1
         self.MemoryBlock[MemoryIndex + IndexOffset].CreateImmediate(0, LineNumber)
         IndexOffset += 1
 

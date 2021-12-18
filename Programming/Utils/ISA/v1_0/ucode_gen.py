@@ -1,11 +1,12 @@
 import sys,re,enum
 from writer import Write
-from Utils.ISA.macros import *
+from Utils.ISA.v1_1.ucode.macros import *
+import Utils.ISA.v1_1.ucode.ucodedef as ucode
 
 # print("cd \"", os.path.dirname(os.path.abspath(__file__)), "\"", sep="")
 # print("format-hex a.bin | more")
 
-import ISA.v1_1.ucodedef as ucode
+
 
 # EEPROM Address Pinout
 

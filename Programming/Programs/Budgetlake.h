@@ -1,5 +1,5 @@
 // Trap table
-#define WAIT    0x0100
+#define SLEEP   0x0100
 #define SPRINT  0x0101
 
 // Port registers

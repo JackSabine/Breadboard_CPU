@@ -169,7 +169,7 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) ->
 
                 if(re.search(r"^.BLKW", LineSplit.WordList[1]) is not None):
                     BlockwordTemp = __DecOrHexSearch(LineSplit.WordList[2])
-                    if(BlockwordTemp is int):
+                    if(type(BlockwordTemp) is int):
                         MemoryIndex = MemoryMap.GenerateBlock(
                             MemoryIndex=MemoryIndex,
                             BlockSize=BlockwordTemp,
@@ -191,7 +191,7 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) ->
     return
 
 
-def Assemble(FileToCompile, FileToWrite):
+def Assemble(FileToCompile, FileToWrite, Debug=False):
     
     SourceDir: str = os.path.dirname(os.path.abspath(FileToCompile))
 
@@ -224,27 +224,33 @@ def Assemble(FileToCompile, FileToWrite):
     IncludedMacros = __ParseHeaders(IncludeFiles, SourceDir)
     del IncludeFiles
 
-    MemoryMap: OSymbolicMemoryMap = OSymbolicMemoryMap(2**NUM_CODE_ADDRESS_PINS)
-
-    for LineGroup in LineGroups:
-        __PopulateMemoryMap(MemoryMap, LineGroup)
-        
-    # MemoryMap.ToFile("Test.txt")
+    if(Debug):
+        MemoryMap_BeforeMacros: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))
+        for LineGroup in LineGroups:
+            __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroup)   # Pass MemoryMap by reference
+        MemoryMap_BeforeMacros.ToFile(f"Testing__PreMacro.txt")
+        del MemoryMap_BeforeMacros
 
     # Perform macro substitution
-    
+    for LineGroup in LineGroups:
+        for LineSplit in LineGroup.Lines:
+            for i, Argument in enumerate(LineSplit.WordList):
+                if(Argument in IncludedMacros):
+                    LineSplit.WordList[i] = Argument.replace(Argument, IncludedMacros[Argument])
+
+    MemoryMap: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))    # One instruction is two memory locations
+    for LineGroup in LineGroups:
+        __PopulateMemoryMap(MemoryMap, LineGroup)   # Pass MemoryMap by reference
+    if(Debug):
+        MemoryMap.ToFile(f"Testing__PostMacro.txt")
 
     ProgramMemory: bytearray = bytearray(2**NUM_CODE_ADDRESS_PINS)
-
-
 
     # Iterate over each instruction in MemoryMap
     Operation: str
     Arguments: list[str]
 
-
-
-    for i in range(len(MemoryMap.MemoryBlock)):
+    for i, _ in enumerate(MemoryMap.MemoryBlock):
         if(MemoryMap.MemoryBlock[i].IsCellAnInstruction()):
             
             Operation = MemoryMap.MemoryBlock[i].GetWordList()[0].upper()
@@ -262,12 +268,27 @@ def Assemble(FileToCompile, FileToWrite):
 
             Instruction = InstructionOp | InstructionArgs
 
-            ProgramMemory[i] = Instruction
+            ProgramMemory[2*i + 0] = (Instruction >> 0) & 0xFF
+            ProgramMemory[2*i + 1] = (Instruction >> 8) & 0xFF
         else:
             # No instruction to assemble, just copy raw data
-            ProgramMemory[i] = MemoryMap.MemoryBlock[i].GetCellValue()
+            ProgramMemory[2*i + 0] = MemoryMap.MemoryBlock[i].GetCellValue() & 0xFF
+            ProgramMemory[2*i + 1] = 0x00
+
         
     Write(ProgramMemory, FileToWrite)
+
+    MemoryBytes: bytes
+    MemoryWord: int
+    # Re-parse binary
+    with open(FileToWrite, "rb") as Reparse:
+        
+        MemoryBytes = Reparse.read(2)
+        while(MemoryBytes):
+            MemoryWord = int.from_bytes(MemoryBytes, "little")
+            MemoryBytes = Reparse.read(2)
+        
+        print("exit")
 
     return
 
@@ -306,4 +327,4 @@ if __name__ == "__main__":
     # if(InFile is None):
     #     raise Exception("Specify an input file with -c <file>")
 
-    Assemble(FileToCompile=InFile, FileToWrite=OutFile)
+    Assemble(FileToCompile=InFile, FileToWrite=OutFile, Debug=True)

@@ -16,7 +16,7 @@ def Merge(InFiles, OutFile):
     for File in InFiles:
         with open(File, "rb") as Inp:
             Bytes = Inp.read()
-            for Idx in range(len(Bytes)):
+            for Idx, _ in enumerate(Bytes):
                 Merged[Idx] |= Bytes[Idx]
 
     Write(Merged, OutFile)

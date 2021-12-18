@@ -1,5 +1,5 @@
 ; Built for ISA v1.1
-.INCLUDE    OSR_1_1.h
+.INCLUDE    Budgetlake.h
 .ORIG       0x0000
 
 ; registers
@@ -49,12 +49,12 @@ lcd_start_fcn_set_lp:
     stpi    PORTA,  0x00            ; CE = 0
 
     ld      r0,     #1              ; wait_lp iter 1 time
-    trap    wait
+    trap    SLEEP
 
     stpi    PORTA,  0x01            ; CE = 1
 
     ld      r0,     #1
-    trap    wait_lp_routine
+    trap    SLEEP
 
     addi    r1,     #-1
     jnz     lcd_start_fcn_set_lp
@@ -84,9 +84,9 @@ lcd_start_fcn_set_lp:
 
 ; TRAP TABLE
 .ORIG   0x0100
-wait:
+__wait:
     jmp     wait_lp_routine
-sprint:
+__sprint:
     jmp     sprint_routine
 
 wait_lp_routine:

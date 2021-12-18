@@ -7,6 +7,5 @@ def Write(Data, FileName):
 
     with open(FileName, "wb") as output_file:
         output_file.write(Data)
-        output_file.close()
 
     return
