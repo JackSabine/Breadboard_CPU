@@ -6,8 +6,9 @@ sys.path.append(os.path.dirname(path))
 
 import enum, re
 from writer import Write
-from ISA.v1_1.ucode.ashelp import *
-from ISA.v1_1.ucode.macros import *
+from ISA.v1_1.inst_assembler import CreateBitArgs, OPCODE_DICT
+from ISA.v1_1.classes import OLine, OLineSplit, OLineGroup, OSymbolicMemoryMap
+from ISA.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS, INSTRUCTION_POS
 
 def __DecOrHexSearch(str) -> int:
     MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
@@ -191,6 +192,41 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) ->
     return
 
 
+
+def __InterpretInstructions(MemoryMap: OSymbolicMemoryMap, ProgramMemory: bytearray) -> None:
+    # Iterate over each instruction in MemoryMap
+    Operation: str
+    Arguments: list[str]
+
+    for i, _ in enumerate(MemoryMap.MemoryBlock):
+        if(MemoryMap.MemoryBlock[i].IsCellAnInstruction()):
+            
+            Operation = MemoryMap.MemoryBlock[i].GetWordList()[0].upper()
+            Arguments = MemoryMap.MemoryBlock[i].GetWordList()[1:]
+
+            InstructionOp = OPCODE_DICT.get(Operation.upper()) << INSTRUCTION_POS
+
+            InstructionArgs = CreateBitArgs(
+                Operation               =   Operation, 
+                Args                    =   Arguments,
+                SymbolTable             =   MemoryMap.SymbolTable,
+                Instruction_MemoryIndex =   i,
+                LineNumber              =   MemoryMap.MemoryBlock[i].GetAssociatedLineNumber()
+            )
+
+            Instruction = InstructionOp | InstructionArgs
+
+            ProgramMemory[2*i + 0] = (Instruction >> 0) & 0xFF
+            ProgramMemory[2*i + 1] = (Instruction >> 8) & 0xFF
+        else:
+            # No instruction to assemble, just copy raw data
+            ProgramMemory[2*i + 0] = MemoryMap.MemoryBlock[i].GetCellValue() & 0xFF
+            ProgramMemory[2*i + 1] = 0x00
+
+    return
+
+
+
 def Assemble(FileToCompile, FileToWrite, Debug=False):
     
     SourceDir: str = os.path.dirname(os.path.abspath(FileToCompile))
@@ -199,12 +235,10 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
     with open(FileToCompile, "r") as FileToCompile_Handle:
         Raw = FileToCompile_Handle.readlines()
     
-    # UneditedLines is an ordered list of all lines in FileToCompile
+    # UneditedLines is an list of all lines in FileToCompile
     UneditedLines: list[OLine] = []
-    for i in range(len(Raw)):
+    for i, _ in enumerate(Raw):
         UneditedLines.append(OLine(Text=Raw[i], LineNumber=i+1))
-
-    FileToCompile_Handle.close()
 
     del i, FileToCompile_Handle, Raw
 
@@ -246,49 +280,11 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
 
     ProgramMemory: bytearray = bytearray(2**NUM_CODE_ADDRESS_PINS)
 
-    # Iterate over each instruction in MemoryMap
-    Operation: str
-    Arguments: list[str]
-
-    for i, _ in enumerate(MemoryMap.MemoryBlock):
-        if(MemoryMap.MemoryBlock[i].IsCellAnInstruction()):
-            
-            Operation = MemoryMap.MemoryBlock[i].GetWordList()[0].upper()
-            Arguments = MemoryMap.MemoryBlock[i].GetWordList()[1:]
-
-            InstructionOp = OPCODE_MAP.get(Operation.upper()) << INSTRUCTION_POS
-
-            InstructionArgs = CreateBitArgs(
-                Operation               =   Operation, 
-                Args                    =   Arguments,
-                SymbolTable             =   MemoryMap.SymbolTable,
-                Instruction_MemoryIndex =   i,
-                LineNumber              =   MemoryMap.MemoryBlock[i].GetAssociatedLineNumber()
-            )
-
-            Instruction = InstructionOp | InstructionArgs
-
-            ProgramMemory[2*i + 0] = (Instruction >> 0) & 0xFF
-            ProgramMemory[2*i + 1] = (Instruction >> 8) & 0xFF
-        else:
-            # No instruction to assemble, just copy raw data
-            ProgramMemory[2*i + 0] = MemoryMap.MemoryBlock[i].GetCellValue() & 0xFF
-            ProgramMemory[2*i + 1] = 0x00
-
+    __InterpretInstructions(MemoryMap, ProgramMemory)
         
     Write(ProgramMemory, FileToWrite)
 
-    MemoryBytes: bytes
-    MemoryWord: int
-    # Re-parse binary
-    with open(FileToWrite, "rb") as Reparse:
-        
-        MemoryBytes = Reparse.read(2)
-        while(MemoryBytes):
-            MemoryWord = int.from_bytes(MemoryBytes, "little")
-            MemoryBytes = Reparse.read(2)
-        
-        print("exit")
+
 
     return
 

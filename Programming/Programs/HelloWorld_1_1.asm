@@ -4,7 +4,7 @@
 .ORIG       0x0400
 HelloWorld:
     lea     r0,     MyLabel
-    trap    sprint
+    trap    SPRINT
     jmp     around
 
 MyLabel         .STRINGZ    "Hello, World!"
