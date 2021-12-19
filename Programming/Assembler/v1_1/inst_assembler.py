@@ -77,20 +77,26 @@ def RegImm(Args: list[str], LineNumber: int) -> int:
         raise Exception(f"Incorrect number of arguments on line {LineNumber}")
 
     ArgA: int
-    ArgB: int
+    ArgC: int
     MatchA: re.Match
     ValueC: int
 
-    MatchA = re.search(r"r([0-7])",Args[0],re.IGNORECASE)
-    ValueC = __DecOrHexSearch(Args[1])    
+    MatchA = re.search(r"r([0-7])", Args[0], re.IGNORECASE)
+    ValueC = __DecOrHexSearch(Args[1])
 
     if(MatchA is None or ValueC is None):
         raise Exception(f"Incorrect arguments on line {LineNumber}")
 
-    ArgA = int(MatchA.groups()[0]) << REGA_POS
-    ArgB = (ValueC & 0xFF) << IMM_POS
+    MaxPos =  (2**NUM_IMM_BITS) - 1 
+    MaxNeg = -(2**NUM_IMM_BITS)
 
-    return (ArgA | ArgB)
+    if(ValueC not in range(MaxNeg, MaxPos+1, 1)):
+        raise Exception(f"LD immediate value on line {LineNumber} exceeds max range [{MaxNeg},{MaxPos}]")
+
+    ArgA = int(MatchA.groups()[0]) << REGA_POS
+    ArgC = (ValueC & 0xFF) << IMM_POS
+
+    return (ArgA | ArgC)
 
 
 
@@ -170,55 +176,13 @@ def BaseR(Args: list[str], LineNumber: int):
 
 
 
-# Operation must be in list: ["CMP", "LD", "TRAP"]
+# Operation must be in set: OTHER
 def Other(Operation: str, Args: list[str], LineNumber: int):    
 
-    ArgA: int
-    ArgB: int
     ArgC: int
-    MatchA: re.Match
-    MatchB: re.Match
     ValueC: int
 
-    if(Operation == "CMP"):
-        if(len(Args) != 2):
-            raise Exception(f"Incorrect number of arguments on line {LineNumber}")
-
-        MatchA = re.search(r"r([0-7])",Args[0],re.IGNORECASE)
-        MatchB = re.search(r"r([0-7])",Args[1],re.IGNORECASE)
-
-        if(MatchA is None or MatchB is None):
-            raise Exception(f"Incorrect arguments on line {LineNumber}")
-
-        ArgA = int(MatchA.groups()[0]) << REGA_POS
-        ArgB = int(MatchB.groups()[0]) << REGB_POS
-
-        return (ArgA | ArgB)
-
-
-    elif(Operation == "LD"):
-        if(len(Args) != 2):
-            raise Exception(f"Incorrect number of arguments on line {LineNumber}")
-
-        MatchA = re.search(r"r([0-7])", Args[0], re.IGNORECASE)
-        ValueC = __DecOrHexSearch(Args[1])
-
-        if(MatchA is None or ValueC is None):
-            raise Exception(f"Incorrect arguments on line {LineNumber}")
-
-        MaxPos =  (2**NUM_IMM_BITS) - 1 
-        MaxNeg = -(2**NUM_IMM_BITS)
-
-        if(ValueC not in range(MaxNeg, MaxPos+1, 1)):
-            raise Exception(f"LD immediate value on line {LineNumber} exceeds max range [{MaxNeg},{MaxPos}]")
-        
-        ArgA = int(MatchA.groups()[0]) << REGA_POS
-        ArgC = (ValueC & 0xFF) << IMM_POS
-
-        return (ArgA | ArgC)
-
-
-    elif(Operation == "TRAP"):
+    if(Operation == "TRAP"):
         if(len(Args) != 1):
             raise Exception(f"Incorrect number of arguments on line {LineNumber}")
 
@@ -226,13 +190,19 @@ def Other(Operation: str, Args: list[str], LineNumber: int):
 
         if(ValueC is None):
             raise Exception(f"Incorrect arguments on line {LineNumber}")
-    
+
         ArgC = ValueC
+
+        MaxPos = (2**NUM_TRAPV_BITS)-1
+        MaxNeg = -(2**NUM_TRAPV_BITS)
+
+        if(ArgC not in range(MaxNeg, MaxPos+1, 1)):
+            raise Exception(f"TRAP vector exceeds on line {LineNumber} exceeds max range [{hex(MaxNeg)},{hex(MaxPos)}]")
 
         return (ArgC)
 
     else:
-        raise Exception(f"Operation {Operation} recognized as type \"Other\", but does not match any instructions")
+        raise Exception(f"Operation {Operation} in set OTHER {OTHER}, but does not match any instructions")
 
 
 

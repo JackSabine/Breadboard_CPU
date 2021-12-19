@@ -79,6 +79,8 @@ IMM_POS = 0
 
 NUM_CODE_ADDRESS_PINS = 15
 
+NUM_TRAPV_BITS = 5
+
 
 OPCODE_DICT: dict[str, int] = {
     "ADD":    0b00000,
@@ -150,8 +152,8 @@ OPERATION_DICT: dict[int, str] = {
     0b11111: "JNC"    
 }
 
-TWOREG:     set[str] = {"ADD", "AND", "OR"}
-REGIMM:     set[str] = {"ADDI", "ANDI", "ORI"}
+TWOREG:     set[str] = {"ADD", "AND", "OR", "CMP"}
+REGIMM:     set[str] = {"ADDI", "ANDI", "ORI", "LD"}
 SINGR:      set[str] = {"NOT", "START", "SETSP", "PUSH", "POP", "CPYSP"}
 PCOFF:      set[str] = {"JMP", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL", "LEA"}
 NOARG:      set[str] = {"PAUSE", "RET"}
@@ -159,4 +161,4 @@ BASER:      set[str] = {"LDR", "STR"}
 PORTIMM:    set[str] = {"STPI"}
 PORTREG:    set[str] = {"STP"}
 
-OTHER:      set[str] = {"CMP", "LD", "TRAP"}
+OTHER:      set[str] = {"TRAP"}

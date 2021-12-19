@@ -258,10 +258,10 @@ lcd_start_fcn_set_lp	| 0x0016 | stpi	PORTA	0x00
                     	| 0x00FF | NULL
 __wait              	| 0x0100 | jmp	wait_lp_routine
 __sprint            	| 0x0101 | jmp	sprint_routine
-wait_lp_routine     	| 0x0102 | addi	r0	#-1
-                    	| 0x0103 | jnz	wait_lp_routine
-                    	| 0x0104 | ret
-sprint_routine      	| 0x0105 | ret
+                    	| 0x0102 | NULL
+                    	| 0x0103 | NULL
+                    	| 0x0104 | NULL
+                    	| 0x0105 | NULL
                     	| 0x0106 | NULL
                     	| 0x0107 | NULL
                     	| 0x0108 | NULL
@@ -288,10 +288,10 @@ sprint_routine      	| 0x0105 | ret
                     	| 0x011D | NULL
                     	| 0x011E | NULL
                     	| 0x011F | NULL
-                    	| 0x0120 | NULL
-                    	| 0x0121 | NULL
-                    	| 0x0122 | NULL
-                    	| 0x0123 | NULL
+wait_lp_routine     	| 0x0120 | addi	r0	#-1
+                    	| 0x0121 | jnz	wait_lp_routine
+                    	| 0x0122 | ret
+sprint_routine      	| 0x0123 | ret
                     	| 0x0124 | NULL
                     	| 0x0125 | NULL
                     	| 0x0126 | NULL

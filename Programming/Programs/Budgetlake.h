@@ -1,6 +1,6 @@
 // Trap table
-#define SLEEP   0x0100
-#define SPRINT  0x0101
+#define SLEEP   0x00
+#define SPRINT  0x01
 
 // Port registers
 #define PADIR   0x00    // Not implemented in hardware

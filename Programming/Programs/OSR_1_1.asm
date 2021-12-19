@@ -89,6 +89,7 @@ __wait:
 __sprint:
     jmp     sprint_routine
 
+.ORIG 0x0120
 wait_lp_routine:
     addi    r0,     #-1
     jnz     wait_lp_routine
