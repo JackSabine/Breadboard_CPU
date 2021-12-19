@@ -1,11 +1,10 @@
 import os, sys
-
 path: str = os.path.dirname(__file__)
-while(not path.endswith("ISA")):
+while(not path.endswith("Assembler")):
     path = os.path.dirname(path)
 sys.path.append(os.path.dirname(path))
 
-from ISA.v1_1.ucode.macros import *
+from Assembler.v1_1.ucode.macros import *
 
 
 
@@ -27,6 +26,11 @@ def __ExtractSignedImmediate(Word: int, ImmPos: int, ImmWidth: int) -> str:
 
     return (f"#{SignedImmediate}")
 
+def __ParseDataAsASCII(Word: int) -> str:
+    if(Word in range(0, 256)):
+        return f"'{chr(Word)}'"
+    else:
+        return "' '"
 
 
 def DecodeBinary(BinarySource: str, OutputFile: str):

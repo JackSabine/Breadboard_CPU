@@ -1,10 +1,10 @@
 import os, sys
 path: str = os.path.dirname(__file__)
-while(not path.endswith("ISA")):
+while(not path.endswith("Assembler")):
     path = os.path.dirname(path)
 sys.path.append(os.path.dirname(path))
 
-from ISA.v1_1.ucode.macros import *
+from Assembler.v1_1.ucode.macros import *
 
 import re
 

@@ -1,14 +1,14 @@
 import os, sys
 path: str = os.path.dirname(__file__)
-while(not path.endswith("ISA")):
+while(not path.endswith("Assembler")):
     path = os.path.dirname(path)
 sys.path.append(os.path.dirname(path))
 
 import enum, re
 from writer import Write
-from ISA.v1_1.inst_assembler import CreateBitArgs, OPCODE_DICT
-from ISA.v1_1.classes import OLine, OLineSplit, OLineGroup, OSymbolicMemoryMap
-from ISA.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS, INSTRUCTION_POS
+from Assembler.v1_1.inst_assembler import CreateBitArgs
+from Assembler.v1_1.classes import OLine, OLineSplit, OLineGroup, OSymbolicMemoryMap
+from Assembler.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS, INSTRUCTION_POS, OPCODE_DICT
 
 def __DecOrHexSearch(str) -> int:
     MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
@@ -262,7 +262,7 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
         MemoryMap_BeforeMacros: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))
         for LineGroup in LineGroups:
             __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroup)   # Pass MemoryMap by reference
-        MemoryMap_BeforeMacros.ToFile(f"Testing__PreMacro.txt")
+        MemoryMap_BeforeMacros.ToFile(f"./Assembler/v1_1/Testing__PreMacro.txt")
         del MemoryMap_BeforeMacros
 
     # Perform macro substitution
@@ -276,7 +276,7 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
     for LineGroup in LineGroups:
         __PopulateMemoryMap(MemoryMap, LineGroup)   # Pass MemoryMap by reference
     if(Debug):
-        MemoryMap.ToFile(f"Testing__PostMacro.txt")
+        MemoryMap.ToFile(f"./Assembler/v1_1/Testing__PostMacro.txt")
 
     ProgramMemory: bytearray = bytearray(2**NUM_CODE_ADDRESS_PINS)
 
@@ -301,7 +301,7 @@ if __name__ == "__main__":
     StateV  = None
 
     InFile = "./Programs/OSR_1_1.asm"
-    OutFile = "./Utils/Testing.bin"
+    OutFile = "./Assembler/v1_1/Testing.bin"
 
     # if(len(sys.argv) < 2):
     #     raise Exception("Not enough input arguments")

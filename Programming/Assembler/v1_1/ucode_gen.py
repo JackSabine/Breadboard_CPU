@@ -1,7 +1,13 @@
-import sys,re,enum
+import os, sys
+path: str = os.path.dirname(__file__)
+while(not path.endswith("Assembler")):
+    path = os.path.dirname(path)
+sys.path.append(os.path.dirname(path))
+
+import re,enum
 from writer import Write
-from ISA.v1_1.ucode.macros import *
-import ISA.v1_1.ucode.ucodedef as ucode
+from Assembler.v1_1.ucode.macros import *
+import Assembler.v1_1.ucode.ucodedef as ucode
 
 # EEPROM Address Pinout
 
