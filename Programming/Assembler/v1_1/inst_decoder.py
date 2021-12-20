@@ -17,12 +17,18 @@ def __ExtractRegister(Word: int, RegPos: int) -> str:
 
 def __ExtractSignedImmediate(Word: int, ImmPos: int, ImmWidth: int) -> str:
     SignedImmediate: int
+    HexValue: int
     Mask: int
 
     Mask = (1 << ImmWidth) - 1
-    SignedImmediate = (Word >> ImmPos) & Mask
+    HexValue = (Word >> ImmPos) & Mask
 
-    return ("#{} / 0x{:0{}X}".format(SignedImmediate, SignedImmediate, 2))
+    if(HexValue >> (ImmWidth-1) == 1):
+        SignedImmediate = HexValue - (1 << ImmWidth)
+    else:
+        SignedImmediate = HexValue
+
+    return ("#{} / 0x{:0{}X}".format(SignedImmediate, HexValue, 2))
 
 
 def __ExtractBitfield(Word: int, EndIndex: int, StartIndex: int) -> int:
@@ -79,7 +85,9 @@ def __ParseInstruction(Word: int) -> str:
             Arguments.append(__ExtractRegister(Word, REGB_POS))
         else:
             raise Exception(f"While re-parsing, Operation {Operation} recognized in OPCODE_DICT but does not appear in any instruction collections")
-        return ("{} {}".format(Operation, ", ".join(Arguments)))
+        return ("{:<6} {}".format(
+            Operation,
+            ", ".join(Arguments)))
 
     else:
         return ("None")
@@ -96,8 +104,18 @@ def DecodeBinary(BinarySource: str, OutputFile: str):
     with open(BinarySource, "rb") as Reparse:
         
         with open(OutputFile, "w") as Output:
+            CurLinStr = "{} | {} | {}\n".format(
+                str.ljust("Addrs", 4 + 2),
+                str.ljust("Instruction Disassembly", 30),
+                str.ljust("ASCII Character", 20)
+            )
+            Output.write(CurLinStr)
+
+            CurLineStr = "-"*(4+2+1+30+20+5) + "\n"
+            Output.write(CurLineStr)
 
             while(MemoryBytes := Reparse.read(2)):
+
                 MemoryWord = int.from_bytes(MemoryBytes, "little")
 
                 CurLinStr = "0x{:0{}X} | {} | {}\n".format(
@@ -115,3 +133,5 @@ def DecodeBinary(BinarySource: str, OutputFile: str):
 
 if __name__ == "__main__":
     DecodeBinary("./Assembler/v1_1/Testing.bin", "./Assembler/v1_1/Decoded.txt")
+    pass
+    #print("#{}".format(__ExtractSignedImmediate(0x7F8, IMM_POS, 11)))
