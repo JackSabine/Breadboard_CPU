@@ -116,8 +116,16 @@ def __ParseHeaders(IncludeFiles: list[str], SourceDir: str) -> dict[str, str]:
                         IncludedMacros[MacroMatch.groups()[0]] = MacroMatch.groups()[1]
     return IncludedMacros
 
+def __ExpandMacroInstructions(LineGroups: list[OLineGroup]):
+    Operation: str
 
-def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) -> None:
+    for LineGroup in LineGroups:
+        for i, LineSplit in enumerate(LineGroup.Lines):
+            pass
+
+    return
+
+def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroups: list[OLineGroup]) -> None:
         # Parse the label and its (potential) associated data 
 
     # Syntax of labels:
@@ -142,52 +150,53 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroup: OLineGroup) ->
     RegexStringTemp: re.Match
     BlockwordTemp: int
 
-    MemoryIndex = LineGroup.Orig
+    for LineGroup in LineGroups:
+        MemoryIndex = LineGroup.Orig
 
-    for LineSplit in LineGroup.Lines:
-        if(LineSplit.IsAnInstruction):
-            MemoryIndex = MemoryMap.PlaceInstruction(
-                MemoryIndex=MemoryIndex,
-                WordList=LineSplit.WordList,
-                LineNumber=LineSplit.LineNumber,
-                Label=CurCodeLabel
-            )
-            CurCodeLabel = None     # Clear the current label so it's only paired with one code line
+        for LineSplit in LineGroup.Lines:
+            if(LineSplit.IsAnInstruction):
+                MemoryIndex = MemoryMap.PlaceInstruction(
+                    MemoryIndex=MemoryIndex,
+                    WordList=LineSplit.WordList,
+                    LineNumber=LineSplit.LineNumber,
+                    Label=CurCodeLabel
+                )
+                CurCodeLabel = None     # Clear the current label so it's only paired with one code line
 
-        else:
-            # Determine what kind of label it is
-            WordListLen = len(LineSplit.WordList)
-            RegexLabelTemp = re.search(r"^([A-Za-z_][A-Za-z0-9_]*):$", LineSplit.WordList[0])
+            else:
+                # Determine what kind of label it is
+                WordListLen = len(LineSplit.WordList)
+                RegexLabelTemp = re.search(r"^([A-Za-z_][A-Za-z0-9_]*):$", LineSplit.WordList[0])
 
-            if(RegexLabelTemp is None):
-                raise Exception(f"Label on line {LineSplit.LineNumber} is not of the expected format")
+                if(RegexLabelTemp is None):
+                    raise Exception(f"Label on line {LineSplit.LineNumber} is not of the expected format")
 
-            if(WordListLen == 1):
-                # Code label
-                CurCodeLabel = RegexLabelTemp.groups()[0]
-            elif(WordListLen == 3):
-                CurBlockLabel = RegexLabelTemp.groups()[0]
+                if(WordListLen == 1):
+                    # Code label
+                    CurCodeLabel = RegexLabelTemp.groups()[0]
+                elif(WordListLen == 3):
+                    CurBlockLabel = RegexLabelTemp.groups()[0]
 
-                if(re.search(r"^.BLKW", LineSplit.WordList[1]) is not None):
-                    BlockwordTemp = __DecOrHexSearch(LineSplit.WordList[2])
-                    if(type(BlockwordTemp) is int):
-                        MemoryIndex = MemoryMap.GenerateBlock(
-                            MemoryIndex=MemoryIndex,
-                            BlockSize=BlockwordTemp,
-                            LineNumber=LineSplit.LineNumber,
-                            Label=CurBlockLabel
-                        )
-                    else:
-                        raise Exception(f"Blockword length for label {CurBlockLabel} on line {LineSplit.LineNumber} cannot be determined")
-                elif(re.search(r"^.STRINGZ$", LineSplit.WordList[1]) is not None):
-                    RegexStringTemp = re.search(r"^\"(.*)\"$", LineSplit.WordList[2])
-                    if(RegexStringTemp is not None):
-                        MemoryIndex = MemoryMap.GenerateString(
-                            MemoryIndex=MemoryIndex,
-                            String=RegexStringTemp.groups()[0],
-                            LineNumber=LineSplit.LineNumber,
-                            Label=CurBlockLabel
-                        )
+                    if(re.search(r"^.BLKW", LineSplit.WordList[1]) is not None):
+                        BlockwordTemp = __DecOrHexSearch(LineSplit.WordList[2])
+                        if(type(BlockwordTemp) is int):
+                            MemoryIndex = MemoryMap.GenerateBlock(
+                                MemoryIndex=MemoryIndex,
+                                BlockSize=BlockwordTemp,
+                                LineNumber=LineSplit.LineNumber,
+                                Label=CurBlockLabel
+                            )
+                        else:
+                            raise Exception(f"Blockword length for label {CurBlockLabel} on line {LineSplit.LineNumber} cannot be determined")
+                    elif(re.search(r"^.STRINGZ$", LineSplit.WordList[1]) is not None):
+                        RegexStringTemp = re.search(r"^\"(.*)\"$", LineSplit.WordList[2])
+                        if(RegexStringTemp is not None):
+                            MemoryIndex = MemoryMap.GenerateString(
+                                MemoryIndex=MemoryIndex,
+                                String=RegexStringTemp.groups()[0],
+                                LineNumber=LineSplit.LineNumber,
+                                Label=CurBlockLabel
+                            )
 
     return
 
@@ -258,10 +267,12 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
     IncludedMacros = __ParseHeaders(IncludeFiles, SourceDir)
     del IncludeFiles
 
+    # Iterate over every instruction and determine if any "macro" instructions exist (e.g. lea r0, LABEL -> ld r0, MemDict[LABEL] & 0xFF ; ld r1, MemDict[LABEL] >> 8
+    __ExpandMacroInstructions(LineGroups)
+
     if(Debug):
         MemoryMap_BeforeMacros: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))
-        for LineGroup in LineGroups:
-            __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroup)   # Pass MemoryMap by reference
+        __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroups)   # Pass MemoryMap by reference
         MemoryMap_BeforeMacros.ToFile(f"./Assembler/v1_1/Testing__PreMacro.txt")
         del MemoryMap_BeforeMacros
 
@@ -273,8 +284,7 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
                     LineSplit.WordList[i] = Argument.replace(Argument, IncludedMacros[Argument])
 
     MemoryMap: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))    # One instruction is two memory locations
-    for LineGroup in LineGroups:
-        __PopulateMemoryMap(MemoryMap, LineGroup)   # Pass MemoryMap by reference
+    __PopulateMemoryMap(MemoryMap, LineGroups)   # Pass MemoryMap by reference
     if(Debug):
         MemoryMap.ToFile(f"./Assembler/v1_1/Testing__PostMacro.txt")
 
