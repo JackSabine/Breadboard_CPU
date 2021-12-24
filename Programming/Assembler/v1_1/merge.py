@@ -5,8 +5,8 @@ while(not path.endswith("Assembler")):
 sys.path.append(os.path.dirname(path))
 
 import re, enum
-from writer import Write
 from Assembler.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS
+import Assembler.v1_1.Utils as Utils
 
 class __FlagState(enum.Enum):
     MERGE_FILES     = 0
@@ -25,7 +25,7 @@ def Merge(InFiles, OutFile):
             for Idx, _ in enumerate(Bytes):
                 Merged[Idx] |= Bytes[Idx]
 
-    Write(Merged, OutFile)
+    Utils.Write(Merged, OutFile)
 
 if __name__ == "__main__":
     FlagState = None

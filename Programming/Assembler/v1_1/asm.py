@@ -5,125 +5,37 @@ while(not path.endswith("Assembler")):
 sys.path.append(os.path.dirname(path))
 
 import enum, re
-from writer import Write
 from Assembler.v1_1.inst_assembler import CreateBitArgs
 from Assembler.v1_1.classes import OLine, OLineSplit, OLineGroup, OSymbolicMemoryMap
 from Assembler.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS, INSTRUCTION_POS, OPCODE_DICT
-
-def __DecOrHexSearch(str) -> int:
-    MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
-    MatchHex = re.search(r"0?x([0-9A-F]+)",str,re.IGNORECASE)
-    RetVal = None
-
-    if MatchDec is not None:
-        RetVal = int(MatchDec.groups()[0])
-    elif MatchHex is not None:
-        RetVal = int(MatchHex.groups()[0],base=16)
-
-    return RetVal
+from Assembler.v1_1.inst_decoder import DecodeBinary
+import Assembler.v1_1.TextParsing as Parsing
+import Assembler.v1_1.Utils as Utils
 
 
-def __FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
-    # Need to iterate through each line and filter out excess whitespace, comments, blank lines
-    FilteredSplitLines: list[OLineSplit] = []
-    CurText: str
-    CurNum: int
-    IsCurAnInstruction: bool
-
-    for ULine in UneditedLines:
-        CurText = ULine.Text
-        CurNum = ULine.LineNumber    
-
-        if(CurText.find(";") != -1):
-            CurText = CurText[ : CurText.find(";") ]
-        
-        # If we find a single character, continue parsing
-        if(re.search(r"[\S]+", CurText)):
-            IsCurAnInstruction = CurText.startswith(("\t", " "))
-            CurText = CurText.strip()
-            # Delete newlines and replace commas with spaces
-            CurText = CurText.replace("\n", "").replace(",", " ")
-            # print("{:<40} is {:<3} an instruction".format(CurText, "" if IsCurAnInstruction else "not"))
-
-            # Remove blank lines
-            if CurText != "":
-                # Split each line by spaces (commas replaced with spaces)
-                FilteredSplitLines.append(OLineSplit(WordList=CurText.split(), LineNumber=CurNum, IsAnInstruction=IsCurAnInstruction))
-        
-    return FilteredSplitLines
-
-
-def __ParseAssemblerDirectives(FilteredSplitLines: list[OLineSplit]) -> tuple[list[OLineGroup], list[str]]:
-    # Identify assembler directives and do not translate those to binary
-    # Current directives:
-    # .ORIG (active until next ORIG found)
-    # .INCLUDE (for macro defintions)
-
-    LineGroups: list[OLineGroup] = []
-    LineGroupIdx: int = -1
-    CurrentORIG: int = 0x0000
-    IncludeFiles: list[str] = []
-    IncludeFile: re.Match
-
-    for FSLine in FilteredSplitLines:
-        # Check if the current line is an assembler directive
-        if(FSLine.WordList[0].startswith(".")):
-            # Process an assembler directive
-            if  (re.search(r"^.ORIG$",      FSLine.WordList[0], re.IGNORECASE) is not None):
-                if(len(FSLine.WordList) < 2):
-                    raise Exception(f"Insufficient number of arguments for .ORIG directive on line {FSLine.LineNumber}")
-
-                CurrentORIG = __DecOrHexSearch(FSLine.WordList[1])
-
-                if(CurrentORIG is not None):
-                    LineGroupIdx += 1
-                    LineGroups.append(OLineGroup(Origin=CurrentORIG, Lines=[]))
-                else:
-                    raise Exception(f"Incorrect arguments on line {FSLine.LineNumber}")
-
-            elif(re.search(r"^.INCLUDE$",   FSLine.WordList[0], re.IGNORECASE) is not None):
-                if(len(FSLine.WordList) < 2):
-                    raise Exception(f"Insufficient number of arguments for .INCLUDE directive on line {FSLine.LineNumber}")
-                IncludeFile = re.search(r"([A-Za-z0-9_]+.h)", FSLine.WordList[1])
-                if(IncludeFile is not None):
-                    IncludeFiles.append(IncludeFile.groups()[0])
-                else:
-                    raise Exception(f"Incorrect arguments on line {FSLine.LineNumber}")
-        else:
-            if(LineGroupIdx >= 0):
-                LineGroups[LineGroupIdx].Lines.append(FSLine)
-            else:
-                raise Exception(f"Line {FSLine.LineNumber} does not fall under any .ORIG directive")
-
-    return (LineGroups, IncludeFiles)
-
-
-def __ParseHeaders(IncludeFiles: list[str], SourceDir: str) -> dict[str, str]:
-    IncludedMacros: dict[str, str] = {}
-    CurrentMacro: str
-    MacroMatch: re.Match
-    for IncF in IncludeFiles:
-        # Search in the directory above the assembler
-        if(not os.path.exists(f"{SourceDir}\\{IncF}")):
-            raise Exception(f"{IncF} does not exist in {SourceDir}")
-        else:
-            with open(f"{SourceDir}\\{IncF}") as IncludedFile:
-                IncludedFileLines = IncludedFile.readlines()
-                for CurrentMacro in IncludedFileLines:
-                    # Ensure that the macro begins with a letter (no numbers or symbols)
-                    MacroMatch = re.search(r"#define ([A-Za-z][A-Za-z0-9_]+)[\s\t]+([0-9x#]+)", CurrentMacro)
-                    if(MacroMatch is not None):
-                        IncludedMacros[MacroMatch.groups()[0]] = MacroMatch.groups()[1]
-    return IncludedMacros
-
-def __ExpandMacroInstructions(LineGroups: list[OLineGroup]):
+def __ExpandMacroInstructions(LineGroups_Source: list[OLineGroup]) -> list[OLineGroup]:
     Operation: str
+    LineGroups_Output: list[OLineGroup] = []
 
+    for LG_Index, LineGroup in enumerate(LineGroups_Source):
+        LineGroups_Output.append(OLineGroup(Origin=LineGroup.Orig, Lines=[]))
+
+        for LineSplit in LineGroup.Lines:
+            Operation = LineSplit.WordList[0].upper()
+
+            if(Operation == "LEA"):
+                pass
+            else:
+                LineGroups_Output[LG_Index].Lines.append(LineSplit)
+
+    return LineGroups_Output
+
+def __MacroSubstitution(LineGroups: list[OLineGroup], MacroDict: dict[str, str]) -> None:
     for LineGroup in LineGroups:
-        for i, LineSplit in enumerate(LineGroup.Lines):
-            pass
-
-    return
+        for LineSplit in LineGroup.Lines:
+            for i, Argument in enumerate(LineSplit.WordList):
+                if(Argument in MacroDict):
+                    LineSplit.WordList[i] = Argument.replace(Argument, MacroDict[Argument])
 
 def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroups: list[OLineGroup]) -> None:
         # Parse the label and its (potential) associated data 
@@ -178,7 +90,7 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroups: list[OLineGro
                     CurBlockLabel = RegexLabelTemp.groups()[0]
 
                     if(re.search(r"^.BLKW", LineSplit.WordList[1]) is not None):
-                        BlockwordTemp = __DecOrHexSearch(LineSplit.WordList[2])
+                        BlockwordTemp = Utils.DecOrHexSearch(LineSplit.WordList[2])
                         if(type(BlockwordTemp) is int):
                             MemoryIndex = MemoryMap.GenerateBlock(
                                 MemoryIndex=MemoryIndex,
@@ -238,63 +150,59 @@ def __InterpretInstructions(MemoryMap: OSymbolicMemoryMap, ProgramMemory: bytear
 
 def Assemble(FileToCompile, FileToWrite, Debug=False):
     
-    SourceDir: str = os.path.dirname(os.path.abspath(FileToCompile))
+    SourceDir: str
+    Raw: list[str]
+    UneditedLines: list[OLine]
+    FilteredSplitLines: list[OLineSplit]
+    LineGroups_BeforeMacroInstructionExpansion: list[OLineGroup]
+    IncludeFiles: list[str]
+    IncludedMacros: dict[str, str]
+    LineGroups_AfterMacroInstructionExpansion: list[OLineGroup]
+    MemoryMap: OSymbolicMemoryMap
+    ProgramMemory: bytearray
+    
+    SourceDir = os.path.dirname(os.path.abspath(FileToCompile))
 
     # Read in data 
+    
     with open(FileToCompile, "r") as FileToCompile_Handle:
         Raw = FileToCompile_Handle.readlines()
     
     # UneditedLines is an list of all lines in FileToCompile
-    UneditedLines: list[OLine] = []
-    for i, _ in enumerate(Raw):
-        UneditedLines.append(OLine(Text=Raw[i], LineNumber=i+1))
-
-    del i, FileToCompile_Handle, Raw
+    UneditedLines = Parsing.CreateOLineList(Raw)
 
     # Convert our raw text into a list of lines split into their arguments and with an associated line number
-    FilteredSplitLines: list[OLineSplit]
-    FilteredSplitLines = __FilterLinesAndSplitOnSpaces(UneditedLines)
-    del UneditedLines
+    FilteredSplitLines = Parsing.FilterLinesAndSplitOnSpaces(UneditedLines)
 
     # Separate the Filtered lines
-    LineGroups: list[OLineGroup]
-    IncludeFiles: list[str]
-    LineGroups, IncludeFiles = __ParseAssemblerDirectives(FilteredSplitLines)
-    del FilteredSplitLines
+    LineGroups_BeforeMacroInstructionExpansion, IncludeFiles = Parsing.ParseAssemblerDirectives(FilteredSplitLines)
 
     # Assemble a dictionary of macros from IncludeFiles
-    IncludedMacros: dict[str, str]
-    IncludedMacros = __ParseHeaders(IncludeFiles, SourceDir)
-    del IncludeFiles
+    IncludedMacros = Parsing.ParseHeaders(IncludeFiles, SourceDir)
 
     # Iterate over every instruction and determine if any "macro" instructions exist (e.g. lea r0, LABEL -> ld r0, MemDict[LABEL] & 0xFF ; ld r1, MemDict[LABEL] >> 8
-    __ExpandMacroInstructions(LineGroups)
+    LineGroups_AfterMacroInstructionExpansion = __ExpandMacroInstructions(LineGroups_BeforeMacroInstructionExpansion)
 
     if(Debug):
         MemoryMap_BeforeMacros: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))
-        __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroups)   # Pass MemoryMap by reference
+        __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroups_AfterMacroInstructionExpansion)   # Pass MemoryMap by reference
         MemoryMap_BeforeMacros.ToFile(f"./Assembler/v1_1/Testing__PreMacro.txt")
-        del MemoryMap_BeforeMacros
 
     # Perform macro substitution
-    for LineGroup in LineGroups:
-        for LineSplit in LineGroup.Lines:
-            for i, Argument in enumerate(LineSplit.WordList):
-                if(Argument in IncludedMacros):
-                    LineSplit.WordList[i] = Argument.replace(Argument, IncludedMacros[Argument])
+    __MacroSubstitution(LineGroups_AfterMacroInstructionExpansion, IncludedMacros)
 
-    MemoryMap: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))    # One instruction is two memory locations
-    __PopulateMemoryMap(MemoryMap, LineGroups)   # Pass MemoryMap by reference
+    MemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))    # One instruction is two memory locations
+    __PopulateMemoryMap(MemoryMap, LineGroups_AfterMacroInstructionExpansion)   # Pass MemoryMap by reference
     if(Debug):
         MemoryMap.ToFile(f"./Assembler/v1_1/Testing__PostMacro.txt")
 
-    ProgramMemory: bytearray = bytearray(2**NUM_CODE_ADDRESS_PINS)
+    ProgramMemory = bytearray(2**NUM_CODE_ADDRESS_PINS)
 
     __InterpretInstructions(MemoryMap, ProgramMemory)
         
-    Write(ProgramMemory, FileToWrite)
+    Utils.Write(ProgramMemory, FileToWrite)
 
-
+    DecodeBinary("./Assembler/v1_1/Testing.bin", "./Assembler/v1_1/Decoded.txt")
 
     return
 

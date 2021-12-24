@@ -5,43 +5,33 @@ while(not path.endswith("Assembler")):
 sys.path.append(os.path.dirname(path))
 
 from Assembler.v1_1.ucode.macros import *
+import Assembler.v1_1.Utils as Utils
+import Assembler.v1_1.InstructionDefinition as InstDef
 
 import re
-
-def __DecOrHexSearch(str):
-    MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
-    MatchHex = re.search(r"0?x([0-9A-F]+)",str,re.IGNORECASE)
-    RetVal = None
-
-    if MatchDec is not None:
-        RetVal = int(MatchDec.groups()[0])
-    elif MatchHex is not None:
-        RetVal = int(MatchHex.groups()[0],base=16)
-
-    return RetVal
 
 
 def CreateBitArgs(Operation: str, Args: list[str], SymbolTable: dict[str, int], Instruction_MemoryIndex: int, LineNumber: int) -> int:
 
     BitArgs: int
 
-    if(Operation in TWOREG):
+    if(Operation in InstDef.TWOREG):
         BitArgs = TwoReg(Args, LineNumber)
-    elif(Operation in REGIMM):
+    elif(Operation in InstDef.REGIMM):
         BitArgs = RegImm(Args, LineNumber)
-    elif(Operation in SINGR):
+    elif(Operation in InstDef.SINGR):
         BitArgs = SingR(Args, LineNumber)
-    elif(Operation in PCOFF):
+    elif(Operation in InstDef.PCOFF):
         BitArgs = PCOff(Args, LineNumber, SymbolTable, Instruction_MemoryIndex)
-    elif(Operation in NOARG):
+    elif(Operation in InstDef.NOARG):
         BitArgs = NoArg()
-    elif(Operation in BASER):
+    elif(Operation in InstDef.BASER):
         BitArgs = BaseR(Args, LineNumber)
-    elif(Operation in OTHER):
+    elif(Operation in InstDef.OTHER):
         BitArgs = Other(Operation, Args, LineNumber)
-    elif(Operation in PORTIMM):
+    elif(Operation in InstDef.PORTIMM):
         BitArgs = PortImm(Args, LineNumber)
-    elif(Operation in PORTREG):
+    elif(Operation in InstDef.PORTREG):
         BitArgs = PortReg(Args, LineNumber)
     else:
         raise Exception(f"Operation {Operation} on line {LineNumber} recognized in OPCODE_MAP but does not appear in any instruction collections")
@@ -82,7 +72,7 @@ def RegImm(Args: list[str], LineNumber: int) -> int:
     ValueC: int
 
     MatchA = re.search(r"r([0-7])", Args[0], re.IGNORECASE)
-    ValueC = __DecOrHexSearch(Args[1])
+    ValueC = Utils.DecOrHexSearch(Args[1])
 
     if(MatchA is None or ValueC is None):
         raise Exception(f"Incorrect arguments on line {LineNumber}")
@@ -157,7 +147,7 @@ def BaseR(Args: list[str], LineNumber: int):
 
     MatchA = re.search(r"r([0-7])",Args[0],re.IGNORECASE)
     MatchB = re.search(r"r([0-7])",Args[1],re.IGNORECASE)
-    ValueC = __DecOrHexSearch(Args[2])
+    ValueC = Utils.DecOrHexSearch(Args[2])
 
     if(MatchA is None or MatchB is None or ValueC is None):
         raise Exception(f"Incorrect arguments on line {LineNumber}")
@@ -186,7 +176,7 @@ def Other(Operation: str, Args: list[str], LineNumber: int):
         if(len(Args) != 1):
             raise Exception(f"Incorrect number of arguments on line {LineNumber}")
 
-        ValueC = __DecOrHexSearch(Args[0])
+        ValueC = Utils.DecOrHexSearch(Args[0])
 
         if(ValueC is None):
             raise Exception(f"Incorrect arguments on line {LineNumber}")
@@ -202,7 +192,7 @@ def Other(Operation: str, Args: list[str], LineNumber: int):
         return (ArgC)
 
     else:
-        raise Exception(f"Operation {Operation} in set OTHER {OTHER}, but does not match any instructions")
+        raise Exception(f"Operation {Operation} in set OTHER {InstDef.OTHER}, but does not match any instructions")
 
 
 
@@ -216,7 +206,7 @@ def PortReg(Args: list[str], LineNumber: int) -> int:
     PortNumber: int
     MatchA: re.Match
     
-    PortNumber = __DecOrHexSearch(Args[0])
+    PortNumber = Utils.DecOrHexSearch(Args[0])
     MatchA = re.search(r"r([0-7])",Args[1],re.IGNORECASE)
 
     if(PortNumber is None or MatchA is None):
@@ -239,8 +229,8 @@ def PortImm(Args: list[str], LineNumber: int) -> int:
     PortNumber: int
     ValueC: int
 
-    PortNumber = __DecOrHexSearch(Args[0])
-    ValueC = __DecOrHexSearch(Args[1])
+    PortNumber = Utils.DecOrHexSearch(Args[0])
+    ValueC = Utils.DecOrHexSearch(Args[1])
 
     if(PortNumber is None or ValueC is None):
         raise Exception(f"Incorrect arguments on line {LineNumber}")

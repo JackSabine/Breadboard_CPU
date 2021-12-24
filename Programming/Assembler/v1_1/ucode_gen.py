@@ -5,7 +5,7 @@ while(not path.endswith("Assembler")):
 sys.path.append(os.path.dirname(path))
 
 import re,enum
-from writer import Write
+import Assembler.v1_1.Utils as Utils
 from Assembler.v1_1.ucode.macros import *
 import Assembler.v1_1.ucode.ucodedef as ucode
 
@@ -62,7 +62,7 @@ def ucode_gen(OutFile):
                     if(Inst & NI == NI):
                         break
 
-    Write(Data, OutFile)
+    Utils.Write(Data, OutFile)
 
     return
 
