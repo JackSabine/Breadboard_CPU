@@ -19,30 +19,33 @@ $(filter %.bin,$(obj_files)): %.bin: $(SRC_DIR)/%.asm
 workspace:
 	@[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR)
 
+# Merge two binaries
 merge:
 	cd $(WORK_DIR); py $(UTIL_DIR)/merge.py -m $(obj_files) -o $(WORK_DIR)/a.bin; cp $(WORK_DIR)/a.bin $(PROG_DIR)/binaries/a.bin;
 
+# Write the program binary to the program NVRAM
 progc:
 	@cd $(PROG_DIR) ; \
 	./minipro.exe -p $(PROG_CHIP) -w binaries/a.bin;
 
-
+# Program microcode loop
 pml:
 	@cd $(PROG_DIR) ; \
 	while [ true ] ; do \
 		./minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin; \
-		((count = count - 1)) ; \
 		read -n 1 -s -r -p "Press any key to continue ('q' to exit)" key; \
 		if [ $$key = 'q' ]; then \
 			exit ; \
 		fi ; \
 		echo ; \
 	done
-	
+
+# Program microcode
 pm:
 	@cd $(PROG_DIR) ; \
 	./minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin
 
+# Generate microcode binary and move to programmer directory
 ucode: workspace
 	@py $(UTIL_DIR)/ucode_gen.py -o $(WORK_DIR)/microcode.bin; cp $(WORK_DIR)/microcode.bin $(PROG_DIR)/binaries/microcode.bin;
 
