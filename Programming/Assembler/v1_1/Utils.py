@@ -1,16 +1,17 @@
 import re
+from typing import Union
 
-def DecOrHexSearch(str) -> int:
+def DecOrHexSearch(str) -> Union[int, None]:
     MatchDec = re.search(r"#(-?[0-9]+)",str,re.IGNORECASE)
     MatchHex = re.search(r"0?x([0-9A-F]+)",str,re.IGNORECASE)
     RetVal = None
 
-    if MatchDec is not None:
+    if(MatchDec is not None):
         RetVal = int(MatchDec.groups()[0])
-    elif MatchHex is not None:
+    elif(MatchHex is not None):
         RetVal = int(MatchHex.groups()[0],base=16)
 
-    return RetVal
+    return (RetVal)
 
 def Write(Data, FileName):
     """

@@ -13,6 +13,8 @@ startup:
 
     call    lcd_init
 
+    lea r0, foo
+
     ; ld      r1,     #16
     ; ld      r2,     0xFF
     ; ld      r3,     0xFE

@@ -78,7 +78,3 @@ PORTIMM:    set[str] = {"STPI"}
 PORTREG:    set[str] = {"STP"}
 
 OTHER:      set[str] = {"TRAP"}
-
-ASSEMBLER_MACRO_INSTRUCTIONS = {
-    "LEA_PLACEHOLDER"
-}

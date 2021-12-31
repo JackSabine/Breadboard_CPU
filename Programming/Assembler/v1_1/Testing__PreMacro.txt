@@ -4,50 +4,50 @@ startup             	| 0x0000 | ld	r0	0x00
                     	| 0x0001 | ld	r1	0x82
                     	| 0x0002 | setsp	r0
                     	| 0x0003 | call	lcd_init
-config_env          	| 0x0004 | ld	r0	0x00
-                    	| 0x0005 | ld	r1	0x04
-                    	| 0x0006 | ld	r4	0x00
-                    	| 0x0007 | ld	r5	0x82
-                    	| 0x0008 | ld	r6	0x00
-                    	| 0x0009 | ld	r7	0x80
-                    	| 0x000A | leaB	r0	foo
-                    	| 0x000B | start	r0
-foo                 	| 0x000C | 'H'
-                    	| 0x000D | 'e'
-                    	| 0x000E | 'l'
+                    	| 0x0004 | _LEALSB	r0	foo
+                    	| 0x0005 | _LEAMSB
+config_env          	| 0x0006 | ld	r0	0x00
+                    	| 0x0007 | ld	r1	0x04
+                    	| 0x0008 | ld	r4	0x00
+                    	| 0x0009 | ld	r5	0x82
+                    	| 0x000A | ld	r6	0x00
+                    	| 0x000B | ld	r7	0x80
+                    	| 0x000C | start	r0
+foo                 	| 0x000D | 'H'
+                    	| 0x000E | 'e'
                     	| 0x000F | 'l'
-                    	| 0x0010 | 'o'
-                    	| 0x0011 | NULL
-lcd_init            	| 0x0012 | stpi	PBDIR	0x00
-                    	| 0x0013 | stpi	PORTA	0x01
-                    	| 0x0014 | stpi	PORTB	0x00
-lcd_start_fcn_set   	| 0x0015 | stpi	PORTB	0x30
-                    	| 0x0016 | ld	r1	#3
-lcd_start_fcn_set_lp	| 0x0017 | stpi	PORTA	0x00
-                    	| 0x0018 | ld	r0	#1
-                    	| 0x0019 | trap	SLEEP
-                    	| 0x001A | stpi	PORTA	0x01
-                    	| 0x001B | ld	r0	#1
-                    	| 0x001C | trap	SLEEP
-                    	| 0x001D | addi	r1	#-1
-                    	| 0x001E | jnz	lcd_start_fcn_set_lp
-                    	| 0x001F | stpi	PORTB	0x38
-                    	| 0x0020 | stpi	PORTA	0x00
-                    	| 0x0021 | stpi	PORTA	0x01
-                    	| 0x0022 | stpi	PORTB	0x08
-                    	| 0x0023 | stpi	PORTA	0x00
-                    	| 0x0024 | stpi	PORTA	0x01
-                    	| 0x0025 | stpi	PORTB	0x01
-                    	| 0x0026 | stpi	PORTA	0x00
-                    	| 0x0027 | stpi	PORTA	0x01
-                    	| 0x0028 | stpi	PORTB	0x06
-                    	| 0x0029 | stpi	PORTA	0x00
-                    	| 0x002A | stpi	PORTA	0x01
-                    	| 0x002B | stpi	PORTB	0x0F
-                    	| 0x002C | stpi	PORTA	0x00
-                    	| 0x002D | stpi	PORTA	0x01
-                    	| 0x002E | ret
-                    	| 0x002F | NULL
+                    	| 0x0010 | 'l'
+                    	| 0x0011 | 'o'
+                    	| 0x0012 | NULL
+lcd_init            	| 0x0013 | stpi	PBDIR	0x00
+                    	| 0x0014 | stpi	PORTA	0x01
+                    	| 0x0015 | stpi	PORTB	0x00
+lcd_start_fcn_set   	| 0x0016 | stpi	PORTB	0x30
+                    	| 0x0017 | ld	r1	#3
+lcd_start_fcn_set_lp	| 0x0018 | stpi	PORTA	0x00
+                    	| 0x0019 | ld	r0	#1
+                    	| 0x001A | trap	SLEEP
+                    	| 0x001B | stpi	PORTA	0x01
+                    	| 0x001C | ld	r0	#1
+                    	| 0x001D | trap	SLEEP
+                    	| 0x001E | addi	r1	#-1
+                    	| 0x001F | jnz	lcd_start_fcn_set_lp
+                    	| 0x0020 | stpi	PORTB	0x38
+                    	| 0x0021 | stpi	PORTA	0x00
+                    	| 0x0022 | stpi	PORTA	0x01
+                    	| 0x0023 | stpi	PORTB	0x08
+                    	| 0x0024 | stpi	PORTA	0x00
+                    	| 0x0025 | stpi	PORTA	0x01
+                    	| 0x0026 | stpi	PORTB	0x01
+                    	| 0x0027 | stpi	PORTA	0x00
+                    	| 0x0028 | stpi	PORTA	0x01
+                    	| 0x0029 | stpi	PORTB	0x06
+                    	| 0x002A | stpi	PORTA	0x00
+                    	| 0x002B | stpi	PORTA	0x01
+                    	| 0x002C | stpi	PORTB	0x0F
+                    	| 0x002D | stpi	PORTA	0x00
+                    	| 0x002E | stpi	PORTA	0x01
+                    	| 0x002F | ret
                     	| 0x0030 | NULL
                     	| 0x0031 | NULL
                     	| 0x0032 | NULL

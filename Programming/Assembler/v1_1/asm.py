@@ -5,30 +5,12 @@ while(not path.endswith("Assembler")):
 sys.path.append(os.path.dirname(path))
 
 import enum, re
-from Assembler.v1_1.inst_assembler import CreateBitArgs
+from Assembler.v1_1.inst_assembler import InterpretInstructions
 from Assembler.v1_1.classes import OLine, OLineSplit, OLineGroup, OSymbolicMemoryMap
-from Assembler.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS, INSTRUCTION_POS, OPCODE_DICT
+from Assembler.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS, INSTRUCTION_POS
 from Assembler.v1_1.inst_decoder import DecodeBinary
 import Assembler.v1_1.TextParsing as Parsing
 import Assembler.v1_1.Utils as Utils
-
-
-def __ExpandMacroInstructions(LineGroups_Source: list[OLineGroup]) -> list[OLineGroup]:
-    Operation: str
-    LineGroups_Output: list[OLineGroup] = []
-
-    for LG_Index, LineGroup in enumerate(LineGroups_Source):
-        LineGroups_Output.append(OLineGroup(Origin=LineGroup.Orig, Lines=[]))
-
-        for LineSplit in LineGroup.Lines:
-            Operation = LineSplit.WordList[0].upper()
-
-            if(Operation == "LEA"):
-                pass
-            else:
-                LineGroups_Output[LG_Index].Lines.append(LineSplit)
-
-    return LineGroups_Output
 
 def __MacroSubstitution(LineGroups: list[OLineGroup], MacroDict: dict[str, str]) -> None:
     for LineGroup in LineGroups:
@@ -114,50 +96,15 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroups: list[OLineGro
 
 
 
-def __InterpretInstructions(MemoryMap: OSymbolicMemoryMap, ProgramMemory: bytearray) -> None:
-    # Iterate over each instruction in MemoryMap
-    Operation: str
-    Arguments: list[str]
-
-    for i, _ in enumerate(MemoryMap.MemoryBlock):
-        if(MemoryMap.MemoryBlock[i].IsCellAnInstruction()):
-            
-            Operation = MemoryMap.MemoryBlock[i].GetWordList()[0].upper()
-            Arguments = MemoryMap.MemoryBlock[i].GetWordList()[1:]
-
-            InstructionOp = OPCODE_DICT.get(Operation.upper()) << INSTRUCTION_POS
-
-            InstructionArgs = CreateBitArgs(
-                Operation               =   Operation, 
-                Args                    =   Arguments,
-                SymbolTable             =   MemoryMap.SymbolTable,
-                Instruction_MemoryIndex =   i,
-                LineNumber              =   MemoryMap.MemoryBlock[i].GetAssociatedLineNumber()
-            )
-
-            Instruction = InstructionOp | InstructionArgs
-
-            ProgramMemory[2*i + 0] = (Instruction >> 0) & 0xFF
-            ProgramMemory[2*i + 1] = (Instruction >> 8) & 0xFF
-        else:
-            # No instruction to assemble, just copy raw data
-            ProgramMemory[2*i + 0] = MemoryMap.MemoryBlock[i].GetCellValue() & 0xFF
-            ProgramMemory[2*i + 1] = 0x00
-
-    return
-
-
-
 def Assemble(FileToCompile, FileToWrite, Debug=False):
     
     SourceDir: str
     Raw: list[str]
     UneditedLines: list[OLine]
     FilteredSplitLines: list[OLineSplit]
-    LineGroups_BeforeMacroInstructionExpansion: list[OLineGroup]
     IncludeFiles: list[str]
     IncludedMacros: dict[str, str]
-    LineGroups_AfterMacroInstructionExpansion: list[OLineGroup]
+    LineGroups: list[OLineGroup]
     MemoryMap: OSymbolicMemoryMap
     ProgramMemory: bytearray
     
@@ -175,30 +122,27 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
     FilteredSplitLines = Parsing.FilterLinesAndSplitOnSpaces(UneditedLines)
 
     # Separate the Filtered lines
-    LineGroups_BeforeMacroInstructionExpansion, IncludeFiles = Parsing.ParseAssemblerDirectives(FilteredSplitLines)
+    LineGroups, IncludeFiles = Parsing.ParseAssemblerDirectives(FilteredSplitLines)
 
     # Assemble a dictionary of macros from IncludeFiles
     IncludedMacros = Parsing.ParseHeaders(IncludeFiles, SourceDir)
 
-    # Iterate over every instruction and determine if any "macro" instructions exist (e.g. lea r0, LABEL -> ld r0, MemDict[LABEL] & 0xFF ; ld r1, MemDict[LABEL] >> 8
-    LineGroups_AfterMacroInstructionExpansion = __ExpandMacroInstructions(LineGroups_BeforeMacroInstructionExpansion)
-
     if(Debug):
         MemoryMap_BeforeMacros: OSymbolicMemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))
-        __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroups_AfterMacroInstructionExpansion)   # Pass MemoryMap by reference
+        __PopulateMemoryMap(MemoryMap_BeforeMacros, LineGroups)   # Pass MemoryMap by reference
         MemoryMap_BeforeMacros.ToFile(f"./Assembler/v1_1/Testing__PreMacro.txt")
 
     # Perform macro substitution
-    __MacroSubstitution(LineGroups_AfterMacroInstructionExpansion, IncludedMacros)
+    __MacroSubstitution(LineGroups, IncludedMacros)
 
     MemoryMap = OSymbolicMemoryMap(2**(NUM_CODE_ADDRESS_PINS-1))    # One instruction is two memory locations
-    __PopulateMemoryMap(MemoryMap, LineGroups_AfterMacroInstructionExpansion)   # Pass MemoryMap by reference
+    __PopulateMemoryMap(MemoryMap, LineGroups)   # Pass MemoryMap by reference
     if(Debug):
         MemoryMap.ToFile(f"./Assembler/v1_1/Testing__PostMacro.txt")
 
     ProgramMemory = bytearray(2**NUM_CODE_ADDRESS_PINS)
 
-    __InterpretInstructions(MemoryMap, ProgramMemory)
+    InterpretInstructions(MemoryMap, ProgramMemory)
         
     Utils.Write(ProgramMemory, FileToWrite)
 

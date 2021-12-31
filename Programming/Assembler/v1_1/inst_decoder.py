@@ -5,6 +5,7 @@ while(not path.endswith("Assembler")):
 sys.path.append(os.path.dirname(path))
 
 from Assembler.v1_1.ucode.macros import *
+import Assembler.v1_1.InstructionDefinition as InstDef
 
 
 def __ExtractRegister(Word: int, RegPos: int) -> str:
@@ -53,34 +54,34 @@ def __ParseInstruction(Word: int) -> str:
     Arguments: list[str] = []
 
     OpMask = (1 << NUM_OPC_BITS) - 1
-    Operation = OPERATION_DICT.get((Word >> INSTRUCTION_POS) & OpMask)
+    Operation = InstDef.OPERATION_DICT.get((Word >> INSTRUCTION_POS) & OpMask)
 
     if(Operation is not None):
-        if(Operation in TWOREG):
+        if(Operation in InstDef.TWOREG):
             Arguments.append(__ExtractRegister(Word, REGA_POS))
             Arguments.append(__ExtractRegister(Word, REGB_POS))
-        elif(Operation in REGIMM):
+        elif(Operation in InstDef.REGIMM):
             Arguments.append(__ExtractRegister(Word, REGA_POS))
             Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 8))
-        elif(Operation in SINGR):
+        elif(Operation in InstDef.SINGR):
             Arguments.append(__ExtractRegister(Word, REGA_POS))
-        elif(Operation in PCOFF):
+        elif(Operation in InstDef.PCOFF):
             Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 11))
-        elif(Operation in NOARG):
+        elif(Operation in InstDef.NOARG):
             pass
-        elif(Operation in BASER):
+        elif(Operation in InstDef.BASER):
             Arguments.append(__ExtractRegister(Word, REGA_POS))
             Arguments.append(__ExtractRegister(Word, REGB_POS))
             Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 5))
-        elif(Operation in OTHER):
+        elif(Operation in InstDef.OTHER):
             if(Operation == "TRAP"):
                 Arguments.append(hex(__ExtractBitfield(Word, 10, 0)))
             else:
-                raise Exception(f"Operation {Operation} appears in set OTHER ({OTHER}) but is not implemented")
-        elif(Operation in PORTIMM):
+                raise Exception(f"Operation {Operation} appears in set OTHER ({InstDef.OTHER}) but is not implemented")
+        elif(Operation in InstDef.PORTIMM):
             Arguments.append(hex(__ExtractBitfield(Word, 10, 8)))
             Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 8))
-        elif(Operation in PORTREG):
+        elif(Operation in InstDef.PORTREG):
             Arguments.append(hex(__ExtractBitfield(Word, 10, 8)))
             Arguments.append(__ExtractRegister(Word, REGB_POS))
         else:
