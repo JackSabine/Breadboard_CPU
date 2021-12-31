@@ -46,7 +46,7 @@ NOT_TAKEN = BLANK
 
 
 MicroInstructions = {
-    0b00000: ADD,
+    0b00000: PAUSE,
     0b00001: ADDI,
     0b00010: LEA,
     0b00011: NOT,
@@ -57,7 +57,7 @@ MicroInstructions = {
     0b01000: LD,
     0b01001: LDR,
     0b01010: STR,
-    0b01011: PAUSE,
+    0b01011: ADD,
     0b01100: CALL,
     0b01101: RET,
     0b01110: TRAP,

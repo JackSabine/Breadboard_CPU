@@ -1,5 +1,5 @@
 OPCODE_DICT: dict[str, int] = {
-    "ADD":    0b00000,
+    "PAUSE":  0b00000,
     "ADDI":   0b00001,
     "LEA":    0b00010,
     "NOT":    0b00011,
@@ -10,7 +10,7 @@ OPCODE_DICT: dict[str, int] = {
     "LD":     0b01000,
     "LDR":    0b01001,
     "STR":    0b01010,
-    "PAUSE":  0b01011,
+    "ADD":    0b01011,
     "CALL":   0b01100,
     "RET":    0b01101,
     "TRAP":   0b01110,
@@ -34,7 +34,7 @@ OPCODE_DICT: dict[str, int] = {
 }
 
 OPERATION_DICT: dict[int, str] = {
-    0b00000: "ADD",
+    0b00000: "PAUSE",
     0b00001: "ADDI",
     0b00010: "LEA",
     0b00011: "NOT",
@@ -45,7 +45,7 @@ OPERATION_DICT: dict[int, str] = {
     0b01000: "LD",
     0b01001: "LDR",
     0b01010: "STR",
-    0b01011: "PAUSE",
+    0b01011: "ADD",
     0b01100: "CALL",
     0b01101: "RET",
     0b01110: "TRAP",
@@ -71,10 +71,10 @@ OPERATION_DICT: dict[int, str] = {
 TWOREG:     set[str] = {"ADD", "AND", "OR", "CMP"}
 REGIMM:     set[str] = {"ADDI", "ANDI", "ORI", "LD"}
 SINGR:      set[str] = {"NOT", "START", "SETSP", "PUSH", "POP", "CPYSP"}
-PCOFF:      set[str] = {"JMP", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL", "LEA"}
+PCOFF:      set[str] = {"JMP", "JO", "JNO", "JZ", "JNZ", "JS", "JNS", "JC", "JNC", "CALL"}
 NOARG:      set[str] = {"PAUSE", "RET"}
 BASER:      set[str] = {"LDR", "STR"}
 PORTIMM:    set[str] = {"STPI"}
 PORTREG:    set[str] = {"STP"}
 
-OTHER:      set[str] = {"TRAP"}
+OTHER:      set[str] = {"TRAP", "LEA"}

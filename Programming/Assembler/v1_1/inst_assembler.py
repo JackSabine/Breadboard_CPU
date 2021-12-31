@@ -28,7 +28,7 @@ def InterpretInstructions(MemoryMap: OSymbolicMemoryMap, ProgramMemory: bytearra
 
             InstructionOp = OPCODE_DICT.get(Operation.upper()) << INSTRUCTION_POS
 
-            InstructionArgs = CreateBitArgs(
+            InstructionArgs = __CreateBitArgs(
                 Operation               =   Operation, 
                 Args                    =   Arguments,
                 SymbolTable             =   MemoryMap.SymbolTable,
@@ -42,12 +42,12 @@ def InterpretInstructions(MemoryMap: OSymbolicMemoryMap, ProgramMemory: bytearra
             ProgramMemory[2*i + 1] = (Instruction >> 8) & 0xFF
         else:
             # No instruction to assemble, just copy raw data
-            ProgramMemory[2*i + 0] = MemoryMap.MemoryBlock[i].GetCellValue() & 0xFF
+            ProgramMemory[2*i + 0] = MemoryMap.MemoryBlock[i].GetCellValue() & IMM_MASK
             ProgramMemory[2*i + 1] = 0x00
 
     return
 
-def CreateBitArgs(Operation: str, Args: list[str], SymbolTable: dict[str, int], Instruction_MemoryIndex: int, LineNumber: int) -> int:
+def __CreateBitArgs(Operation: str, Args: list[str], SymbolTable: dict[str, int], Instruction_MemoryIndex: int, LineNumber: int) -> int:
 
     BitArgs: int
 
@@ -58,13 +58,13 @@ def CreateBitArgs(Operation: str, Args: list[str], SymbolTable: dict[str, int], 
     elif(Operation in InstDef.SINGR):
         BitArgs = SingR(Args, LineNumber)
     elif(Operation in InstDef.PCOFF):
-        BitArgs = PCOff(Args, LineNumber, SymbolTable, Instruction_MemoryIndex)
+        BitArgs = JumpInstruction(Args, LineNumber, SymbolTable, Instruction_MemoryIndex)
     elif(Operation in InstDef.NOARG):
         BitArgs = NoArg()
     elif(Operation in InstDef.BASER):
         BitArgs = BaseR(Args, LineNumber)
     elif(Operation in InstDef.OTHER):
-        BitArgs = Other(Operation, Args, LineNumber)
+        BitArgs = Other(Operation, Args, LineNumber, SymbolTable, Instruction_MemoryIndex)
     elif(Operation in InstDef.PORTIMM):
         BitArgs = PortImm(Args, LineNumber)
     elif(Operation in InstDef.PORTREG):
@@ -74,6 +74,14 @@ def CreateBitArgs(Operation: str, Args: list[str], SymbolTable: dict[str, int], 
     
     return (BitArgs)
 
+
+
+def CheckNumArgs(Args: list[str], ExpectedNum: int, LineNumberForExceptions: int) -> None:
+    if(len(Args) != ExpectedNum):
+        raise Exception(f"Incorrect number of arguments on line {LineNumberForExceptions}")
+    
+    return
+    
 
 
 def ParseReg(Arg: str, LineNumberForExceptions: int) -> int:
@@ -86,7 +94,7 @@ def ParseReg(Arg: str, LineNumberForExceptions: int) -> int:
 
 
 
-def ParseImmediate(Arg: str, BitWidth: int, LineNumberForExceptions: int) -> int:
+def ParseSignedImmediate(Arg: str, BitWidth: int, LineNumberForExceptions: int) -> int:
     Value = Utils.DecOrHexSearch(Arg)
     BitMask: int = (1 << BitWidth) - 1
 
@@ -104,9 +112,24 @@ def ParseImmediate(Arg: str, BitWidth: int, LineNumberForExceptions: int) -> int
 
 
 
+def CalcPCOffset(TargetLabel: str, SymbolTable: dict[str, int], LineNumberForExceptions: int, Instruction_MemoryAddress: int, PCOffsetBitWidth: int) -> int:
+    if(SymbolTable.get(TargetLabel) is None):
+        raise Exception(f"Label {TargetLabel} has no defined destination on line {LineNumberForExceptions}")
+
+    BitMask: int = (1 << PCOffsetBitWidth) - 1
+    PCOffset: int = SymbolTable.get(TargetLabel) - (Instruction_MemoryAddress + 1)
+    MaxPos: int = 2**(PCOffsetBitWidth-1)             # Example 1024 and -1023 (not typical -1024 to 1023 because of PC+1)
+    MaxNeg: int = -(2**(PCOffsetBitWidth-1)) + 1
+
+    if(PCOffset not in range(MaxNeg, MaxPos+1, 1)):
+        raise Exception(f"PC Offset on line {LineNumberForExceptions} to label {TargetLabel} exceeds max range [{MaxNeg},{MaxPos}]")
+
+    return (PCOffset & BitMask)
+
+
+
 def TwoReg(Args: list[str], LineNumber: int) -> int:
-    if(len(Args) != 2):
-        raise Exception(f"Incorrect number of arguments on line {LineNumber}")
+    CheckNumArgs(Args, 2, LineNumber)
 
     ArgA: int = ParseReg(Args[0], LineNumber) << REGA_POS
     ArgB: int = ParseReg(Args[1], LineNumber) << REGB_POS
@@ -116,19 +139,17 @@ def TwoReg(Args: list[str], LineNumber: int) -> int:
 
 
 def RegImm(Args: list[str], LineNumber: int) -> int:
-    if(len(Args) != 2):
-        raise Exception(f"Incorrect number of arguments on line {LineNumber}")
+    CheckNumArgs(Args, 2, LineNumber)
 
     ArgA: int = ParseReg(Args[0], LineNumber) << REGA_POS
-    ImmVal: int = ParseImmediate(Args[1], NUM_IMM_BITS, LineNumber) << IMM_POS
+    ImmVal: int = ParseSignedImmediate(Args[1], NUM_IMM_BITS, LineNumber) << IMM_POS
 
     return (ArgA | ImmVal)
 
 
 
 def SingR(Args: list[str], LineNumber: int):
-    if(len(Args) != 1):
-        raise Exception(f"Incorrect number of arguments on line {LineNumber}")
+    CheckNumArgs(Args, 1, LineNumber)
 
     ArgA: int = ParseReg(Args[0], LineNumber) << REGA_POS
     
@@ -136,55 +157,45 @@ def SingR(Args: list[str], LineNumber: int):
 
 
 
-def PCOff(Args: list[str], LineNumber: int, SymbolTable: dict[str, int], Instruction_MemoryIndex: int):
-    if(len(Args) != 1):
-        raise Exception(f"Incorrect number of arguments on line {LineNumber}")
-    if(SymbolTable.get(Args[0]) is None):
-        raise Exception(f"Label {Args[0]} has no defined destination on line {LineNumber}")
+def JumpInstruction(Args: list[str], LineNumber: int, SymbolTable: dict[str, int], Instruction_MemoryIndex: int):
+    CheckNumArgs(Args, 1, LineNumber)
 
-    PCOffset: int
-    MaxPos: int
-    MaxNeg: int
-    BitMask: int = (1 << NUM_JUMP_BITS) - 1
-
-    PCOffset = SymbolTable.get(Args[0]) - (Instruction_MemoryIndex + 1)
-    MaxPos = (2**(NUM_JUMP_BITS-1))             # Example 1024 and -1023 (not typical -1024 to 1023 because of PC+1)
-    MaxNeg = (-1*2**(NUM_JUMP_BITS-1) + 1)
-
-    if(PCOffset not in range(MaxNeg, MaxPos+1, 1)):
-        raise Exception(f"Jump/Call on line {LineNumber} to label {Args[0]} exceeds max range [{MaxNeg},{MaxPos}]")
-    
-    return (PCOffset & BitMask)
-    
+    return CalcPCOffset(Args[0], SymbolTable, LineNumber, Instruction_MemoryIndex, NUM_JUMP_BITS) << JUMP_POS 
 
 
 NoArg = lambda: 0x0000
 
 
+
 def BaseR(Args: list[str], LineNumber: int):
-    if(len(Args) != 3):
-        raise Exception(f"Incorrect number of arguments on line {LineNumber}")
+    CheckNumArgs(Args, 3, LineNumber)
 
     ArgA: int = ParseReg(Args[0], LineNumber) << REGA_POS
     ArgB: int = ParseReg(Args[1], LineNumber) << REGB_POS
-    ValueC: int = ParseImmediate(Args[2], NUM_BASER_OFFSET_BITS, LineNumber) << IMM_POS
+    ValueC: int = ParseSignedImmediate(Args[2], NUM_BASER_OFFSET_BITS, LineNumber) << IMM_POS
 
     return (ArgA | ArgB | ValueC)
 
 
 
 # Operation must be in set: OTHER
-def Other(Operation: str, Args: list[str], LineNumber: int):    
-
-    ValueC: int
+def Other(Operation: str, Args: list[str], LineNumber: int, SymbolTable: dict[str, int], Instruction_MemoryAddress: int):    
 
     if(Operation == "TRAP"):
-        if(len(Args) != 1):
-            raise Exception(f"Incorrect number of arguments on line {LineNumber}")
+        CheckNumArgs(Args, 1, LineNumber)
 
-        ValueC = ParseImmediate(Args[0], NUM_TRAPV_BITS, LineNumber)
+        ValueC: int = ParseSignedImmediate(Args[0], NUM_TRAPV_BITS, LineNumber)
 
         return (ValueC)
+
+    elif(Operation == "LEA"):
+        CheckNumArgs(Args, 2, LineNumber)
+
+        ArgA: int = ParseReg(Args[0], LineNumber)
+        ValueC: int = CalcPCOffset(Args[1], SymbolTable, LineNumber, Instruction_MemoryAddress, NUM_LEA_BITS) << JUMP_POS
+
+        return (ArgA | ValueC)
+
 
     else:
         raise Exception(f"Operation {Operation} in set OTHER {InstDef.OTHER}, but does not match any instructions")
@@ -193,10 +204,9 @@ def Other(Operation: str, Args: list[str], LineNumber: int):
 
 # Syntax: STP #/0x{PortNum}, r[0-7]
 def PortReg(Args: list[str], LineNumber: int) -> int:
-    if(len(Args) != 2):
-        raise Exception(f"Incorrect number of arguments on line {LineNumber}")
+    CheckNumArgs(Args, 2, LineNumber)
 
-    ArgA: int = ParseImmediate(Args[0], NUM_PORT_BITS, LineNumber) << PORT_POS
+    ArgA: int = ParseSignedImmediate(Args[0], NUM_PORT_BITS, LineNumber) << PORT_POS
     ArgB: int = ParseReg(Args[1], LineNumber)
     
     return (ArgA | ArgB)
@@ -205,10 +215,9 @@ def PortReg(Args: list[str], LineNumber: int) -> int:
 
 # Syntax: STPI #/0x{PortNum}, #/0x{Val}
 def PortImm(Args: list[str], LineNumber: int) -> int:
-    if(len(Args) != 2):
-        raise Exception(f"Incorrect number of arguments on line {LineNumber}")
+    CheckNumArgs(Args, 2, LineNumber)
 
-    ArgA: int = ParseImmediate(Args[0], NUM_PORT_BITS, LineNumber) << PORT_POS
-    ArgC: int = ParseImmediate(Args[1], NUM_IMM_BITS) << IMM_POS
+    ArgA: int = ParseSignedImmediate(Args[0], NUM_PORT_BITS, LineNumber) << PORT_POS
+    ArgC: int = ParseSignedImmediate(Args[1], NUM_IMM_BITS, LineNumber) << IMM_POS
 
     return (ArgA | ArgC)

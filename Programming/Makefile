@@ -1,7 +1,7 @@
 .DEFAULT_GOAL 	= all
 
 BASE 			:= $(PWD)
-UTIL_DIR 		:= $(BASE)/Utils
+UTIL_DIR 		:= $(BASE)/Assembler/v1_1
 WORK_DIR		:= $(UTIL_DIR)/work
 SRC_DIR			:= $(BASE)/Programs
 PROG_DIR		:= C:/cygwin64/home/jack/minipro
@@ -9,7 +9,7 @@ PROG_CHIP		= AT28C256
 UCODE_CHIP		= AT28C64B
 NUM_MICROCODE_ROMS	= 5
 
-obj_files 		= OSR.bin HelloWorld.bin
+obj_files 		= OSR_1_1.bin HelloWorld_1_1.bin
 
 all: workspace $(obj_files) merge
 

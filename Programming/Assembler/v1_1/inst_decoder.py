@@ -62,33 +62,35 @@ def __ParseInstruction(Word: int) -> str:
             Arguments.append(__ExtractRegister(Word, REGB_POS))
         elif(Operation in InstDef.REGIMM):
             Arguments.append(__ExtractRegister(Word, REGA_POS))
-            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 8))
+            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, NUM_IMM_BITS))
         elif(Operation in InstDef.SINGR):
             Arguments.append(__ExtractRegister(Word, REGA_POS))
         elif(Operation in InstDef.PCOFF):
-            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 11))
+            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, NUM_JUMP_BITS))
         elif(Operation in InstDef.NOARG):
             pass
         elif(Operation in InstDef.BASER):
             Arguments.append(__ExtractRegister(Word, REGA_POS))
             Arguments.append(__ExtractRegister(Word, REGB_POS))
-            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 5))
+            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, NUM_BASER_OFFSET_BITS))
         elif(Operation in InstDef.OTHER):
             if(Operation == "TRAP"):
                 Arguments.append(hex(__ExtractBitfield(Word, 10, 0)))
+            elif(Operation == "LEA"):
+                Arguments.append(__ExtractRegister(Word, REGA_POS))
+                Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, NUM_LEA_BITS))
+                pass
             else:
                 raise Exception(f"Operation {Operation} appears in set OTHER ({InstDef.OTHER}) but is not implemented")
         elif(Operation in InstDef.PORTIMM):
             Arguments.append(hex(__ExtractBitfield(Word, 10, 8)))
-            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, 8))
+            Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, NUM_IMM_BITS))
         elif(Operation in InstDef.PORTREG):
-            Arguments.append(hex(__ExtractBitfield(Word, 10, 8)))
+            Arguments.append(hex(__ExtractBitfield(Word, 10, NUM_IMM_BITS)))
             Arguments.append(__ExtractRegister(Word, REGB_POS))
         else:
             raise Exception(f"While re-parsing, Operation {Operation} recognized in OPCODE_DICT but does not appear in any instruction collections")
-        return ("{:<6} {}".format(
-            Operation,
-            ", ".join(Arguments)))
+        return ("{:<6} {}".format(Operation, ", ".join(Arguments)))
 
     else:
         return ("None")
