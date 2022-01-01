@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(path))
 
 from Assembler.v1_1.ucode.macros import *
 import Assembler.v1_1.InstructionDefinition as InstDef
+import re, enum
 
 
 def __ExtractRegister(Word: int, RegPos: int) -> str:
@@ -75,7 +76,7 @@ def __ParseInstruction(Word: int) -> str:
             Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, NUM_BASER_OFFSET_BITS))
         elif(Operation in InstDef.OTHER):
             if(Operation == "TRAP"):
-                Arguments.append(hex(__ExtractBitfield(Word, 10, 0)))
+                Arguments.append(hex(__ExtractBitfield(Word, 16-NUM_OPC_BITS, 0)))
             elif(Operation == "LEA"):
                 Arguments.append(__ExtractRegister(Word, REGA_POS))
                 Arguments.append(__ExtractSignedImmediate(Word, IMM_POS, NUM_LEA_BITS))
@@ -133,7 +134,38 @@ def DecodeBinary(BinarySource: str, OutputFile: str):
 
     return
 
+class __FlagState(enum.Enum):
+    BIN_FILE    = 0
+    OUT_FILE    = 1
 
 if __name__ == "__main__":
-    DecodeBinary("./Assembler/v1_1/work/a.bin", "./Assembler/v1_1/Decoded.txt")
-    pass
+    cwd: str = os.getcwd()
+
+    InFile  = None
+    OutFile = None
+    StateV  = None
+
+    # InFile = "./Programs/HelloWorld_1_1.asm"
+    # OutFile = "./Assembler/v1_1/Testing.bin"
+
+    if(len(sys.argv) < 2):
+        raise Exception("Not enough input arguments")
+
+    for arg in sys.argv[1:]:
+        if(re.search(r"-b", arg, re.IGNORECASE)):
+            StateV = __FlagState.BIN_FILE
+        elif(re.search(r"-o", arg, re.IGNORECASE)):
+            StateV = __FlagState.OUT_FILE
+        else:
+            if(StateV == __FlagState.BIN_FILE):
+                InFile = arg
+            elif(StateV == __FlagState.OUT_FILE):
+                OutFile = arg   
+
+    if(OutFile is None):
+        OutFile = rf"{cwd}/a.bin"
+
+    if(InFile is None):
+        raise Exception("Specify an input file with -c <file>")
+
+    DecodeBinary(InFile, OutFile)

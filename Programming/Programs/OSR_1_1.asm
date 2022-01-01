@@ -13,8 +13,6 @@ startup:
 
     call    lcd_init
 
-    lea r0, foo
-
     ; ld      r1,     #16
     ; ld      r2,     0xFF
     ; ld      r3,     0xFE
@@ -33,8 +31,6 @@ config_env:
     ld      r7,     0x80
     
     start   r0
-
-foo:        .STRINGZ    "Hello"
 
 lcd_init:
     ; Need RS (4)=0, R/W (5)=0, CE (6)=1, and DB7-DB0=0x00
@@ -97,5 +93,20 @@ wait_lp_routine:
     jnz     wait_lp_routine
     ret
 
+; String pointer present in {r1, r0}
 sprint_routine:
+    pause
+    stpi    PORTA,  0x01
+sprint_routine_lp:
+    ldr     r2,     r0,     #0  ; Load char present at {r1, r0}
+    jz      sprint_routine_exit ; If null, exit this block
+    stp     PORTB,  r2          ; If not null, store the char at PORTB
+    stpi    PORTA,  0x00
+    stpi    PORTA,  0x01
+    addi    r0,     #1
+    jnc     sprint_routine_lp
+    addi    r1,     #1
+    jmp     sprint_routine_lp
+
+sprint_routine_exit:
     ret

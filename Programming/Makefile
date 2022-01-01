@@ -4,7 +4,7 @@ BASE 			:= $(PWD)
 ASSEMBLER_DIR 	:= $(BASE)/Assembler/v1_1
 WORK_DIR		:= $(ASSEMBLER_DIR)/work
 SRC_DIR			:= $(BASE)/Programs
-PROGRAMMER_DIR		:= C:/cygwin64/home/jack/minipro
+PROGRAMMER_DIR	:= C:/cygwin64/home/jack/minipro
 PROG_CHIP		= AT28C256
 UCODE_CHIP		= AT28C64B
 NUM_MICROCODE_ROMS	= 5
@@ -30,8 +30,9 @@ progc:
 
 # Program microcode loop
 pml:
+	@cd $(PROGRAMMER_DIR) ; \
 	while [ true ] ; do \
-		$(PROGRAMMER_DIR)/minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin; \
+		./minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin; \
 		read -n 1 -s -r -p "Press any key to continue ('q' to exit)" key; \
 		if [ $$key = 'q' ]; then \
 			exit ; \
@@ -47,6 +48,10 @@ pm:
 # Generate microcode binary and move to programmer directory
 ucode: workspace
 	@py $(ASSEMBLER_DIR)/ucode_gen.py -o $(WORK_DIR)/microcode.bin; cp $(WORK_DIR)/microcode.bin $(PROGRAMMER_DIR)/binaries/microcode.bin;
+
+# Run the decoder on the output binary a.bin
+dec:
+	@py $(ASSEMBLER_DIR)/inst_decoder.py -b $(WORK_DIR)/a.bin -o $(WORK_DIR)/Decoded.txt
 
 .PHONY: clean
 

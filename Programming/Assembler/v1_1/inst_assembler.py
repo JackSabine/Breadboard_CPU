@@ -184,9 +184,11 @@ def Other(Operation: str, Args: list[str], LineNumber: int, SymbolTable: dict[st
     if(Operation == "TRAP"):
         CheckNumArgs(Args, 1, LineNumber)
 
+        TRAP_TABLE_START_POS: int = 0x0100
+
         ValueC: int = ParseSignedImmediate(Args[0], NUM_TRAPV_BITS, LineNumber)
 
-        return (ValueC)
+        return (ValueC + TRAP_TABLE_START_POS)
 
     elif(Operation == "LEA"):
         CheckNumArgs(Args, 2, LineNumber)

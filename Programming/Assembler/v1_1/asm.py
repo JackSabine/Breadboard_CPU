@@ -185,4 +185,4 @@ if __name__ == "__main__":
     if(InFile is None):
         raise Exception("Specify an input file with -c <file>")
 
-    Assemble(FileToCompile=InFile, FileToWrite=OutFile, Debug=True)
+    Assemble(FileToCompile=InFile, FileToWrite=OutFile)
