@@ -73,7 +73,7 @@ def __PopulateMemoryMap(MemoryMap: OSymbolicMemoryMap, LineGroups: list[OLineGro
 
                     if(re.search(r"^.BLKW", LineSplit.WordList[1]) is not None):
                         BlockwordTemp = Utils.DecOrHexSearch(LineSplit.WordList[2])
-                        if(type(BlockwordTemp) is int):
+                        if(BlockwordTemp is not None):
                             MemoryIndex = MemoryMap.GenerateBlock(
                                 MemoryIndex=MemoryIndex,
                                 BlockSize=BlockwordTemp,
@@ -162,27 +162,27 @@ if __name__ == "__main__":
     OutFile = None
     StateV  = None
 
-    InFile = "./Programs/OSR_1_1.asm"
-    OutFile = "./Assembler/v1_1/Testing.bin"
+    # InFile = "./Programs/HelloWorld_1_1.asm"
+    # OutFile = "./Assembler/v1_1/Testing.bin"
 
-    # if(len(sys.argv) < 2):
-    #     raise Exception("Not enough input arguments")
+    if(len(sys.argv) < 2):
+        raise Exception("Not enough input arguments")
 
-    # for arg in sys.argv[1:]:
-    #     if(re.search(r"-c", arg, re.IGNORECASE)):
-    #         StateV = __FlagState.SRC_FILE
-    #     elif(re.search(r"-o", arg, re.IGNORECASE)):
-    #         StateV = __FlagState.OUT_FILE
-    #     else:
-    #         if(StateV == __FlagState.SRC_FILE):
-    #             InFile = arg
-    #         elif(StateV == __FlagState.OUT_FILE):
-    #             OutFile = arg   
+    for arg in sys.argv[1:]:
+        if(re.search(r"-c", arg, re.IGNORECASE)):
+            StateV = __FlagState.SRC_FILE
+        elif(re.search(r"-o", arg, re.IGNORECASE)):
+            StateV = __FlagState.OUT_FILE
+        else:
+            if(StateV == __FlagState.SRC_FILE):
+                InFile = arg
+            elif(StateV == __FlagState.OUT_FILE):
+                OutFile = arg   
 
-    # if(OutFile is None):
-    #     OutFile = rf"{cwd}/a.bin"
+    if(OutFile is None):
+        OutFile = rf"{cwd}/a.bin"
 
-    # if(InFile is None):
-    #     raise Exception("Specify an input file with -c <file>")
+    if(InFile is None):
+        raise Exception("Specify an input file with -c <file>")
 
     Assemble(FileToCompile=InFile, FileToWrite=OutFile, Debug=True)

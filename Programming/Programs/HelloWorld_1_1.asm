@@ -1,14 +1,15 @@
 ; Built for ISA v1.1
 
-.INCLUDE    OSR_1_1
+.INCLUDE    Budgetlake.h
 .ORIG       0x0400
 HelloWorld:
     lea     r0,     MyLabel
     trap    SPRINT
     jmp     around
 
-MyLabel         .STRINGZ    "Hello, World!"
-MyOtherLabel    .BLKW       0xF
+foo:        .STRINGZ    "Hello"
+MyLabel:        .STRINGZ    "Hello, World!"
+; MyOtherLabel:   .BLKW       0xF
 
 around:
     pause

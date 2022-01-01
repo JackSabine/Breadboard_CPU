@@ -16,12 +16,13 @@ def CreateOLineList(LineText: list[str]) -> list[OLine]:
 
     return (OLineList)
 
-def FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
+def FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]) -> list[OLineSplit]:
     # Need to iterate through each line and filter out excess whitespace, comments, blank lines
     FilteredSplitLines: list[OLineSplit] = []
     CurText: str
     CurNum: int
     IsCurAnInstruction: bool
+    KeywordList: list[str]
 
     for ULine in UneditedLines:
         CurText = ULine.Text
@@ -31,17 +32,14 @@ def FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]):
             CurText = CurText[ : CurText.find(";") ]
         
         # If we find a single character, continue parsing
-        if(re.search(r"[\S]+", CurText)):
+        if(re.search(r"\S", CurText) is not None):
             IsCurAnInstruction = CurText.startswith(("\t", " "))
             CurText = CurText.strip()
-            # Delete newlines and replace commas with spaces
-            CurText = CurText.replace("\n", "").replace(",", " ")
+
+            KeywordList = re.split(r'((?:[^"\s,]|"[^"]*")+)', CurText)[1::2]
             # print("{:<40} is {:<3} an instruction".format(CurText, "" if IsCurAnInstruction else "not"))
 
-            # Remove blank lines
-            if CurText != "":
-                # Split each line by spaces (commas replaced with spaces)
-                FilteredSplitLines.append(OLineSplit(WordList=CurText.split(), LineNumber=CurNum, IsAnInstruction=IsCurAnInstruction))
+            FilteredSplitLines.append(OLineSplit(WordList=KeywordList, LineNumber=CurNum, IsAnInstruction=IsCurAnInstruction))
         
     return FilteredSplitLines
 

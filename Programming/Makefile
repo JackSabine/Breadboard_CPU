@@ -30,9 +30,8 @@ progc:
 
 # Program microcode loop
 pml:
-	@cd $(PROG_DIR) ; \
 	while [ true ] ; do \
-		./minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin; \
+		$(PROG_DIR)/minipro.exe -p $(UCODE_CHIP) -w binaries/microcode.bin; \
 		read -n 1 -s -r -p "Press any key to continue ('q' to exit)" key; \
 		if [ $$key = 'q' ]; then \
 			exit ; \
