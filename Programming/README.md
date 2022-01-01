@@ -3,6 +3,7 @@
 ## Installing/Updating Cygwin64
 - They both use the same executable available at https://www.cygwin.com/install.html
 - Click the hyperlink setup-x86_64.exe for a 64b machine (https://www.cygwin.com/setup-x86_64.exe)
+- You DO NOT need to add C:\cygwin64\bin to the path.  If you get an error about a cygwin1.dll not being found, try uninstalling and reinstalling with this guide.
 
 1. Make sure to point it at C:\cygwin64
 2. Pick a mirror site in the US from https://cygwin.com/mirrors.html (I had success with http://cygwin.mirror.constant.com/ in New Jersey)
