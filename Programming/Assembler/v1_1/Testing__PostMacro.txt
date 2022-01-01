@@ -1047,8 +1047,8 @@ MyLabel   	| 0x0409 | 'H'
           	| 0x0414 | 'd'
           	| 0x0415 | '!'
           	| 0x0416 | NULL
-around    	| 0x0417 | pause
-          	| 0x0418 | NULL
+around    	| 0x0417 | lea	r0	foo
+          	| 0x0418 | pause
           	| 0x0419 | NULL
           	| 0x041A | NULL
           	| 0x041B | NULL

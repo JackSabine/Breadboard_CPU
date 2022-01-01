@@ -12,4 +12,5 @@ MyLabel:        .STRINGZ    "Hello, World!"
 ; MyOtherLabel:   .BLKW       0xF
 
 around:
+    lea r0, foo
     pause

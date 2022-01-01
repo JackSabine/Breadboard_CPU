@@ -146,7 +146,7 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
         
     Utils.Write(ProgramMemory, FileToWrite)
 
-    DecodeBinary("./Assembler/v1_1/Testing.bin", "./Assembler/v1_1/Decoded.txt")
+    DecodeBinary(FileToWrite, "./Assembler/v1_1/Decoded.txt")
 
     return
 

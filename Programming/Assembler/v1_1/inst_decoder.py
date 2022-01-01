@@ -135,5 +135,5 @@ def DecodeBinary(BinarySource: str, OutputFile: str):
 
 
 if __name__ == "__main__":
-    DecodeBinary("./Assembler/v1_1/Testing.bin", "./Assembler/v1_1/Decoded.txt")
+    DecodeBinary("./Assembler/v1_1/work/a.bin", "./Assembler/v1_1/Decoded.txt")
     pass
