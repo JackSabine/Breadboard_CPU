@@ -209,7 +209,7 @@ def PortReg(Args: list[str], LineNumber: int) -> int:
     CheckNumArgs(Args, 2, LineNumber)
 
     ArgA: int = ParseSignedImmediate(Args[0], NUM_PORT_BITS, LineNumber) << PORT_POS
-    ArgB: int = ParseReg(Args[1], LineNumber)
+    ArgB: int = ParseReg(Args[1], LineNumber) << REGB_POS
     
     return (ArgA | ArgB)
     

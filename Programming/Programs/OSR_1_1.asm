@@ -95,14 +95,13 @@ wait_lp_routine:
 
 ; String pointer present in {r1, r0}
 sprint_routine:
-    pause
-    stpi    PORTA,  0x01
+    stpi    PORTA,  0x05
 sprint_routine_lp:
     ldr     r2,     r0,     #0  ; Load char present at {r1, r0}
     jz      sprint_routine_exit ; If null, exit this block
     stp     PORTB,  r2          ; If not null, store the char at PORTB
-    stpi    PORTA,  0x00
-    stpi    PORTA,  0x01
+    stpi    PORTA,  0x04
+    stpi    PORTA,  0x05
     addi    r0,     #1
     jnc     sprint_routine_lp
     addi    r1,     #1

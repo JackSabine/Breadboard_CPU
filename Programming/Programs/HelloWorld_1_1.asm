@@ -3,11 +3,11 @@
 .INCLUDE    Budgetlake.h
 .ORIG       0x0400
 HelloWorld:
-    lea     r0,     MyLabel
+    lea     r0,     EpicMessage
     trap    SPRINT
     jmp     around
 
-MyLabel:        .STRINGZ    "Hello, World!"
+EpicMessage:        .STRINGZ    "new year pog"
 
 around:
     pause
