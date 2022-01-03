@@ -163,8 +163,6 @@ Wire Wire Line
 Connection ~ 3650 2400
 Wire Wire Line
 	3650 2400 3650 2500
-Wire Wire Line
-	4450 2200 4400 2200
 $Comp
 L Breadboard_CPU-rescue:LED-Device D302
 U 1 1 5F022248
@@ -486,8 +484,8 @@ Text Notes 5325 1625 2    118  ~ 0
 Astable clock
 Text Notes 3900 3525 0    118  ~ 0
 Debounced button
-Text Notes 15425 1675 2    118  ~ 0
-Clock selector
+Text Notes 13100 1900 2    118  ~ 0
+Clock selector\n\nTHIS ISN'T CURRENT YOU MADE A GLITCHLESS CLOCK\nMUXER PLS FIX THIS SCH
 $Comp
 L Breadboard_CPU-rescue:74LS08-74xx U?
 U 1 1 617D15EB

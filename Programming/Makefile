@@ -14,14 +14,14 @@ obj_files 		= OSR_1_1.bin HelloWorld_1_1.bin
 all: workspace $(obj_files) merge
 
 $(filter %.bin,$(obj_files)): %.bin: $(SRC_DIR)/%.asm
-	py $(ASSEMBLER_DIR)/asm.py -c $< -o $(WORK_DIR)/$@
+	@py $(ASSEMBLER_DIR)/asm.py -c $< -o $(WORK_DIR)/$@
 	
 workspace:
 	@[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR)
 
 # Merge two binaries
 merge:
-	cd $(WORK_DIR); py $(ASSEMBLER_DIR)/merge.py -m $(obj_files) -o $(WORK_DIR)/a.bin; cp $(WORK_DIR)/a.bin $(PROGRAMMER_DIR)/binaries/a.bin;
+	@cd $(WORK_DIR); py $(ASSEMBLER_DIR)/merge.py -m $(obj_files) -o $(WORK_DIR)/a.bin; cp $(WORK_DIR)/a.bin $(PROGRAMMER_DIR)/binaries/a.bin;
 
 # Write the program binary to the program NVRAM
 progc:

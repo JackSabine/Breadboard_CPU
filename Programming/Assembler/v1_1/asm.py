@@ -8,7 +8,6 @@ import enum, re
 from Assembler.v1_1.inst_assembler import InterpretInstructions
 from Assembler.v1_1.classes import OLine, OLineSplit, OLineGroup, OSymbolicMemoryMap
 from Assembler.v1_1.ucode.macros import NUM_CODE_ADDRESS_PINS, INSTRUCTION_POS
-from Assembler.v1_1.inst_decoder import DecodeBinary
 import Assembler.v1_1.TextParsing as Parsing
 import Assembler.v1_1.Utils as Utils
 
@@ -145,8 +144,6 @@ def Assemble(FileToCompile, FileToWrite, Debug=False):
     InterpretInstructions(MemoryMap, ProgramMemory)
         
     Utils.Write(ProgramMemory, FileToWrite)
-
-    DecodeBinary(FileToWrite, "./Assembler/v1_1/Decoded.txt")
 
     return
 

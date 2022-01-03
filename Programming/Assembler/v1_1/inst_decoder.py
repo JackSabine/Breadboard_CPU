@@ -163,9 +163,9 @@ if __name__ == "__main__":
                 OutFile = arg   
 
     if(OutFile is None):
-        OutFile = rf"{cwd}/a.bin"
+        OutFile = rf"{cwd}/Decoded.txt"
 
     if(InFile is None):
-        raise Exception("Specify an input file with -c <file>")
+        raise Exception("Specify an input file with -b <file>")
 
     DecodeBinary(InFile, OutFile)

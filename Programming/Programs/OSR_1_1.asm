@@ -86,26 +86,78 @@ __wait:
     jmp     wait_lp_routine
 __sprint:
     jmp     sprint_routine
+__display_rst:
+    jmp     display_rst_routine
+
+
+
 
 .ORIG 0x0120
+
+; WAIT trap routine
+; Num loop cycles value present in r0
 wait_lp_routine:
     addi    r0,     #-1
     jnz     wait_lp_routine
     ret
 
-; String pointer present in {r1, r0}
+
+
+; SPRINT trap routine
+; {r1, r0}: String pointer present
+; r2:       Remaining horizontal characters
+; r3:       Remaining vertical rows (when 0, stop even if *strptr != NULL) --- use for char data after pushing remaining rows
 sprint_routine:
+    ; Clears display and sets cursor to home
+    trap    DISPLAY_RST
+
     stpi    PORTA,  0x05
+    ld      r2,     #16
+    ld      r3,     #1
+    push    r3
 sprint_routine_lp:
-    ldr     r2,     r0,     #0  ; Load char present at {r1, r0}
-    jz      sprint_routine_exit ; If null, exit this block
-    stp     PORTB,  r2          ; If not null, store the char at PORTB
+    ldr     r3,     r0,     #0
+    jz      sprint_routine_exit_popr3
+
+    stp     PORTB,  r3
     stpi    PORTA,  0x04
     stpi    PORTA,  0x05
+
+    addi    r2,     #-1
+    jz      sprint_routine_checkrows
+sprint_routine_increment_srcptr:
     addi    r0,     #1
     jnc     sprint_routine_lp
     addi    r1,     #1
     jmp     sprint_routine_lp
 
+sprint_routine_checkrows:
+    pop     r3
+    jz      sprint_routine_exit
+    addi    r3,     #-1
+    push    r3
+    ld      r2,     #16
+
+    ; Set DDRAM address to 0x40 (row 2 column 1) (RS=0 W=0)
+    stpi    PORTA,  0x01
+    stpi    PORTB,  0xC0    ; 0x80 | 0x40
+    stpi    PORTA,  0x00
+    stpi    PORTA,  0x01
+    stpi    PORTA,  0x05
+
+    jmp     sprint_routine_increment_srcptr
+
+sprint_routine_exit_popr3:
+    pop     r3
 sprint_routine_exit:
+    stpi    PORTA,  0x01
+    ret
+
+
+
+; DISPLAY_RST trap routine
+display_rst_routine:
+    stpi    PORTB,  0x01            ; 0000 0001 for Clear Display (sets 20H to all DDRAM locs, 00H to DDRAM addr, return cursor to original position)
+    stpi    PORTA,  0x00
+    stpi    PORTA,  0x01
     ret

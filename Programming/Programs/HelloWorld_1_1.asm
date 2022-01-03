@@ -3,11 +3,11 @@
 .INCLUDE    Budgetlake.h
 .ORIG       0x0400
 HelloWorld:
-    lea     r0,     EpicMessage
+    lea     r0,     LongMessage
     trap    SPRINT
     jmp     around
 
-EpicMessage:        .STRINGZ    "new year pog"
+LongMessage:        .STRINGZ    "This is a long message 31 chars"
 
 around:
     pause
