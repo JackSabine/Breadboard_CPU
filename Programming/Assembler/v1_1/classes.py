@@ -1,26 +1,22 @@
+from dataclasses import dataclass
+
 import math, copy
 
+@dataclass
 class OLine:
-    def __init__(self, Text: str, LineNumber: int):
-        self.Text: str = Text
-        self.LineNumber: int = LineNumber
+    Text: str
+    LineNumber: int
 
-        return
-
+@dataclass
 class OLineSplit:
-    def __init__(self, WordList: list[str], LineNumber: int, IsAnInstruction: bool):
-        self.WordList: list[str] = WordList
-        self.LineNumber: int = LineNumber
-        self.IsAnInstruction: bool = IsAnInstruction
-        
-        return
+    WordList: list[str]
+    LineNumber: int
+    IsAnInstruction: bool
 
+@dataclass
 class OLineGroup:
-    def __init__(self, Origin: int, Lines: list[OLineSplit]):
-        self.Orig: int = Origin
-        self.Lines: list[OLineSplit] = Lines
-
-        return
+    Orig: int
+    Lines: list[OLineSplit]
 
 class OSymbolicMemoryCell:
     def __init__(self):
@@ -63,7 +59,7 @@ class OSymbolicMemoryCell:
 class OSymbolicMemoryMap:
 
     def __init__(self, MemorySize):
-        self.MemoryBlock: list[OSymbolicMemoryCell] = [OSymbolicMemoryCell() for i in range(MemorySize)]
+        self.MemoryBlock: list[OSymbolicMemoryCell] = [OSymbolicMemoryCell() for _ in range(MemorySize)]
         # Can't use ```[OSymbolicMemoryCell()] * MemorySize``` or will be all the same object
 
         self.__MemorySize = MemorySize
@@ -74,17 +70,11 @@ class OSymbolicMemoryMap:
     def ToFile(self, FileName) -> None:
         with open(FileName, "w") as f:
             
-            # Determine the longest label
-            Label_MaxLen: int = 0
-            Label_CurLen: int
-            for Label in self.SymbolTable:
-                Label_CurLen = len(Label)
-                if(Label_CurLen > Label_MaxLen):
-                    Label_MaxLen = Label_CurLen
+            Label_MaxLen: int = max(self.SymbolTable.keys(), key=len)
 
             # Determine number of hex digits
-            NumHexDigits: int = 1 + math.floor(math.log(self.__MemorySize) / math.log(16))
-
+            NumHexDigits: int = 1 + math.log(self.__MemorySize) // math.log(16)
+            
             CurLineStr: str
 
             CurLineStr = "{}\t| {}  | {}\n".format(

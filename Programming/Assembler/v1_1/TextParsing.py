@@ -5,7 +5,7 @@ while(not path.endswith("Assembler")):
 sys.path.append(os.path.dirname(path))
 
 import re
-from Assembler.v1_1.classes import OLine, OLineSplit, OLineGroup, OSymbolicMemoryMap
+from Assembler.v1_1.classes import OLine, OLineSplit, OLineGroup
 import Assembler.v1_1.Utils as Utils
 
 def CreateOLineList(LineText: list[str]) -> list[OLine]:
@@ -19,27 +19,27 @@ def CreateOLineList(LineText: list[str]) -> list[OLine]:
 def FilterLinesAndSplitOnSpaces(UneditedLines: list[OLine]) -> list[OLineSplit]:
     # Need to iterate through each line and filter out excess whitespace, comments, blank lines
     FilteredSplitLines: list[OLineSplit] = []
-    CurText: str
-    CurNum: int
     IsCurAnInstruction: bool
     KeywordList: list[str]
 
     for ULine in UneditedLines:
-        CurText = ULine.Text
-        CurNum = ULine.LineNumber    
 
-        if(CurText.find(";") != -1):
-            CurText = CurText[ : CurText.find(";") ]
+        if(ULine.Text.find(";") != -1):
+            ULine.Text = ULine.Text[ : ULine.Text.find(";") ]
         
         # If we find a single character, continue parsing
-        if(re.search(r"\S", CurText) is not None):
-            IsCurAnInstruction = CurText.startswith(("\t", " "))
-            CurText = CurText.strip()
+        if(re.search(r"\S", ULine.Text) is not None):
+            IsCurAnInstruction = ULine.Text.startswith(("\t", " "))
 
-            KeywordList = re.split(r'((?:[^"\s,]|"[^"]*")+)', CurText)[1::2]
-            # print("{:<40} is {:<3} an instruction".format(CurText, "" if IsCurAnInstruction else "not"))
+            KeywordList = re.split(r'((?:[^"\s,]|"[^"]*")+)', ULine.Text.strip())[1::2]
 
-            FilteredSplitLines.append(OLineSplit(WordList=KeywordList, LineNumber=CurNum, IsAnInstruction=IsCurAnInstruction))
+            FilteredSplitLines.append(
+                OLineSplit(
+                    WordList=KeywordList, 
+                    LineNumber=ULine.LineNumber, 
+                    IsAnInstruction=IsCurAnInstruction
+                    )
+                )
         
     return FilteredSplitLines
 
@@ -68,7 +68,7 @@ def ParseAssemblerDirectives(FilteredSplitLines: list[OLineSplit]) -> tuple[list
 
                 if(CurrentORIG is not None):
                     LineGroupIdx += 1
-                    LineGroups.append(OLineGroup(Origin=CurrentORIG, Lines=[]))
+                    LineGroups.append(OLineGroup(Orig=CurrentORIG, Lines=[]))
                 else:
                     raise Exception(f"Incorrect arguments on line {FSLine.LineNumber}")
 

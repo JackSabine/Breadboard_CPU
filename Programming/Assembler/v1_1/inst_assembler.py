@@ -20,13 +20,13 @@ def InterpretInstructions(MemoryMap: OSymbolicMemoryMap, ProgramMemory: bytearra
     for i, _ in enumerate(MemoryMap.MemoryBlock):
         if(MemoryMap.MemoryBlock[i].IsCellAnInstruction()):
             
-            Operation = MemoryMap.MemoryBlock[i].GetWordList()[0].upper()
-            Arguments = MemoryMap.MemoryBlock[i].GetWordList()[1:]
+            Operation, *Arguments = MemoryMap.MemoryBlock[i].GetWordList()
+            Operation = Operation.upper()
 
-            if(Operation.upper() not in OPCODE_DICT):
+            if(Operation not in OPCODE_DICT):
                 raise Exception(f"Instruction {Operation} on line {MemoryMap.MemoryBlock[i].GetAssociatedLineNumber()} is an invalid instruction")
 
-            InstructionOp = OPCODE_DICT.get(Operation.upper()) << INSTRUCTION_POS
+            InstructionOp = OPCODE_DICT.get(Operation) << INSTRUCTION_POS
 
             InstructionArgs = __CreateBitArgs(
                 Operation               =   Operation, 

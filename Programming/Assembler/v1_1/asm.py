@@ -152,12 +152,14 @@ class __FlagState(enum.Enum):
     SRC_FILE    = 0
     OUT_FILE    = 1
 
+
 if __name__ == "__main__":
     cwd: str = os.getcwd()
 
     InFile  = None
     OutFile = None
     StateV  = None
+    Profiling = False
 
     # InFile = "./Programs/HelloWorld_1_1.asm"
     # OutFile = "./Assembler/v1_1/Testing.bin"
@@ -170,6 +172,8 @@ if __name__ == "__main__":
             StateV = __FlagState.SRC_FILE
         elif(re.search(r"-o", arg, re.IGNORECASE)):
             StateV = __FlagState.OUT_FILE
+        elif(re.search(r"-p", arg, re.IGNORECASE)):
+            Profiling = True
         else:
             if(StateV == __FlagState.SRC_FILE):
                 InFile = arg
@@ -182,4 +186,13 @@ if __name__ == "__main__":
     if(InFile is None):
         raise Exception("Specify an input file with -c <file>")
 
-    Assemble(FileToCompile=InFile, FileToWrite=OutFile)
+
+    if(not Profiling):
+        Assemble(FileToCompile=InFile, FileToWrite=OutFile)
+    else:
+        import cProfile, pstats
+
+        with cProfile.Profile() as pr:
+            Assemble(FileToCompile=InFile, FileToWrite=OutFile)
+
+        pstats.Stats(pr).dump_stats(filename=f"asm_profile.prof")
